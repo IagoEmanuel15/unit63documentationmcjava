@@ -1843,7 +1843,9 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       currentIndex: 0,
       itemsArray: [],
       chunkSize: 50,
-      completedPages: new Set()
+      completedPages: new Set(),
+      retryCount: 0,       // NOVO: Contador de tentativas do lote atual
+      maxRetries: 3        // NOVO: Limite máximo de tentativas por lote
     };
 
     function togglePauseImport() {
@@ -1931,26 +1933,52 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
-      const chunk = importState.itemsArray.slice(importState.currentIndex, importState.currentIndex + importState.chunkSize);
-      importState.currentIndex += importState.chunkSize;
-
+      // Pega o lote atual (sem avançar o index ainda)
+      const start = importState.currentIndex;
+      const chunk = importState.itemsArray.slice(start, start + importState.chunkSize);
+      
       const chunkObj = {};
       chunk.forEach(item => { chunkObj[item.key] = item.value; });
 
       const role = currentUserSession ? currentUserSession.role : 'editor';
       const username = currentUserSession ? currentUserSession.username : 'Sistema';
+
+      // Função para lidar com falhas (Auto-recuperação)
+      const handleFailure = (err) => {
+        console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, err);
+        
+        if (importState.retryCount < importState.maxRetries) {
+          importState.retryCount++;
+          document.getElementById('importStatusText').innerText = `Falha detectada. Retentando (${importState.retryCount}/${importState.maxRetries})...`;
+          
+          // Espera um tempo progressivo antes de tentar de novo (2s, 4s, 6s)
+          setTimeout(processNextChunk, 2000 * importState.retryCount);
+        } else {
+          // Estourou o limite de tentativas. Pausa para não perder dados.
+          document.getElementById('importStatusText').innerText = 'Erro persistente. Importação pausada.';
+          importState.isPaused = true;
+          document.getElementById('btnPauseImport').innerText = 'Retomar';
+          document.getElementById('btnPauseImport').className = 'px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors shadow-sm';
+          showToast(`Servidor não respondeu. Importação pausada após ${importState.maxRetries} tentativas.`);
+        }
+      };
       
       google.script.run
         .withSuccessHandler(res => {
-          // Independentemente de ter importado novos ou só achado duplicados, o lote foi lido.
+          // Se chegou aqui, o lote foi lido (mesmo que com duplicados)
+          
+          // Agora sim, avançamos os contadores
+          importState.currentIndex += chunk.length;
           importState.processedItems += chunk.length;
+          importState.retryCount = 0; // Reseta o contador para o próximo lote
+          
           if (importState.processedItems > importState.totalItems) {
             importState.processedItems = importState.totalItems;
           }
           
           updateProgressBar();
 
-          // Se o servidor retornou páginas afetadas, atualiza o histórico visual
+          // Atualiza o histórico visual de páginas
           if (res && res.affectedPages && res.affectedPages.length > 0) {
             let hasNewPage = false;
             res.affectedPages.forEach(pageName => {
@@ -1974,17 +2002,13 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
             }
           }
           
+          // Volta o texto para "Processando" caso tenha saído dele numa tentativa falha
+          document.getElementById('importStatusText').innerText = 'Processando...';
+
           // Chama o próximo lote
           setTimeout(processNextChunk, 300); 
         })
-        .withFailureHandler(err => {
-          // Se der erro de rede, ele avança o contador para não travar a barra e tenta o próximo
-          console.error('Erro no lote:', err);
-          importState.processedItems += chunk.length;
-          if (importState.processedItems > importState.totalItems) importState.processedItems = importState.totalItems;
-          updateProgressBar();
-          setTimeout(processNextChunk, 300);
-        })
+        .withFailureHandler(handleFailure)
         .importJsonStringsToSheet(JSON.stringify(chunkObj), role, username);
     }
 
