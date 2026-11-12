@@ -1901,16 +1901,58 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
+      // --- OTIMIZAÇÃO DE FILTRO (FRONTEND) ---
+      // Cria um mapa de termos existentes para pularmos o que for igual
+      const existingMap = {};
+      if (appState && appState.pages) {
+        appState.pages.forEach(p => {
+          if (p.terms) {
+            p.terms.forEach(t => {
+              const k = (t.key || '').toLowerCase().trim();
+              if (k) existingMap[k] = (t.sheetVal || '').trim();
+            });
+          }
+        });
+      }
+
+      const filteredItems = [];
+      let frontendIgnored = 0;
+
+      keys.forEach(k => {
+        const cleanK = k.trim();
+        const cleanV = String(parsed[k]).trim();
+        
+        // Se já existe e a tradução é idêntica, ignora no frontend
+        if (existingMap[cleanK.toLowerCase()] === cleanV) {
+          frontendIgnored++;
+        } else {
+          filteredItems.push({ key: cleanK, value: cleanV });
+        }
+      });
+
+      if (filteredItems.length === 0) {
+        showToast(`Todos os ${frontendIgnored} termo(s) do arquivo já existem e são idênticos. Nada a importar.`);
+        return;
+      }
+
+      if (frontendIgnored > 0) {
+        showToast(`Ignorando ${frontendIgnored} termo(s) idêntico(s). Importando ${filteredItems.length}...`);
+      }
+
+      // --- PREPARA O ESTADO PARA O PROCESSAMENTO EM LOTES ---
       importState.isImporting = true;
       importState.isPaused = false;
       importState.shouldStop = false;
-      importState.totalItems = keys.length;
+      importState.totalItems = filteredItems.length; // Usa o tamanho filtrado
       importState.processedItems = 0;
       importState.currentIndex = 0;
-      importState.itemsArray = keys.map(k => ({ key: k, value: parsed[k] }));
+      importState.itemsArray = filteredItems;        // Usa apenas os que precisam de ação
       importState.completedPages.clear();
+      importState.retryCount = 0;
+
       document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Processando...</p>';
 
+      // Altera a interface
       document.getElementById('jsonInputAreaWrapper').classList.add('hidden');
       document.getElementById('importProgressArea').classList.remove('hidden');
       document.getElementById('btnSubmitJson').classList.add('hidden');
