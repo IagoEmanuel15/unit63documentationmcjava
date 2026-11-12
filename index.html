@@ -11,47 +11,47 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxDzjXEzbm0FUes0HHNYAR1l1tPd0I2B5BJHj7ePpQK2_4-Xo36iw5J9TeQCkD7txxQ/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyEol8aEg2I2fWdweYI0YvqokLzEqxkDYMO6V2pEFIniTqeKNj0myAYGgI9nPGvY0DY/exec";
 
-window.google = {
-    script: {
-      run: {
-        _success: null,
-        _failure: null,
-        withSuccessHandler: function(callback) { this._success = callback; return this; },
-        withFailureHandler: function(callback) { this._failure = callback; return this; },
+    // Cria o objeto global 'google' de forma segura para o navegador
+    var google = window.google || {};
+    google.script = google.script || {};
+    google.script.run = {
+      _success: null,
+      _failure: null,
+      withSuccessHandler: function(callback) { this._success = callback; return this; },
+      withFailureHandler: function(callback) { this._failure = callback; return this; },
 
-        verifyUserLogin: function(user, pass) { this._call('verifyUserLogin', { user, pass }); },
-        registerNewUser: function(user, pass) { this._call('registerNewUser', { user, pass }); },
-        verifyUserRole: function(username) { this._call('verifyUserRole', { username }); },
-        searchGlobal: function(query) { this._call('searchGlobal', { query }); },
-        getSpreadsheetData: function(role) { this._call('getSpreadsheetData', { role }); },
-        updateCellInSheet: function(sheetName, rowIndex, fieldName, value, role, username) { this._call('updateCellInSheet', { sheetName, rowIndex, fieldName, value, role, username }); },
-        addTermToSheet: function(sheetName, termData, role, username) { this._call('addTermToSheet', { sheetName, termData, role, username }); },
-        addNewPageToSpreadsheet: function(title, icon, crowdinUrl, role, username) { this._call('addNewPageToSpreadsheet', { title, icon, crowdinUrl, role, username }); },
-        deleteMultipleRowsFromSheet: function(sheetName, rowIndices, role, username) { this._call('deleteMultipleRowsFromSheet', { sheetName, rowIndices, role, username }); },
-        updateAllStatusesInSheet: function(sheetName, status, role, username) { this._call('updateAllStatusesInSheet', { sheetName, status, role, username }); },
-        getAuditLogsFromSheet: function() { this._call('getAuditLogsFromSheet', {}); },
-        recordAuditLog: function(username, title, description) { this._call('recordAuditLog', { username, title, description }); },
-        revertCellInSheet: function(sheetName, rowIndex, fieldName, oldValue, role, username) { this._call('revertCellInSheet', { sheetName, rowIndex, fieldName, oldValue, role, username }); },
-        updatePageHeaderInfo: function(oldTitle, newTitle, desc, titleLink, icon, username) { this._call('updatePageHeaderInfo', { oldTitle, newTitle, desc, titleLink, icon, username }); },
-        deleteMultiplePagesFromSpreadsheet: function(pageTitles, role, username) { this._call('deleteMultiplePagesFromSpreadsheet', { pageTitles, role, username }); },
-        restoreDeletedPageFromSnapshot: function(snapshotPayload, role, username) { this._call('restoreDeletedPageFromSnapshot', { snapshotPayload, role, username }); },
-        importJsonStringsToSheet: function(jsonDataString, role, username) { this._call('importJsonStringsToSheet', { jsonDataString, role, username }); },
+      verifyUserLogin: function(user, pass) { this._call('verifyUserLogin', { user, pass }); },
+      registerNewUser: function(user, pass) { this._call('registerNewUser', { user, pass }); },
+      verifyUserRole: function(username) { this._call('verifyUserRole', { username }); },
+      searchGlobal: function(query) { this._call('searchGlobal', { query }); },
+      getSpreadsheetData: function(role) { this._call('getSpreadsheetData', { role }); },
+      updateCellInSheet: function(sheetName, rowIndex, fieldName, value, role, username) { this._call('updateCellInSheet', { sheetName, rowIndex, fieldName, value, role, username }); },
+      addTermToSheet: function(sheetName, termData, role, username) { this._call('addTermToSheet', { sheetName, termData, role, username }); },
+      addNewPageToSpreadsheet: function(title, icon, crowdinUrl, role, username) { this._call('addNewPageToSpreadsheet', { title, icon, crowdinUrl, role, username }); },
+      deleteMultipleRowsFromSheet: function(sheetName, rowIndices, role, username) { this._call('deleteMultipleRowsFromSheet', { sheetName, rowIndices, role, username }); },
+      updateAllStatusesInSheet: function(sheetName, status, role, username) { this._call('updateAllStatusesInSheet', { sheetName, status, role, username }); },
+      getAuditLogsFromSheet: function() { this._call('getAuditLogsFromSheet', {}); },
+      recordAuditLog: function(username, title, description) { this._call('recordAuditLog', { username, title, description }); },
+      revertCellInSheet: function(sheetName, rowIndex, fieldName, oldValue, role, username) { this._call('revertCellInSheet', { sheetName, rowIndex, fieldName, oldValue, role, username }); },
+      updatePageHeaderInfo: function(oldTitle, newTitle, desc, titleLink, icon, username) { this._call('updatePageHeaderInfo', { oldTitle, newTitle, desc, titleLink, icon, username }); },
+      deleteMultiplePagesFromSpreadsheet: function(pageTitles, role, username) { this._call('deleteMultiplePagesFromSpreadsheet', { pageTitles, role, username }); },
+      restoreDeletedPageFromSnapshot: function(snapshotPayload, role, username) { this._call('restoreDeletedPageFromSnapshot', { snapshotPayload, role, username }); },
+      importJsonStringsToSheet: function(jsonDataString, role, username) { this._call('importJsonStringsToSheet', { jsonDataString, role, username }); },
 
-        _call: function(actionName, payload) {
-          const sc = this._success;
-          const fc = this._failure;
-          this._success = null;
-          this._failure = null;
-          fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: actionName, ...payload }) })
-            .then(res => res.json())
-            .then(data => { if (sc) sc(data); })
-            .catch(err => { console.error("Erro na requisição:", err); if (fc) fc(err); });
-        }
+      _call: function(actionName, payload) {
+        const sc = this._success;
+        const fc = this._failure;
+        this._success = null;
+        this._failure = null;
+        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: actionName, ...payload }) })
+          .then(res => res.json())
+          .then(data => { if (sc) sc(data); })
+          .catch(err => { console.error("Erro na requisição:", err); if (fc) fc(err); });
       }
-    }
-  };
+    };
+    window.google = google;
 
     tailwind.config = {
       darkMode: 'class',
@@ -65,7 +65,7 @@ window.google = {
           }
         }
       }
-    }
+    };
 
     function toggleDarkMode() {
       const html = document.documentElement;
@@ -101,13 +101,11 @@ window.google = {
     }
 
 /* Esconde TUDO antes do login */
-#appMainContainer, #sidebarContainer, #topSearchBarContainer, footer, #loadingScreen {
+body:not(.app-ready) #appMainContainer, 
+body:not(.app-ready) #sidebarContainer, 
+body:not(.app-ready) #topSearchBarContainer, 
+body:not(.app-ready) footer {
   display: none !important;
-}
-
-/* Mostra a tela de loading quando ativa */
-#loadingScreen:not(.hidden) {
-  display: flex !important;
 }
 
 /* Quando logado, mostra o app */
@@ -116,22 +114,6 @@ body.app-ready #sidebarContainer { display: flex !important; }
 body.app-ready #topSearchBarContainer { display: flex !important; }
 body.app-ready footer { display: flex !important; }
 
-/* Quando o app estiver pronto (classe no body), mostra tudo */
-body.app-ready #topSearchBarContainer {
-  display: flex !important;
-}
-
-body.app-ready #sidebarContainer {
-  display: flex !important;
-}
-
-body.app-ready #appMainContainer {
-  display: flex !important;
-}
-
-body.app-ready footer {
-  display: flex !important;
-}
   </style>
 </head>
 
@@ -660,7 +642,10 @@ body.app-ready footer {
 
     function showLoading() {
       const el = document.getElementById('loadingScreen');
-      if (el) el.classList.remove('hidden');
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
       clearTimeout(loadingWatchdog);
       loadingWatchdog = setTimeout(() => {
         hideLoading();
@@ -672,7 +657,10 @@ body.app-ready footer {
       clearTimeout(loadingWatchdog);
       loadingWatchdog = null;
       const el = document.getElementById('loadingScreen');
-      if (el) el.classList.add('hidden');
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
     }
 
     const STATUS_PALETTE = {
