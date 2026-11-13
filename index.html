@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYBvsmirVBaRn6FGYEdVLXD8F8dCBLOYn6WK_np1_M0hn9YYMaEuS3Pl9Yx4hWmQNy/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwN-7oEnqT1VFl0G6OQhhlmMTh-sAczs-LcgtgPaPXBULyvETbcY4Lozf3_hA_Jog29/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -1054,29 +1054,30 @@ body.app-ready footer { display: flex !important; }
       }, 15000);
     }
 
-    function handleLoginSubmit(e) {
+function handleLoginSubmit(e) {
   e.preventDefault();
   clearLoginErrorState();
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value.trim();
 
-  // 1. Ativa o estado de carregamento no botão assim que o formulário é enviado
+  // Mantém a tela de login visível e mostra o feedback apenas no botão
   setMorphButtonState('loginSubmitBtn', 'loading', 'Entrar');
-  showLoading();
 
   google.script.run
     .withSuccessHandler(res => {
       if (res && res.success) {
         try {
-          // 2. Opcional: mostra "Concluído!" antes de entrar
           setMorphButtonState('loginSubmitBtn', 'success', 'Entrar');
           currentUserSession = res.user;
+          
+          // Só abre a tela de carregamento após validar as credenciais
+          showLoading();
           document.getElementById('authScreen').classList.add('hidden');
+          
           setupUIAfterLogin();
           loadSheetsData();
           startAutoRoleSync();
           showToast(`Bem-vindo(a), ${currentUserSession.username}!`);
-          // Reseta o botão para caso o usuário faça logout depois
           setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
         } catch (err) {
           console.error('💥 ERRO após login:', err);
@@ -1085,9 +1086,8 @@ body.app-ready footer { display: flex !important; }
           showToast('Erro ao inicializar o app: ' + err.message);
         }
       } else {
-        // 3. Restaura o botão se usuário ou senha estiverem incorretos
+        // Credenciais inválidas: permanece na tela de login sem exibir #loadingScreen
         setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
-        hideLoading();
         document.querySelectorAll('.auth-input').forEach(input => input.classList.add('shake-input'));
         document.getElementById('loginErrorMsg').classList.remove('hidden');
         lucide.createIcons();
@@ -1097,10 +1097,8 @@ body.app-ready footer { display: flex !important; }
       }
     })
     .withFailureHandler(err => {
-      // 4. Restaura o botão se houver erro de conexão/servidor
       setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
       console.error('Falha no login:', err);
-      hideLoading();
       showToast('Erro de comunicação com o servidor. Tente novamente.');
     })
     .verifyUserLogin(user, pass);
@@ -2506,7 +2504,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
   if (state === 'loading') {
     btn.disabled = true;
     btn.classList.add('opacity-80', 'cursor-wait');
-    btn.innerHTML = `<iconify-icon icon="svg-spinners:ring-resize" width="16" height="16"></iconify-icon><span>Processando...</span>`;
+    btn.innerHTML = `<iconify-icon icon="svg-spinners:ring-resize" width="16" height="16"></iconify-icon>`;
   } else if (state === 'success') {
     btn.classList.remove('bg-accentBlue', 'opacity-80', 'cursor-wait');
     btn.classList.add('bg-emerald-500');
