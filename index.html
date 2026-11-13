@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwN-7oEnqT1VFl0G6OQhhlmMTh-sAczs-LcgtgPaPXBULyvETbcY4Lozf3_hA_Jog29/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbylvQNNVdcPBHWyPhfyx0yHuNc4j36GfScgM42ECJdAU9M9nF_AcWR65B7fF4YC5Bhu/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -301,6 +301,91 @@ body.app-ready footer { display: flex !important; }
 
 .leg-a { animation: legStepA 0.45s infinite; }
 .leg-b { animation: legStepB 0.45s infinite; }
+
+/* === SISTEMA DE CLIMA DINÂMICO (MINECRAFT) === */
+#authScreen {
+  transition: background 1.2s ease-in-out;
+}
+
+/* Clima 0: Ensolarado / Céu Limpo */
+#authScreen.weather-sunny {
+  background: linear-gradient(to bottom, #1d4ed8, #3b82f6, #60a5fa) !important;
+}
+
+/* Clima 1 e 2: Nublado / Carregado */
+#authScreen.weather-cloudy-1 {
+  background: linear-gradient(to bottom, #1e293b, #334155, #475569) !important;
+}
+#authScreen.weather-cloudy-2 {
+  background: linear-gradient(to bottom, #0f172a, #1e293b, #334155) !important;
+}
+
+/* Clima 3+: Tempestade */
+#authScreen.weather-storm {
+  background: linear-gradient(to bottom, #020617, #090d16, #111827) !important;
+}
+
+/* Nuvens carregadas */
+.storm-cloud {
+  position: absolute;
+  background: #334155;
+  box-shadow: 0 8px 0 #1e293b;
+  opacity: 0;
+  transition: opacity 1s ease-in-out, background-color 1s ease;
+  animation: cloudDrift linear infinite;
+}
+.storm-cloud::before,
+.storm-cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+}
+
+#authScreen.weather-cloudy-1 .storm-cloud { opacity: 0.65; }
+#authScreen.weather-cloudy-2 .storm-cloud,
+#authScreen.weather-storm .storm-cloud {
+  opacity: 0.95;
+  background: #1e293b;
+  box-shadow: 0 8px 0 #0f172a;
+}
+
+/* Gotas de chuva estilo Minecraft */
+@keyframes mcRainFall {
+  0% { transform: translateY(-10vh) translateX(0); }
+  100% { transform: translateY(110vh) translateX(-25px); }
+}
+
+.mc-rain-drop {
+  position: absolute;
+  top: -20px;
+  width: 2px;
+  height: 16px;
+  background: linear-gradient(to bottom, rgba(147, 197, 253, 0.2), rgba(96, 165, 250, 0.85));
+  animation: mcRainFall linear infinite;
+}
+
+/* Flash do Relâmpago */
+@keyframes lightningFlashAnim {
+  0% { opacity: 0; }
+  10% { opacity: 0.95; }
+  25% { opacity: 0.15; }
+  40% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+.lightning-active {
+  animation: lightningFlashAnim 0.45s ease-out forwards;
+}
+
+/* Raio pixelado no céu */
+@keyframes boltStrikeAnim {
+  0%, 100% { opacity: 0; }
+  15%, 45% { opacity: 1; }
+}
+
+.bolt-active {
+  animation: boltStrikeAnim 0.4s steps(2, end) forwards;
+}
   </style>
 </head>
 
@@ -311,20 +396,40 @@ body.app-ready footer { display: flex !important; }
     <!-- Cenário Animado -->
     <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
       
+      <!-- Sol em bloco (Visível no clima ensolarado) -->
+      <div id="mcSun" class="hidden absolute top-12 right-16 w-16 h-16 bg-amber-300 shadow-[0_0_50px_rgba(253,224,71,0.85)] border-4 border-amber-100 transition-opacity duration-1000"></div>
+
       <!-- Lua em bloco -->
-      <div class="absolute top-12 right-16 w-14 h-14 bg-amber-100/90 shadow-[0_0_35px_rgba(254,243,199,0.45)]">
+      <div id="mcMoon" class="absolute top-12 right-16 w-14 h-14 bg-amber-100/90 shadow-[0_0_35px_rgba(254,243,199,0.45)] transition-opacity duration-1000">
         <div class="w-4 h-4 bg-amber-200/60 mt-2 ml-2"></div>
         <div class="w-3 h-3 bg-amber-200/50 mt-2 ml-8"></div>
       </div>
 
-      <!-- Estrelas piscando -->
-      <div class="sky-star" style="top: 10%; left: 12%; animation-duration: 3.1s;"></div>
-      <div class="sky-star" style="top: 18%; left: 28%; animation-duration: 4.2s; animation-delay: 0.7s;"></div>
-      <div class="sky-star" style="top: 8%; left: 46%; animation-duration: 2.8s; animation-delay: 1.2s;"></div>
-      <div class="sky-star" style="top: 22%; left: 68%; animation-duration: 3.6s; animation-delay: 0.3s;"></div>
-      <div class="sky-star" style="top: 14%; left: 82%; animation-duration: 4.5s; animation-delay: 1.8s;"></div>
-      <div class="sky-star" style="top: 30%; left: 18%; animation-duration: 3.9s; animation-delay: 1.1s;"></div>
-      <div class="sky-star" style="top: 28%; left: 55%; animation-duration: 3.2s; animation-delay: 0.5s;"></div>
+      <!-- Nuvens carregadas (Aparecem ao errar a senha) -->
+      <div class="storm-cloud w-56 h-10" style="top: 8%; animation-duration: 38s; animation-delay: -5s;">
+        <div class="w-28 h-6 -top-5 left-10"></div>
+      </div>
+      <div class="storm-cloud w-72 h-12" style="top: 16%; animation-duration: 46s; animation-delay: -22s;">
+        <div class="w-36 h-8 -top-6 left-14"></div>
+      </div>
+      <div class="storm-cloud w-64 h-10" style="top: 24%; animation-duration: 41s; animation-delay: -14s;">
+        <div class="w-32 h-7 -top-5 left-12"></div>
+      </div>
+      <div class="storm-cloud w-80 h-12" style="top: 12%; animation-duration: 52s; animation-delay: -35s;">
+        <div class="w-40 h-8 -top-6 left-16"></div>
+      </div>
+
+      <!-- Camada de Chuva (Ativada a partir da 3ª tentativa falha) -->
+      <div id="mcRainLayer" class="hidden absolute inset-0 overflow-hidden"></div>
+
+      <!-- Raio Pixelado e Flash de Trovão (Ativados a partir da 4ª tentativa falha) -->
+      <div id="mcLightningBolt" class="opacity-0 absolute top-0 left-1/3 flex flex-col items-center">
+        <div class="w-3 h-16 bg-white shadow-[0_0_20px_#fff]"></div>
+        <div class="w-3 h-14 bg-white shadow-[0_0_20px_#fff] translate-x-3"></div>
+        <div class="w-3 h-16 bg-white shadow-[0_0_20px_#fff]"></div>
+        <div class="w-2 h-20 bg-cyan-100 shadow-[0_0_25px_#38bdf8] -translate-x-2"></div>
+      </div>
+      <div id="mcLightningFlash" class="opacity-0 fixed inset-0 bg-white z-40 pointer-events-none"></div>
 
       <!-- Nuvens deslizando pelo céu -->
       <div class="sky-cloud w-36 h-7" style="top: 14%; animation-duration: 48s; animation-delay: -10s;">
@@ -1060,7 +1165,6 @@ function handleLoginSubmit(e) {
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value.trim();
 
-  // Mantém a tela de login visível e mostra o feedback apenas no botão
   setMorphButtonState('loginSubmitBtn', 'loading', 'Entrar');
 
   google.script.run
@@ -1069,16 +1173,19 @@ function handleLoginSubmit(e) {
         try {
           setMorphButtonState('loginSubmitBtn', 'success', 'Entrar');
           currentUserSession = res.user;
-          
-          // Só abre a tela de carregamento após validar as credenciais
-          showLoading();
-          document.getElementById('authScreen').classList.add('hidden');
-          
-          setupUIAfterLogin();
-          loadSheetsData();
-          startAutoRoleSync();
-          showToast(`Bem-vindo(a), ${currentUserSession.username}!`);
-          setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+
+          // Restaura o clima ensolarado ao acertar as credenciais
+          updateLoginWeather(0, true);
+
+          setTimeout(() => {
+            showLoading();
+            document.getElementById('authScreen').classList.add('hidden');
+            setupUIAfterLogin();
+            loadSheetsData();
+            startAutoRoleSync();
+            showToast(`Bem-vindo(a), ${currentUserSession.username}!`);
+            setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+          }, 750);
         } catch (err) {
           console.error('💥 ERRO após login:', err);
           setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
@@ -1086,7 +1193,10 @@ function handleLoginSubmit(e) {
           showToast('Erro ao inicializar o app: ' + err.message);
         }
       } else {
-        // Credenciais inválidas: permanece na tela de login sem exibir #loadingScreen
+        // Incrementa falhas e piora o clima progressivamente
+        failedLoginAttempts++;
+        updateLoginWeather(failedLoginAttempts, false);
+
         setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
         document.querySelectorAll('.auth-input').forEach(input => input.classList.add('shake-input'));
         document.getElementById('loginErrorMsg').classList.remove('hidden');
@@ -1145,14 +1255,20 @@ function triggerViewAnimation(containerId) {
     .registerNewUser(user, pass);
 }
 
-        function logoutSession() {
+    function logoutSession() {
       if (roleCheckInterval) clearInterval(roleCheckInterval);
+      if (thunderInterval) { clearInterval(thunderInterval); thunderInterval = null; }
+      failedLoginAttempts = 0;
       hideLoading();
       currentUserSession = null;
-      
-      document.body.classList.remove('app-ready');
 
-      document.getElementById('authScreen').classList.remove('hidden');
+      document.body.classList.remove('app-ready');
+      const authScreen = document.getElementById('authScreen');
+      authScreen.classList.remove('hidden', 'weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
+      document.getElementById('mcRainLayer').classList.add('hidden');
+      document.getElementById('mcSun').classList.add('hidden');
+      document.getElementById('mcMoon').classList.remove('hidden');
+
       document.getElementById('loginUser').value = '';
       document.getElementById('loginPass').value = '';
       clearLoginErrorState();
@@ -2520,6 +2636,127 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
 document.addEventListener('DOMContentLoaded', () => {
   lucide.createIcons();
 });
+
+let failedLoginAttempts = 0;
+    let thunderInterval = null;
+    let rainInitialized = false;
+
+    function initRainDrops() {
+      if (rainInitialized) return;
+      const rainLayer = document.getElementById('mcRainLayer');
+      if (!rainLayer) return;
+      let dropsHtml = '';
+      for (let i = 0; i < 95; i++) {
+        const left = Math.random() * 100;
+        const duration = 0.55 + Math.random() * 0.45;
+        const delay = Math.random() * -2;
+        dropsHtml += `<div class="mc-rain-drop" style="left:${left}%; animation-duration:${duration}s; animation-delay:${delay}s;"></div>`;
+      }
+      rainLayer.innerHTML = dropsHtml;
+      rainInitialized = true;
+    }
+
+    // Sintetiza o som grave e estalado de trovão do Minecraft via Web Audio API
+    function playMinecraftThunderSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const duration = 2.4;
+        const bufferSize = ctx.sampleRate * duration;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+          const decay = Math.pow(1 - i / bufferSize, 1.8);
+          data[i] = (Math.random() * 2 - 1) * decay;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(280, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + duration);
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.85, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    function triggerMinecraftThunder() {
+      const flash = document.getElementById('mcLightningFlash');
+      const bolt = document.getElementById('mcLightningBolt');
+      if (bolt) {
+        bolt.style.left = (15 + Math.random() * 70) + '%';
+        bolt.classList.remove('bolt-active');
+        void bolt.offsetWidth;
+        bolt.classList.add('bolt-active');
+      }
+      if (flash) {
+        flash.classList.remove('lightning-active');
+        void flash.offsetWidth;
+        flash.classList.add('lightning-active');
+      }
+      playMinecraftThunderSound();
+    }
+
+    function updateLoginWeather(attempts, isSunny = false) {
+      const screen = document.getElementById('authScreen');
+      const rainLayer = document.getElementById('mcRainLayer');
+      const sun = document.getElementById('mcSun');
+      const moon = document.getElementById('mcMoon');
+      if (!screen) return;
+
+      screen.classList.remove('weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
+
+      if (isSunny) {
+        failedLoginAttempts = 0;
+        if (thunderInterval) {
+          clearInterval(thunderInterval);
+          thunderInterval = null;
+        }
+        if (rainLayer) rainLayer.classList.add('hidden');
+        if (moon) moon.classList.add('hidden');
+        if (sun) sun.classList.remove('hidden');
+        screen.classList.add('weather-sunny');
+        return;
+      }
+
+      if (sun) sun.classList.add('hidden');
+      if (moon) moon.classList.remove('hidden');
+
+      if (attempts === 1) {
+        screen.classList.add('weather-cloudy-1');
+      } else if (attempts === 2) {
+        screen.classList.add('weather-cloudy-2');
+      } else if (attempts === 3) {
+        screen.classList.add('weather-storm');
+        initRainDrops();
+        if (rainLayer) rainLayer.classList.remove('hidden');
+      } else if (attempts >= 4) {
+        screen.classList.add('weather-storm');
+        initRainDrops();
+        if (rainLayer) rainLayer.classList.remove('hidden');
+
+        // Dispara um trovão imediatamente e agenda trovões periódicos
+        triggerMinecraftThunder();
+        if (!thunderInterval) {
+          thunderInterval = setInterval(() => {
+            if (failedLoginAttempts >= 4 && !screen.classList.contains('hidden')) {
+              triggerMinecraftThunder();
+            }
+          }, 5500);
+        }
+      }
+    }
   </script>
 </body>
 </html>
