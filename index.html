@@ -11,7 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyEol8aEg2I2fWdweYI0YvqokLzEqxkDYMO6V2pEFIniTqeKNj0myAYGgI9nPGvY0DY/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxH8c0YLOHF45LJuX1FLaSmJ4zqBHRO6MQa1uxONHcwoYHIVLXsrJC-nUWpHndYkWcI/exec";
+
+    // Cria o objeto global 'google' de forma segura para o navegador
     var google = window.google || {};
     google.script = google.script || {};
     google.script.run = {
@@ -98,13 +100,15 @@
       box-sizing: border-box;
     }
 
+/* Esconde TUDO antes do login */
 body:not(.app-ready) #appMainContainer, 
 body:not(.app-ready) #sidebarContainer, 
 body:not(.app-ready) #topSearchBarContainer, 
 body:not(.app-ready) footer {
   display: none !important;
 }
-    
+
+/* Quando logado, mostra o app */
 body.app-ready #appMainContainer { display: flex !important; }
 body.app-ready #sidebarContainer { display: flex !important; }
 body.app-ready #topSearchBarContainer { display: flex !important; }
@@ -172,6 +176,7 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
+  <!-- TELA DE CARREGAMENTO -->
   <div id="loadingScreen" class="fixed inset-0 bg-[#0b2863] z-[9999] hidden flex-col items-center justify-center space-y-4">
     <div class="relative flex items-center justify-center w-16 h-16">
       <iconify-icon icon="svg-spinners:blocks-wave" class="text-5xl text-white"></iconify-icon>
@@ -182,6 +187,7 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
+  <!-- CONTAINER PRINCIPAL -->
   <div id="appMainContainer" class="w-full h-[calc(100vh-32px)] bg-bgLight dark:bg-bgDark overflow-hidden m-0 p-0">
   
     <aside id="sidebarContainer" class="w-64 bg-sidebar text-white flex-col justify-between shrink-0 p-5 overflow-x-visible transition-colors duration-200 h-full">
@@ -269,8 +275,10 @@ body.app-ready footer { display: flex !important; }
        placeholder="Buscar em todas as páginas por chaves, termos ou traduções..." 
        class="w-full bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-700 dark:text-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all relative z-50">
           
+          <!-- DROPDOWN DE RESULTADOS -->
           <div id="searchDropdown" class="hidden absolute top-full left-0 w-full mt-2 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-[60] max-h-80 overflow-y-auto">
             <div id="searchResultsList" class="p-2 space-y-1">
+              <!-- Resultados injetados via JS -->
             </div>
           </div>
         </div>
@@ -345,26 +353,31 @@ body.app-ready footer { display: flex !important; }
       </div>
 
       <div id="pageViewContainer" class="hidden flex-1 flex flex-col space-y-4 overflow-hidden">
-        <div class="flex items-center justify-between bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <div class="flex items-center gap-3">
-            <div id="activePageIcon" class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue"><i data-lucide="folder" class="w-6 h-6"></i></div>
-            <div class="flex items-center gap-3">
-              <div>
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <div id="activePageIcon" class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue shrink-0">
+              <i data-lucide="folder" class="w-6 h-6"></i>
+            </div>
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2">
-                  <span id="activePageTitle" class="text-base font-bold text-slate-800 dark:text-white font-mono">Carregando...</span>
-                  <button id="editHeaderBtn" onclick="openEditHeaderModal()" class="p-1 text-slate-400 hover:text-accentBlue rounded-lg"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                  <span id="activePageTitle" class="text-base font-bold text-slate-800 dark:text-white font-mono truncate">Carregando...</span>
+                  <button id="editHeaderBtn" onclick="openEditHeaderModal()" class="p-1 text-slate-400 hover:text-accentBlue rounded-lg shrink-0">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                  </button>
                 </div>
-                <p id="activePageDesc" class="text-xs text-slate-500 dark:text-slate-400">Sincronizado com a planilha</p>
+                <p id="activePageDesc" class="text-xs text-slate-500 dark:text-slate-400 truncate">Sincronizado com a planilha</p>
               </div>
-              <div id="activePageCrowdinContainer"></div>
+              <div id="activePageCrowdinContainer" class="shrink-0"></div>
             </div>
           </div>
 
-          <div class="flex items-center space-x-2">
-            <button id="bulkStatusBtn" onclick="openBulkStatusModal()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
-              <i data-lucide="check-check" class="w-3.5 h-3.5 text-brandGreen"></i> Status da página
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button id="bulkStatusBtn" onclick="openBulkStatusModal()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 whitespace-nowrap shrink-0">
+              <i data-lucide="check-check" class="w-3.5 h-3.5 text-brandGreen shrink-0"></i>
+              <span>Status da página</span>
             </button>
-            <div class="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-xl text-xs">
+            <div class="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-xl text-xs whitespace-nowrap shrink-0">
               <span>Exibir:</span>
               <select id="itemsPerPageSelect" onchange="changeItemsPerPage(this.value)" class="bg-transparent font-semibold cursor-pointer focus:outline-none text-slate-700 dark:text-slate-200">
                 <option value="30">30 por página</option>
@@ -373,8 +386,9 @@ body.app-ready footer { display: flex !important; }
                 <option value="all">Todas</option>
               </select>
             </div>
-            <button onclick="deleteSelectedTerms()" id="deleteSelectedBtn" disabled class="px-3 py-2 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 opacity-50 cursor-not-allowed text-xs font-semibold flex items-center gap-1.5 transition-all">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Apagar (<span id="selectedCount">0</span>)
+            <button onclick="deleteSelectedTerms()" id="deleteSelectedBtn" disabled class="px-3 py-2 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 opacity-50 cursor-not-allowed text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-all">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5 shrink-0"></i>
+              <span>Apagar (<span id="selectedCount">0</span>)</span>
             </button>
           </div>
         </div>
@@ -469,6 +483,7 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
+  <!-- MODAL DE IMPORTAÇÃO DE JSON COM PROGRESSO -->
   <div id="jsonImportModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4">
       
@@ -503,6 +518,7 @@ body.app-ready footer { display: flex !important; }
             </div>
           </div>
 
+          <!-- NOVA ÁREA DE HISTÓRICO DE PÁGINAS -->
           <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
             <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Páginas importadas:</span>
             <div id="importPagesHistory" class="max-h-32 overflow-y-auto space-y-1 text-xs font-mono text-slate-600 dark:text-slate-400">
@@ -569,6 +585,7 @@ body.app-ready footer { display: flex !important; }
         <button onclick="closeManagePagesModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
       </div>
       
+      <!-- NOVO BOTÃO: SELECIONAR TODAS -->
       <div class="flex items-center gap-2 px-1 pb-1">
         <input type="checkbox" id="selectAllPagesCheckbox" onchange="toggleSelectAllPages(this.checked)" class="rounded border-slate-300 dark:border-slate-700 w-4 h-4 cursor-pointer">
         <label for="selectAllPagesCheckbox" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">Selecionar todas as páginas</label>
@@ -639,7 +656,7 @@ body.app-ready footer { display: flex !important; }
       loadingWatchdog = setTimeout(() => {
         hideLoading();
         showToast('O servidor demorou para responder. Tente sincronizar novamente.');
-      }, 45000);
+      }, 90000); // Aumentado de 45s para 90s
     }
 
     function hideLoading() {
@@ -784,6 +801,7 @@ body.app-ready footer { display: flex !important; }
       hideLoading();
       currentUserSession = null;
       
+      // Esconde a interface inteira novamente
       document.body.classList.remove('app-ready');
 
       document.getElementById('authScreen').classList.remove('hidden');
@@ -807,12 +825,14 @@ body.app-ready footer { display: flex !important; }
 
       document.body.classList.add('app-ready');
 
+      // 1. Libera o container principal (remove o hidden e coloca flex)
       const appMain = document.getElementById('appMainContainer');
       if (appMain) {
         appMain.classList.remove('hidden');
         appMain.classList.add('flex');
       }
 
+      // 2. Mostra a barra de busca e ajusta o flex
       standardPages.classList.remove('hidden');
       if (topSearch) {
         topSearch.classList.remove('hidden');
@@ -941,6 +961,7 @@ body.app-ready footer { display: flex !important; }
         .deleteMultipleRowsFromSheet(page.title, [rowIndex], currentUserSession.role, currentUserSession.username);
     }
 
+    // Nova função para marcar/desmarcar todas
     function toggleSelectAllPages(isChecked) {
       const checkboxes = document.querySelectorAll('.manage-page-checkbox');
       checkboxes.forEach(cb => cb.checked = isChecked);
@@ -1098,6 +1119,7 @@ body.app-ready footer { display: flex !important; }
       const selectAllCheckbox = document.getElementById('selectAllCheckbox');
       if (selectAllCheckbox && isLeitor) selectAllCheckbox.parentElement.style.display = 'none';
 
+      // Só aplica o filtro se estiver na view de página
 const searchQuery = (currentViewMode === 'page' && document.getElementById('searchInput')) 
   ? document.getElementById('searchInput').value.toLowerCase().trim() 
   : '';
@@ -1170,8 +1192,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
 
     function openSummaryView() {
       currentViewMode = 'summary';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('searchDropdown').classList.add('hidden');
+      document.getElementById('searchInput').value = ''; // Adicione esta linha
+      document.getElementById('searchDropdown').classList.add('hidden'); // Adicione esta linha
       
       currentViewMode = 'summary';
       document.getElementById('historyViewContainer').classList.add('hidden');
@@ -1393,32 +1415,27 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
 
     function loadSheetsData(isManual = false) {
       if (isManual) showToast('Sincronizando...'); else showLoading();
-      const username = currentUserSession ? currentUserSession.username : '';
+      const role = currentUserSession ? currentUserSession.role : 'leitor';
 
       google.script.run
-        .withSuccessHandler(roleRes => {
+        .withSuccessHandler(data => {
           try {
-            if (roleRes && roleRes.success) {
-              currentUserSession.role = roleRes.role;
-              setupUIAfterLogin();
-            }
-            const role = currentUserSession ? currentUserSession.role : 'leitor';
-            google.script.run
-              .withSuccessHandler(data => {
-                try { appState = data || { pages: [] }; renderApp(); }
-                catch (e) { console.error('Erro na renderização:', e); showToast('Erro ao renderizar os dados.'); }
-                finally { hideLoading(); if (isManual) showToast('Sincronizado com sucesso!'); }
-              })
-              .withFailureHandler(err => { console.error('Erro no getSpreadsheetData:', err); hideLoading(); showToast('Erro ao carregar dados da planilha.'); })
-              .getSpreadsheetData(role);
+            appState = data || { pages: [] };
+            renderApp();
           } catch (e) {
-            console.error('Erro no handler do verifyUserRole:', e);
+            console.error('Erro na renderização:', e);
+            showToast('Erro ao renderizar os dados.');
+          } finally {
             hideLoading();
-            showToast('Erro ao verificar permissões.');
+            if (isManual) showToast('Sincronizado com sucesso!');
           }
         })
-        .withFailureHandler(err => { console.error('Erro no verifyUserRole:', err); hideLoading(); showToast('Erro ao verificar permissões do usuário.'); })
-        .verifyUserRole(username);
+        .withFailureHandler(err => {
+          console.error('Erro no getSpreadsheetData:', err);
+          hideLoading();
+          showToast('Erro ao carregar dados da planilha.');
+        })
+        .getSpreadsheetData(role);
     }
 
     function togglePagesSort() {
@@ -1499,8 +1516,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       appState.activePageId = pageId;
       currentPage = 1;
       selectedRowIndices.clear();
-      document.getElementById('searchInput').value = '';
-      document.getElementById('searchDropdown').classList.add('hidden');
+      document.getElementById('searchInput').value = ''; // Adicione esta linha
+      document.getElementById('searchDropdown').classList.add('hidden'); // Adicione esta linha
       
       currentViewMode = 'page';
       appState.activePageId = pageId;
@@ -1682,6 +1699,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const countEl = document.getElementById('selectedPagesCount');
       if (countEl) countEl.innerText = checkedCheckboxes.length;
 
+      // Se o usuário desmarcar uma página, desmarca o "Selecionar todas"
       const selectAllCb = document.getElementById('selectAllPagesCheckbox');
       if (selectAllCb && checkedCheckboxes.length !== checkboxes.length) {
         selectAllCb.checked = false;
@@ -1815,8 +1833,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       itemsArray: [],
       chunkSize: 50,
       completedPages: new Set(),
-      retryCount: 0,
-      maxRetries: 3
+      retryCount: 0,       // NOVO: Contador de tentativas do lote atual
+      maxRetries: 3        // NOVO: Limite máximo de tentativas por lote
     };
 
     function togglePauseImport() {
@@ -1872,6 +1890,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
+      // --- OTIMIZAÇÃO DE FILTRO (FRONTEND) ---
+      // Cria um mapa de termos existentes para pularmos o que for igual
       const existingMap = {};
       if (appState && appState.pages) {
         appState.pages.forEach(p => {
@@ -1891,6 +1911,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         const cleanK = k.trim();
         const cleanV = String(parsed[k]).trim();
         
+        // Se já existe e a tradução é idêntica, ignora no frontend
         if (existingMap[cleanK.toLowerCase()] === cleanV) {
           frontendIgnored++;
         } else {
@@ -1907,18 +1928,20 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         showToast(`Ignorando ${frontendIgnored} termo(s) idêntico(s). Importando ${filteredItems.length}...`);
       }
 
+      // --- PREPARA O ESTADO PARA O PROCESSAMENTO EM LOTES ---
       importState.isImporting = true;
       importState.isPaused = false;
       importState.shouldStop = false;
-      importState.totalItems = filteredItems.length;
+      importState.totalItems = filteredItems.length; // Usa o tamanho filtrado
       importState.processedItems = 0;
       importState.currentIndex = 0;
-      importState.itemsArray = filteredItems;        
+      importState.itemsArray = filteredItems;        // Usa apenas os que precisam de ação
       importState.completedPages.clear();
       importState.retryCount = 0;
 
       document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Processando...</p>';
 
+      // Altera a interface
       document.getElementById('jsonInputAreaWrapper').classList.add('hidden');
       document.getElementById('importProgressArea').classList.remove('hidden');
       document.getElementById('btnSubmitJson').classList.add('hidden');
@@ -1935,11 +1958,13 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         function processNextChunk() {
       if (!importState.isImporting || importState.isPaused || importState.shouldStop) return;
       
+      // Se já processou tudo o que tinha que processar, finaliza 100%
       if (importState.currentIndex >= importState.totalItems) {
         finishImport();
         return;
       }
 
+      // Pega o lote atual (sem avançar o index ainda)
       const start = importState.currentIndex;
       const chunk = importState.itemsArray.slice(start, start + importState.chunkSize);
       
@@ -1949,6 +1974,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const role = currentUserSession ? currentUserSession.role : 'editor';
       const username = currentUserSession ? currentUserSession.username : 'Sistema';
 
+      // Função para lidar com falhas (Auto-recuperação)
       const handleFailure = (err) => {
         console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, err);
         
@@ -1956,8 +1982,10 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
           importState.retryCount++;
           document.getElementById('importStatusText').innerText = `Falha detectada. Retentando (${importState.retryCount}/${importState.maxRetries})...`;
           
+          // Espera um tempo progressivo antes de tentar de novo (2s, 4s, 6s)
           setTimeout(processNextChunk, 2000 * importState.retryCount);
         } else {
+          // Estourou o limite de tentativas. Pausa para não perder dados.
           document.getElementById('importStatusText').innerText = 'Erro persistente. Importação pausada.';
           importState.isPaused = true;
           document.getElementById('btnPauseImport').innerText = 'Retomar';
@@ -1968,10 +1996,12 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       
       google.script.run
         .withSuccessHandler(res => {
+          // Se chegou aqui, o lote foi lido (mesmo que com duplicados)
           
+          // Agora sim, avançamos os contadores
           importState.currentIndex += chunk.length;
           importState.processedItems += chunk.length;
-          importState.retryCount = 0;
+          importState.retryCount = 0; // Reseta o contador para o próximo lote
           
           if (importState.processedItems > importState.totalItems) {
             importState.processedItems = importState.totalItems;
@@ -1979,6 +2009,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
           
           updateProgressBar();
 
+          // Atualiza o histórico visual de páginas
           if (res && res.affectedPages && res.affectedPages.length > 0) {
             let hasNewPage = false;
             res.affectedPages.forEach(pageName => {
@@ -2002,8 +2033,10 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
             }
           }
           
+          // Volta o texto para "Processando" caso tenha saído dele numa tentativa falha
           document.getElementById('importStatusText').innerText = 'Processando...';
 
+          // Chama o próximo lote
           setTimeout(processNextChunk, 300); 
         })
         .withFailureHandler(handleFailure)
@@ -2038,6 +2071,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const dropdown = document.getElementById('searchDropdown');
       const resultsList = document.getElementById('searchResultsList');
 
+      // Se estiver dentro de uma página, apenas filtra a tabela
       if (currentViewMode === 'page') {
         dropdown.classList.add('hidden');
         currentPage = 1;
@@ -2045,6 +2079,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
+      // Se estiver no sumário, faz a busca global
       if (query.trim().length < 2) {
         dropdown.classList.add('hidden');
         return;
