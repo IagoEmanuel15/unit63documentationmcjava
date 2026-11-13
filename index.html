@@ -12,8 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxH8c0YLOHF45LJuX1FLaSmJ4zqBHRO6MQa1uxONHcwoYHIVLXsrJC-nUWpHndYkWcI/exec";
-
-    // Cria o objeto global 'google' de forma segura para o navegador
+    
     var google = window.google || {};
     google.script = google.script || {};
     google.script.run = {
@@ -119,7 +118,6 @@ body.app-ready footer { display: flex !important; }
 
 <body id="appBody" class="bg-bgLight dark:bg-bgDark text-slate-800 dark:text-slate-100 font-sans antialiased h-screen w-screen flex flex-col overflow-hidden m-0 p-0 transition-colors duration-200">
 
-  <!-- TELA DE AUTENTICAÇÃO -->
   <div id="authScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0b2863] p-4">
     <div class="relative w-full max-w-md bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-[30px] p-8 shadow-2xl space-y-6">
       <div class="text-center space-y-2">
@@ -176,7 +174,6 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
-  <!-- TELA DE CARREGAMENTO -->
   <div id="loadingScreen" class="fixed inset-0 bg-[#0b2863] z-[9999] hidden flex-col items-center justify-center space-y-4">
     <div class="relative flex items-center justify-center w-16 h-16">
       <iconify-icon icon="svg-spinners:blocks-wave" class="text-5xl text-white"></iconify-icon>
@@ -187,7 +184,6 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
-  <!-- CONTAINER PRINCIPAL -->
   <div id="appMainContainer" class="w-full h-[calc(100vh-32px)] bg-bgLight dark:bg-bgDark overflow-hidden m-0 p-0">
   
     <aside id="sidebarContainer" class="w-64 bg-sidebar text-white flex-col justify-between shrink-0 p-5 overflow-x-visible transition-colors duration-200 h-full">
@@ -275,10 +271,8 @@ body.app-ready footer { display: flex !important; }
        placeholder="Buscar em todas as páginas por chaves, termos ou traduções..." 
        class="w-full bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-700 dark:text-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all relative z-50">
           
-          <!-- DROPDOWN DE RESULTADOS -->
           <div id="searchDropdown" class="hidden absolute top-full left-0 w-full mt-2 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-[60] max-h-80 overflow-y-auto">
             <div id="searchResultsList" class="p-2 space-y-1">
-              <!-- Resultados injetados via JS -->
             </div>
           </div>
         </div>
@@ -483,7 +477,6 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
-  <!-- MODAL DE IMPORTAÇÃO DE JSON COM PROGRESSO -->
   <div id="jsonImportModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4">
       
@@ -518,7 +511,6 @@ body.app-ready footer { display: flex !important; }
             </div>
           </div>
 
-          <!-- NOVA ÁREA DE HISTÓRICO DE PÁGINAS -->
           <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
             <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Páginas importadas:</span>
             <div id="importPagesHistory" class="max-h-32 overflow-y-auto space-y-1 text-xs font-mono text-slate-600 dark:text-slate-400">
@@ -585,7 +577,6 @@ body.app-ready footer { display: flex !important; }
         <button onclick="closeManagePagesModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
       </div>
       
-      <!-- NOVO BOTÃO: SELECIONAR TODAS -->
       <div class="flex items-center gap-2 px-1 pb-1">
         <input type="checkbox" id="selectAllPagesCheckbox" onchange="toggleSelectAllPages(this.checked)" class="rounded border-slate-300 dark:border-slate-700 w-4 h-4 cursor-pointer">
         <label for="selectAllPagesCheckbox" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">Selecionar todas as páginas</label>
@@ -801,7 +792,6 @@ body.app-ready footer { display: flex !important; }
       hideLoading();
       currentUserSession = null;
       
-      // Esconde a interface inteira novamente
       document.body.classList.remove('app-ready');
 
       document.getElementById('authScreen').classList.remove('hidden');
@@ -825,14 +815,12 @@ body.app-ready footer { display: flex !important; }
 
       document.body.classList.add('app-ready');
 
-      // 1. Libera o container principal (remove o hidden e coloca flex)
       const appMain = document.getElementById('appMainContainer');
       if (appMain) {
         appMain.classList.remove('hidden');
         appMain.classList.add('flex');
       }
 
-      // 2. Mostra a barra de busca e ajusta o flex
       standardPages.classList.remove('hidden');
       if (topSearch) {
         topSearch.classList.remove('hidden');
@@ -961,7 +949,6 @@ body.app-ready footer { display: flex !important; }
         .deleteMultipleRowsFromSheet(page.title, [rowIndex], currentUserSession.role, currentUserSession.username);
     }
 
-    // Nova função para marcar/desmarcar todas
     function toggleSelectAllPages(isChecked) {
       const checkboxes = document.querySelectorAll('.manage-page-checkbox');
       checkboxes.forEach(cb => cb.checked = isChecked);
@@ -1119,7 +1106,6 @@ body.app-ready footer { display: flex !important; }
       const selectAllCheckbox = document.getElementById('selectAllCheckbox');
       if (selectAllCheckbox && isLeitor) selectAllCheckbox.parentElement.style.display = 'none';
 
-      // Só aplica o filtro se estiver na view de página
 const searchQuery = (currentViewMode === 'page' && document.getElementById('searchInput')) 
   ? document.getElementById('searchInput').value.toLowerCase().trim() 
   : '';
@@ -1192,8 +1178,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
 
     function openSummaryView() {
       currentViewMode = 'summary';
-      document.getElementById('searchInput').value = ''; // Adicione esta linha
-      document.getElementById('searchDropdown').classList.add('hidden'); // Adicione esta linha
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchDropdown').classList.add('hidden');
       
       currentViewMode = 'summary';
       document.getElementById('historyViewContainer').classList.add('hidden');
@@ -1516,8 +1502,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       appState.activePageId = pageId;
       currentPage = 1;
       selectedRowIndices.clear();
-      document.getElementById('searchInput').value = ''; // Adicione esta linha
-      document.getElementById('searchDropdown').classList.add('hidden'); // Adicione esta linha
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchDropdown').classList.add('hidden');
       
       currentViewMode = 'page';
       appState.activePageId = pageId;
@@ -1699,7 +1685,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const countEl = document.getElementById('selectedPagesCount');
       if (countEl) countEl.innerText = checkedCheckboxes.length;
 
-      // Se o usuário desmarcar uma página, desmarca o "Selecionar todas"
       const selectAllCb = document.getElementById('selectAllPagesCheckbox');
       if (selectAllCb && checkedCheckboxes.length !== checkboxes.length) {
         selectAllCb.checked = false;
@@ -1833,8 +1818,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       itemsArray: [],
       chunkSize: 50,
       completedPages: new Set(),
-      retryCount: 0,       // NOVO: Contador de tentativas do lote atual
-      maxRetries: 3        // NOVO: Limite máximo de tentativas por lote
+      retryCount: 0, 
+      maxRetries: 3
     };
 
     function togglePauseImport() {
@@ -1890,8 +1875,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
-      // --- OTIMIZAÇÃO DE FILTRO (FRONTEND) ---
-      // Cria um mapa de termos existentes para pularmos o que for igual
       const existingMap = {};
       if (appState && appState.pages) {
         appState.pages.forEach(p => {
@@ -1911,7 +1894,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         const cleanK = k.trim();
         const cleanV = String(parsed[k]).trim();
         
-        // Se já existe e a tradução é idêntica, ignora no frontend
         if (existingMap[cleanK.toLowerCase()] === cleanV) {
           frontendIgnored++;
         } else {
@@ -1928,20 +1910,18 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         showToast(`Ignorando ${frontendIgnored} termo(s) idêntico(s). Importando ${filteredItems.length}...`);
       }
 
-      // --- PREPARA O ESTADO PARA O PROCESSAMENTO EM LOTES ---
       importState.isImporting = true;
       importState.isPaused = false;
       importState.shouldStop = false;
-      importState.totalItems = filteredItems.length; // Usa o tamanho filtrado
+      importState.totalItems = filteredItems.length; 
       importState.processedItems = 0;
       importState.currentIndex = 0;
-      importState.itemsArray = filteredItems;        // Usa apenas os que precisam de ação
+      importState.itemsArray = filteredItems;  
       importState.completedPages.clear();
       importState.retryCount = 0;
 
       document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Processando...</p>';
 
-      // Altera a interface
       document.getElementById('jsonInputAreaWrapper').classList.add('hidden');
       document.getElementById('importProgressArea').classList.remove('hidden');
       document.getElementById('btnSubmitJson').classList.add('hidden');
@@ -1958,13 +1938,11 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         function processNextChunk() {
       if (!importState.isImporting || importState.isPaused || importState.shouldStop) return;
       
-      // Se já processou tudo o que tinha que processar, finaliza 100%
       if (importState.currentIndex >= importState.totalItems) {
         finishImport();
         return;
       }
 
-      // Pega o lote atual (sem avançar o index ainda)
       const start = importState.currentIndex;
       const chunk = importState.itemsArray.slice(start, start + importState.chunkSize);
       
@@ -1974,7 +1952,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const role = currentUserSession ? currentUserSession.role : 'editor';
       const username = currentUserSession ? currentUserSession.username : 'Sistema';
 
-      // Função para lidar com falhas (Auto-recuperação)
       const handleFailure = (err) => {
         console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, err);
         
@@ -1982,10 +1959,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
           importState.retryCount++;
           document.getElementById('importStatusText').innerText = `Falha detectada. Retentando (${importState.retryCount}/${importState.maxRetries})...`;
           
-          // Espera um tempo progressivo antes de tentar de novo (2s, 4s, 6s)
           setTimeout(processNextChunk, 2000 * importState.retryCount);
         } else {
-          // Estourou o limite de tentativas. Pausa para não perder dados.
           document.getElementById('importStatusText').innerText = 'Erro persistente. Importação pausada.';
           importState.isPaused = true;
           document.getElementById('btnPauseImport').innerText = 'Retomar';
@@ -1996,12 +1971,10 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       
       google.script.run
         .withSuccessHandler(res => {
-          // Se chegou aqui, o lote foi lido (mesmo que com duplicados)
           
-          // Agora sim, avançamos os contadores
           importState.currentIndex += chunk.length;
           importState.processedItems += chunk.length;
-          importState.retryCount = 0; // Reseta o contador para o próximo lote
+          importState.retryCount = 0;
           
           if (importState.processedItems > importState.totalItems) {
             importState.processedItems = importState.totalItems;
@@ -2009,7 +1982,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
           
           updateProgressBar();
 
-          // Atualiza o histórico visual de páginas
           if (res && res.affectedPages && res.affectedPages.length > 0) {
             let hasNewPage = false;
             res.affectedPages.forEach(pageName => {
@@ -2033,10 +2005,8 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
             }
           }
           
-          // Volta o texto para "Processando" caso tenha saído dele numa tentativa falha
           document.getElementById('importStatusText').innerText = 'Processando...';
 
-          // Chama o próximo lote
           setTimeout(processNextChunk, 300); 
         })
         .withFailureHandler(handleFailure)
@@ -2071,7 +2041,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const dropdown = document.getElementById('searchDropdown');
       const resultsList = document.getElementById('searchResultsList');
 
-      // Se estiver dentro de uma página, apenas filtra a tabela
       if (currentViewMode === 'page') {
         dropdown.classList.add('hidden');
         currentPage = 1;
@@ -2079,7 +2048,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
-      // Se estiver no sumário, faz a busca global
       if (query.trim().length < 2) {
         dropdown.classList.add('hidden');
         return;
