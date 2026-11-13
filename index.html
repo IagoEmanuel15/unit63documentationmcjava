@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxwMrcE0FwmdPCMTYEnZjm7_RvIx2y1Ernswwj6ne96CEumZ6t5DJGqcxqwdSfqLDMd/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYBvsmirVBaRn6FGYEdVLXD8F8dCBLOYn6WK_np1_M0hn9YYMaEuS3Pl9Yx4hWmQNy/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -2146,40 +2146,6 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       restoreCallback = function() {};
     }
 
-    function openJsonImportModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      document.getElementById('jsonContentArea').value = '';
-      document.getElementById('jsonFileInput').value = '';
-      
-      document.getElementById('importProgressArea').classList.add('hidden');
-      document.getElementById('jsonInputAreaWrapper').classList.remove('hidden');
-      document.getElementById('btnSubmitJson').classList.remove('hidden');
-      document.getElementById('btnCancelJson').classList.remove('hidden');
-      document.getElementById('btnCancelJson').innerText = 'Cancelar';
-      
-      document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Aguardando importação...</p>';
-      importState.completedPages.clear();
-
-      document.getElementById('jsonImportModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeJsonImportModal() {
-      if (importState.isImporting) {
-        if (!confirm("A importação está em andamento. Deseja realmente fechar?")) return;
-        stopImport();
-      }
-      document.getElementById('jsonImportModal').classList.add('hidden');
-    }
-
-    function handleJsonFileSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) { document.getElementById('jsonContentArea').value = e.target.result; };
-      reader.readAsText(file);
-    }
-
     let importState = {
       isImporting: false,
       isPaused: false,
@@ -2190,20 +2156,74 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       itemsArray: [],
       chunkSize: 50,
       completedPages: new Set(),
-      retryCount: 0, 
+      retryCount: 0,
       maxRetries: 3
     };
+
+    function openJsonImportModal() {
+      if (currentUserSession && currentUserSession.role === 'leitor') return;
+      document.getElementById('jsonContentArea').value = '';
+      document.getElementById('jsonFileInput').value = '';
+
+      importState.isImporting = false;
+      importState.isPaused = false;
+      importState.shouldStop = false;
+      importState.completedPages.clear();
+
+      document.getElementById('importProgressArea').classList.add('hidden');
+      document.getElementById('jsonInputAreaWrapper').classList.remove('hidden');
+      document.getElementById('btnSubmitJson').classList.remove('hidden');
+      document.getElementById('btnCancelJson').classList.remove('hidden');
+      document.getElementById('btnCancelJson').innerText = 'Cancelar';
+      document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Aguardando importação...</p>';
+
+      document.getElementById('jsonImportModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeJsonImportModal() {
+      if (importState.isImporting && !importState.isPaused) {
+        if (!confirm("A importação está em andamento. Deseja realmente fechar?")) return;
+        stopImport();
+      }
+      importState.isImporting = false;
+      document.getElementById('jsonImportModal').classList.add('hidden');
+    }
+
+    function handleJsonFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('jsonContentArea').value = e.target.result;
+      };
+      reader.readAsText(file);
+    }
+
+    function flattenJsonObject(obj, prefix = '', res = {}) {
+      for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        const newKey = prefix ? `${prefix}.${key}` : key;
+        if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+          flattenJsonObject(value, newKey, res);
+        } else if (value !== undefined && value !== null) {
+          res[newKey] = String(value);
+        }
+      }
+      return res;
+    }
 
     function togglePauseImport() {
       importState.isPaused = !importState.isPaused;
       const btn = document.getElementById('btnPauseImport');
       const statusText = document.getElementById('importStatusText');
-      
+
       if (importState.isPaused) {
         btn.innerText = 'Retomar';
         btn.className = 'px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors shadow-sm';
         statusText.innerText = 'Pausado pelo usuário...';
       } else {
+        importState.retryCount = 0;
         btn.innerText = 'Pausar';
         btn.className = 'px-3 py-1.5 bg-yellow-600 text-white font-bold text-xs rounded-lg hover:bg-yellow-700 transition-colors shadow-sm';
         statusText.innerText = 'Processando...';
@@ -2222,7 +2242,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       showToast('Importação interrompida.');
     }
 
-        function submitJsonImport() {
+    function submitJsonImport() {
       if (importState.isImporting) return;
 
       const contentArea = document.getElementById('jsonContentArea');
@@ -2241,7 +2261,13 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
         return;
       }
 
-      const keys = Object.keys(parsed);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        showToast('O JSON deve ser um objeto chave-valor válido.');
+        return;
+      }
+
+      const flatParsed = flattenJsonObject(parsed);
+      const keys = Object.keys(flatParsed);
       if (keys.length === 0) {
         showToast('O JSON está vazio.');
         return;
@@ -2250,6 +2276,7 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const existingMap = {};
       if (appState && appState.pages) {
         appState.pages.forEach(p => {
+          if (p.isTerminology) return;
           if (p.terms) {
             p.terms.forEach(t => {
               const k = (t.key || '').toLowerCase().trim();
@@ -2264,8 +2291,9 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
 
       keys.forEach(k => {
         const cleanK = k.trim();
-        const cleanV = String(parsed[k]).trim();
-        
+        const cleanV = String(flatParsed[k]).trim();
+        if (!cleanK) return;
+
         if (existingMap[cleanK.toLowerCase()] === cleanV) {
           frontendIgnored++;
         } else {
@@ -2285,15 +2313,14 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       importState.isImporting = true;
       importState.isPaused = false;
       importState.shouldStop = false;
-      importState.totalItems = filteredItems.length; 
+      importState.totalItems = filteredItems.length;
       importState.processedItems = 0;
       importState.currentIndex = 0;
-      importState.itemsArray = filteredItems;  
+      importState.itemsArray = filteredItems;
       importState.completedPages.clear();
       importState.retryCount = 0;
 
       document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Processando...</p>';
-
       document.getElementById('jsonInputAreaWrapper').classList.add('hidden');
       document.getElementById('importProgressArea').classList.remove('hidden');
       document.getElementById('btnSubmitJson').classList.add('hidden');
@@ -2301,23 +2328,36 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       document.getElementById('btnPauseImport').classList.remove('hidden');
       document.getElementById('btnStopImport').classList.remove('hidden');
       document.getElementById('btnPauseImport').innerText = 'Pausar';
+      document.getElementById('btnPauseImport').className = 'px-3 py-1.5 bg-yellow-600 text-white font-bold text-xs rounded-lg hover:bg-yellow-700 transition-colors shadow-sm';
       document.getElementById('importStatusText').innerText = 'Processando...';
-      
+
       updateProgressBar();
       processNextChunk();
     }
 
-        function processNextChunk() {
+    function processNextChunk() {
       if (!importState.isImporting || importState.isPaused || importState.shouldStop) return;
-      
+
       if (importState.currentIndex >= importState.totalItems) {
         finishImport();
         return;
       }
 
       const start = importState.currentIndex;
-      const chunk = importState.itemsArray.slice(start, start + importState.chunkSize);
-      
+      const chunk = [];
+      let currentChars = 2; // "{}"
+
+      // Monta o lote respeitando tanto o limite de itens quanto o limite de caracteres
+      for (let i = start; i < Math.min(start + importState.chunkSize, importState.totalItems); i++) {
+        const item = importState.itemsArray[i];
+        const entrySize = item.key.length + item.value.length + 6;
+        if (chunk.length > 0 && (currentChars + entrySize) > importState.maxPayloadChars) {
+          break;
+        }
+        chunk.push(item);
+        currentChars += entrySize;
+      }
+
       const chunkObj = {};
       chunk.forEach(item => { chunkObj[item.key] = item.value; });
 
@@ -2325,36 +2365,42 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       const username = currentUserSession ? currentUserSession.username : 'Sistema';
 
       const handleFailure = (err) => {
-        console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, err);
-        
+        const errMsg = err && err.message ? err.message : String(err || 'Erro desconhecido');
+        console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, errMsg);
+
         if (importState.retryCount < importState.maxRetries) {
           importState.retryCount++;
-          document.getElementById('importStatusText').innerText = `Falha detectada. Retentando (${importState.retryCount}/${importState.maxRetries})...`;
-          
+          document.getElementById('importStatusText').innerText = `Falha detectada (${errMsg}). Tentando novamente (${importState.retryCount}/${importState.maxRetries})...`;
           setTimeout(processNextChunk, 2000 * importState.retryCount);
         } else {
-          document.getElementById('importStatusText').innerText = 'Erro persistente. Importação pausada.';
+          document.getElementById('importStatusText').innerText = `Erro: ${errMsg}`;
           importState.isPaused = true;
           document.getElementById('btnPauseImport').innerText = 'Retomar';
           document.getElementById('btnPauseImport').className = 'px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors shadow-sm';
-          showToast(`Servidor não respondeu. Importação pausada após ${importState.maxRetries} tentativas.`);
+          document.getElementById('btnCancelJson').classList.remove('hidden');
+          document.getElementById('btnCancelJson').innerText = 'Fechar';
+          showToast(`Importação pausada: ${errMsg}`);
         }
       };
-      
+
       google.script.run
         .withSuccessHandler(res => {
-          
+          if (!res || res.success === false || res.error) {
+            handleFailure(new Error((res && (res.message || res.error)) || 'O servidor rejeitou o lote.'));
+            return;
+          }
+
           importState.currentIndex += chunk.length;
           importState.processedItems += chunk.length;
           importState.retryCount = 0;
-          
+
           if (importState.processedItems > importState.totalItems) {
             importState.processedItems = importState.totalItems;
           }
-          
+
           updateProgressBar();
 
-          if (res && res.affectedPages && res.affectedPages.length > 0) {
+          if (res.affectedPages && res.affectedPages.length > 0) {
             let hasNewPage = false;
             res.affectedPages.forEach(pageName => {
               if (!importState.completedPages.has(pageName)) {
@@ -2368,18 +2414,17 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
               if (historyContainer.innerHTML.includes('Aguardando') || historyContainer.innerHTML.includes('Processando')) {
                 historyContainer.innerHTML = '';
               }
-              
-              historyContainer.innerHTML = Array.from(importState.completedPages).sort().map(page => 
+
+              historyContainer.innerHTML = Array.from(importState.completedPages).sort().map(page =>
                 `<div class="flex items-center gap-1.5">${page}</div>`
               ).join('');
-              
+
               historyContainer.scrollTop = historyContainer.scrollHeight;
             }
           }
-          
-          document.getElementById('importStatusText').innerText = 'Processando...';
 
-          setTimeout(processNextChunk, 300); 
+          document.getElementById('importStatusText').innerText = 'Processando...';
+          setTimeout(processNextChunk, 300);
         })
         .withFailureHandler(handleFailure)
         .importJsonStringsToSheet(JSON.stringify(chunkObj), role, username);
@@ -2398,9 +2443,9 @@ const searchQuery = (currentViewMode === 'page' && document.getElementById('sear
       document.getElementById('importProgressBar').style.width = '100%';
       document.getElementById('btnPauseImport').classList.add('hidden');
       document.getElementById('btnStopImport').classList.add('hidden');
-      
+
       showToast('Importação concluída com sucesso!');
-      
+
       setTimeout(() => {
         document.getElementById('jsonImportModal').classList.add('hidden');
         loadSheetsData();
