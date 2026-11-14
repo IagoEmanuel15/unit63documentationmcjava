@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbylvQNNVdcPBHWyPhfyx0yHuNc4j36GfScgM42ECJdAU9M9nF_AcWR65B7fF4YC5Bhu/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxk_K2YT6Oxw75Dn8MpIQ5XxzYOnCel5w-nlLywbjooMsbuIX9xFIoamClr1aLDg9h4/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -386,6 +386,56 @@ body.app-ready footer { display: flex !important; }
 .bolt-active {
   animation: boltStrikeAnim 0.4s steps(2, end) forwards;
 }
+
+/* Centralização perfeita do botão de login e seus estados (loading / success) */
+/* Centralização perfeita do botão preservando as animações */
+#loginSubmitBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  position: relative;
+}
+
+#loginSubmitBtn svg,
+#loginSubmitBtn i {
+  position: static !important;
+  inset: auto !important;
+  margin: 0 !important;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+#loginSubmitBtn span {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+/* Animação do ícone de check ao concluir */
+@keyframes checkPopDraw {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+    stroke-dashoffset: 30;
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2) rotate(0deg);
+    stroke-dashoffset: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    stroke-dashoffset: 0;
+  }
+}
+
+.anim-check-icon {
+  stroke-dasharray: 30;
+  animation: checkPopDraw 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
   </style>
 </head>
 
@@ -406,17 +456,42 @@ body.app-ready footer { display: flex !important; }
       </div>
 
       <!-- Nuvens carregadas (Aparecem ao errar a senha) -->
-      <div class="storm-cloud w-56 h-10" style="top: 8%; animation-duration: 38s; animation-delay: -5s;">
+      <!-- Nuvens carregadas em múltiplas camadas (Aparecem ao errar a senha) -->
+      <div class="storm-cloud w-56 h-10" style="top: 4%; animation-duration: 38s; animation-delay: -5s;">
         <div class="w-28 h-6 -top-5 left-10"></div>
+      </div>
+      <div class="storm-cloud w-80 h-12" style="top: 7%; animation-duration: 50s; animation-delay: -28s;">
+        <div class="w-44 h-8 -top-6 left-16"></div>
+      </div>
+      <div class="storm-cloud w-64 h-10" style="top: 10%; animation-duration: 42s; animation-delay: -16s;">
+        <div class="w-32 h-7 -top-5 left-12"></div>
+      </div>
+      <div class="storm-cloud w-96 h-14" style="top: 13%; animation-duration: 58s; animation-delay: -41s;">
+        <div class="w-48 h-9 -top-7 left-20"></div>
       </div>
       <div class="storm-cloud w-72 h-12" style="top: 16%; animation-duration: 46s; animation-delay: -22s;">
         <div class="w-36 h-8 -top-6 left-14"></div>
       </div>
-      <div class="storm-cloud w-64 h-10" style="top: 24%; animation-duration: 41s; animation-delay: -14s;">
+      <div class="storm-cloud w-60 h-10" style="top: 19%; animation-duration: 36s; animation-delay: -9s;">
+        <div class="w-30 h-6 -top-5 left-10"></div>
+      </div>
+      <div class="storm-cloud w-80 h-12" style="top: 22%; animation-duration: 52s; animation-delay: -35s;">
+        <div class="w-40 h-8 -top-6 left-16"></div>
+      </div>
+      <div class="storm-cloud w-64 h-10" style="top: 25%; animation-duration: 41s; animation-delay: -14s;">
         <div class="w-32 h-7 -top-5 left-12"></div>
       </div>
-      <div class="storm-cloud w-80 h-12" style="top: 12%; animation-duration: 52s; animation-delay: -35s;">
-        <div class="w-40 h-8 -top-6 left-16"></div>
+      <div class="storm-cloud w-88 h-12" style="top: 28%; animation-duration: 55s; animation-delay: -47s;">
+        <div class="w-44 h-8 -top-6 left-18"></div>
+      </div>
+      <div class="storm-cloud w-52 h-9" style="top: 31%; animation-duration: 34s; animation-delay: -19s;">
+        <div class="w-24 h-6 -top-4 left-8"></div>
+      </div>
+      <div class="storm-cloud w-76 h-11" style="top: 34%; animation-duration: 48s; animation-delay: -31s;">
+        <div class="w-38 h-7 -top-5 left-14"></div>
+      </div>
+      <div class="storm-cloud w-64 h-10" style="top: 37%; animation-duration: 44s; animation-delay: -3s;">
+        <div class="w-32 h-6 -top-5 left-12"></div>
       </div>
 
       <!-- Camada de Chuva (Ativada a partir da 3ª tentativa falha) -->
@@ -615,458 +690,18 @@ body.app-ready footer { display: flex !important; }
     </div>
   </div>
 
-  <div id="appMainContainer" class="w-full h-[calc(100vh-32px)] bg-bgLight dark:bg-bgDark overflow-hidden m-0 p-0">
-  
-    <aside id="sidebarContainer" class="w-64 bg-sidebar text-white flex-col justify-between shrink-0 p-5 overflow-x-visible transition-colors duration-200 h-full">
-      <div class="space-y-6 flex flex-col h-full min-h-0">
-        <div class="flex items-center justify-between pb-4 border-b border-white/10 relative shrink-0">
-          <div class="flex items-center gap-3 overflow-hidden">
-            <div class="w-11 h-11 rounded-full bg-white/10 border-2 border-white/20 p-0.5 overflow-hidden shrink-0 flex items-center justify-center text-white">
-              <i data-lucide="user-check" class="w-6 h-6"></i>
-            </div>
-            <div class="overflow-hidden">
-              <h1 id="appDisplayTitle" class="text-sm font-bold tracking-tight text-white truncate">Usuário</h1>
-              <p id="appDisplayDesc" class="text-[11px] text-blue-200/70 truncate capitalize">Função</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-1">
-            <button onclick="logoutSession()" class="p-2 text-rose-300 hover:text-white rounded-xl hover:bg-white/10 transition-colors" title="Sair da Conta">
-              <i data-lucide="log-out" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-black/20 p-1.5 rounded-2xl flex items-center justify-between border border-white/10 shrink-0">
-          <span id="themeLabel" class="text-[11px] font-semibold text-blue-200 px-2">Modo Claro</span>
-          <button onclick="toggleDarkMode()" id="themeToggleBtn" class="w-12 h-6 flex items-center bg-white/20 rounded-full p-1 transition-colors duration-300 focus:outline-none">
-            <div id="themeToggleCircle" class="bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 translate-x-0"></div>
-          </button>
-        </div>
-
-        <div class="space-y-1 shrink-0">
-          <span class="text-[10px] font-bold text-blue-300 uppercase tracking-wider block px-3 mb-2">SISTEMA</span>
-          
-          <button onclick="openSummaryView()" id="summaryTabBtn" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all bg-white/10 text-white shadow-sm">
-            <div class="flex items-center gap-3">
-              <i data-lucide="layout-grid" class="w-4 h-4"></i>
-              <span>Sumário</span>
-            </div>
-            <span id="summaryCountBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-blue-200">0</span>
-          </button>
-
-          <button onclick="openTerminologyView()" id="terminologyTabBtn" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200 hover:text-white hover:bg-white/5 transition-all">
-            <div class="flex items-center gap-3">
-              <i data-lucide="book-open" class="w-4 h-4"></i>
-              <span>Notas terminológicas</span>
-            </div>
-            <span id="terminologyCountBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-blue-200">0</span>
-          </button>
-
-          <button onclick="openHistoryView()" id="historyTabBtn" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200 hover:text-white hover:bg-white/5 transition-all">
-            <div class="flex items-center gap-3">
-              <i data-lucide="history" class="w-4 h-4"></i>
-              <span>Histórico</span>
-            </div>
-            <span id="historyCountBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-blue-200">0</span>
-          </button>
-        </div>
-
-        <hr class="border-white/10 shrink-0">
-
-        <div id="standardPagesSection" class="flex-1 min-h-0 flex flex-col">
-          <div class="flex items-center justify-between mb-2 px-1 shrink-0">
-            <span class="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Páginas da Planilha</span>
-            <button onclick="togglePagesSort()" id="sortPagesBtn" class="text-blue-300/70 hover:text-white transition-colors p-0.5 rounded" title="Alternar ordenação alfabética">
-                <iconify-icon icon="mdi:sort-alphabetical-ascending" width="14" height="14"></iconify-icon>
-              </button>
-            <span id="totalPagesBadge" class="text-[10px] bg-white/10 text-blue-100 px-2 py-0.5 rounded-full font-mono">0</span>
-          </div>
-          <nav id="pagesNav" class="space-y-1 flex-1 overflow-y-auto pr-1"></nav>
-        </div>
-      </div>
-
-      <button id="managePagesFooterBtn" onclick="openManagePagesModal()" class="w-full py-2.5 px-3 border border-red-400/30 bg-red-500/10 hover:bg-red-500/20 text-red-200 rounded-xl text-xs font-medium flex items-center justify-center gap-2 transition-colors shrink-0 mt-4">
-        <i data-lucide="layers" class="w-4 h-4"></i> Gerenciar páginas
-      </button>
-    </aside>
-
-    <main class="flex-1 flex flex-col overflow-hidden p-6 space-y-6">
-      
-      <div id="topSearchBarContainer" class="items-center justify-between gap-4">
-                <div class="relative flex-1 max-w-xl">
-          <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input type="text" id="searchInput" 
-       onfocus="if(currentViewMode === 'summary') document.getElementById('searchDropdown').classList.remove('hidden')"
-       onblur="setTimeout(() => document.getElementById('searchDropdown').classList.add('hidden'), 200)"
-       oninput="handleSearchInput(this.value)" 
-       placeholder="Buscar em todas as páginas por chaves, termos ou traduções..." 
-       class="w-full bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-700 dark:text-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all relative z-50">
-          
-          <div id="searchDropdown" class="hidden absolute top-full left-0 w-full mt-2 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-[60] max-h-80 overflow-y-auto">
-            <div id="searchResultsList" class="p-2 space-y-1">
-            </div>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button id="importJsonBtn" onclick="openJsonImportModal()" class="px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-cardBg dark:bg-cardBgDark hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2 shadow-sm transition-all">
-            <i data-lucide="file-code" class="w-4 h-4 text-accentBlue"></i> Importar JSON
-          </button>
-          <button onclick="loadSheetsData(true)" class="px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-cardBg dark:bg-cardBgDark hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2 shadow-sm transition-all">
-            <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-500"></i> Sincronizar
-          </button>
-          <button id="newPageHeaderBtn" onclick="openNewPageModal()" class="px-4 py-2.5 rounded-2xl bg-accentBlue hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all">
-            <i data-lucide="plus" class="w-4 h-4"></i> Nova página
-          </button>
-        </div>
-      </div>
-
-      <div id="summaryViewContainer" class="flex-1 flex flex-col space-y-6 overflow-hidden">
-        <div>
-          <h2 class="text-lg font-bold text-slate-800 dark:text-white font-sans">Sumário</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Acesse e gerencie o progresso de cada página da documentação</p>
-        </div>
-        <div class="flex-1 overflow-y-auto pr-1">
-          <div id="summaryTopicsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
-        </div>
-      </div>
-
-      <div id="terminologyViewContainer" class="hidden flex-1 flex flex-col space-y-4 overflow-hidden">
-        <div class="flex items-center justify-between bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="p-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400">
-              <i data-lucide="book-open" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <h2 class="text-base font-bold text-slate-800 dark:text-white">Notas Terminológicas (A a Z)</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Glossário e diretrizes de tradução da documentação</p>
-            </div>
-          </div>
-        </div>
-
-        <div id="addTerminologyTermFormWrapper" class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <form onsubmit="handleAddTerminologyTerm(event)" class="grid grid-cols-12 gap-3 items-center">
-            <div class="col-span-3"><textarea id="newTermSource" placeholder="Termo / Source string" required rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea></div>
-            <div class="col-span-3"><textarea id="newTermValue" placeholder="Tradução / Definição" required rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea></div>
-            <div class="col-span-3"><textarea id="newTermComments" placeholder="Anotações" rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea></div>
-            <div class="col-span-2"><textarea id="newTermKey" placeholder="Chave" rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea></div>
-            <div class="col-span-1"><button type="submit" class="w-full bg-accentBlue hover:bg-blue-700 text-white rounded-xl py-2.5 text-xs font-bold flex items-center justify-center transition-all shadow-md shadow-blue-500/20" title="Adicionar Termo"><i data-lucide="plus" class="w-4 h-4"></i></button></div>
-          </form>
-        </div>
-
-        <div class="flex-1 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 overflow-x-auto overflow-y-auto">
-          <div id="alphabetMatrixContainer" class="flex gap-4 min-w-[2800px] h-full pb-2"></div>
-        </div>
-      </div>
-
-      <div id="historyViewContainer" class="hidden flex-1 flex flex-col space-y-4 overflow-hidden">
-        <div class="flex items-center justify-between bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400"><i data-lucide="history" class="w-6 h-6"></i></div>
-            <div>
-              <h2 class="text-base font-bold text-slate-800 dark:text-white">Histórico de Alterações</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Registro histórico completo puxado da planilha de auditoria</p>
-            </div>
-          </div>
-          <button onclick="loadAuditHistory()" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar Histórico
-          </button>
-        </div>
-        <div class="flex-1 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 overflow-y-auto space-y-3">
-          <div id="historyList" class="space-y-3"></div>
-        </div>
-      </div>
-
-      <div id="pageViewContainer" class="hidden flex-1 flex flex-col space-y-4 overflow-hidden">
-        <div class="flex flex-wrap items-center justify-between gap-3 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <div class="flex items-center gap-3 min-w-0 flex-1">
-            <div id="activePageIcon" class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue shrink-0">
-              <i data-lucide="folder" class="w-6 h-6"></i>
-            </div>
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-2">
-                  <span id="activePageTitle" class="text-base font-bold text-slate-800 dark:text-white font-mono truncate">Carregando...</span>
-                  <button id="editHeaderBtn" onclick="openEditHeaderModal()" class="p-1 text-slate-400 hover:text-accentBlue rounded-lg shrink-0">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-                <p id="activePageDesc" class="text-xs text-slate-500 dark:text-slate-400 truncate">Sincronizado com a planilha</p>
-              </div>
-              <div id="activePageCrowdinContainer" class="shrink-0"></div>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2 shrink-0">
-            <button id="bulkStatusBtn" onclick="openBulkStatusModal()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 whitespace-nowrap shrink-0">
-              <i data-lucide="check-check" class="w-3.5 h-3.5 text-brandGreen shrink-0"></i>
-              <span>Status da página</span>
-            </button>
-            <div class="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-xl text-xs whitespace-nowrap shrink-0">
-              <span>Exibir:</span>
-              <select id="itemsPerPageSelect" onchange="changeItemsPerPage(this.value)" class="bg-transparent font-semibold cursor-pointer focus:outline-none text-slate-700 dark:text-slate-200">
-                <option value="30">30 por página</option>
-                <option value="50">50 por página</option>
-                <option value="100">100 por página</option>
-                <option value="all">Todas</option>
-              </select>
-            </div>
-            <button onclick="deleteSelectedTerms()" id="deleteSelectedBtn" disabled class="px-3 py-2 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 opacity-50 cursor-not-allowed text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-all">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5 shrink-0"></i>
-              <span>Apagar (<span id="selectedCount">0</span>)</span>
-            </button>
-          </div>
-        </div>
-
-        <div id="addTermFormWrapper" class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-sm">
-          <form onsubmit="handleAddTerm(event)" class="grid grid-cols-12 gap-2 items-center">
-            <div class="col-span-3"><textarea id="newSource" placeholder="Source" required rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></textarea></div>
-            <div class="col-span-3"><textarea id="newSheetValue" placeholder="Tradução" required rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></textarea></div>
-            <div class="col-span-3"><textarea id="newComments" placeholder="Comentários" rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></textarea></div>
-            <div class="col-span-2"><textarea id="newKey" placeholder="Chaves" required rows="1" oninput="fitTextareaHeight(this)" class="auto-resize-textarea w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 dark:text-slate-100"></textarea></div>
-            <div class="col-span-1"><button type="submit" class="w-full bg-accentBlue hover:bg-blue-700 text-white rounded-xl py-2.5 text-xs font-bold flex items-center justify-center transition-all shadow-md shadow-blue-500/20"><i data-lucide="plus" class="w-4 h-4"></i></button></div>
-          </form>
-        </div>
-
-        <div class="flex-1 bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col shadow-sm">
-          <div class="overflow-x-auto overflow-y-auto flex-1">
-            <table class="w-full text-left border-collapse">
-              <thead class="bg-slate-50 dark:bg-slate-900 sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 uppercase font-bold">
-                <tr>
-                  <th id="thCheckbox" class="py-3 px-3 w-10 text-center"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllRows(this.checked)" class="rounded border-slate-300 dark:border-slate-700 text-accentBlue"></th>
-                  <th class="py-3 px-4 w-1/4">SOURCE STRING</th>
-                  <th id="dynamicSheetColumnHeader" class="py-3 px-4 w-1/4 uppercase">NOME DA PÁGINA</th>
-                  <th class="py-3 px-4 w-1/5">COMENTÁRIOS</th>
-                  <th class="py-3 px-4 w-1/5">CHAVES</th>
-                  <th class="py-3 px-4 w-36">STATUS</th>
-                  <th id="thActions" class="py-3 px-3 w-16 text-center">AÇÕES</th>
-                </tr>
-              </thead>
-              <tbody id="termsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800 text-xs"></tbody>
-            </table>
-          </div>
-          <div id="paginationBar" class="h-11 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-mono">
-            <span id="paginationInfo">Mostrando 0 de 0 itens</span>
-            <div class="flex items-center gap-2">
-              <button onclick="changePage(-1)" id="prevPageBtn" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700">Anterior</button>
-              <span id="currentPageLabel" class="font-semibold text-slate-700 dark:text-slate-200">Pág. 1</span>
-              <button onclick="changePage(1)" id="nextPageBtn" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700">Próxima</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <footer class="h-8 bg-sidebar dark:bg-sidebarDark border-t border-white/10 text-white items-center justify-center px-6 shrink-0 z-30 select-none shadow-inner">
-    <div class="flex items-center gap-2 text-[11px] font-medium tracking-wide">
-      <span class="text-blue-200/80">Criado por <strong class="text-white font-bold">IagoEmanuel15</strong></span>
-      <span class="text-white/30">•</span>
-      <span class="text-blue-200/80">Revisado por <strong class="text-white font-bold">Dieguinho</strong></span>
-    </div>
-  </footer>
-
-  <div id="bulkStatusModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 class="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="check-check" class="w-4 h-4 text-brandGreen"></i> Aplicar status à página</h3>
-        <button onclick="closeBulkStatusModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
-      </div>
-      <div class="space-y-2">
-        <button onclick="applyBulkStatus('Aprovado')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-xs shadow-sm transition-all" style="background-color: #42f59b; color: #000000;">Aprovado</button>
-        <button onclick="applyBulkStatus('Em revisão')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-xs shadow-sm transition-all" style="background-color: #f5da42; color: #000000;">Em revisão</button>
-        <button onclick="applyBulkStatus('Urgente')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-xs shadow-sm transition-all" style="background-color: #ff0000; color: #ffffff;">Urgente</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="newPageModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4">
-      <h3 class="text-base font-bold text-slate-800 dark:text-white">Criar nova página</h3>
-      <div class="space-y-3">
-        <div>
-          <label class="text-xs text-slate-500 block mb-1">Nome da página</label>
-          <input type="text" id="modalPageTitle" placeholder="Ex: accessibility." class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100 transition-all">
-          <p id="newPageTitleError" class="text-[11px] font-semibold text-red-500 hidden mt-1.5 flex items-center gap-1">
-            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i> Já existe uma página com esse nome.
-          </p>
-        </div>
-        <div>
-          <label class="text-xs text-slate-500 block mb-1">Ícone (Ex: mdi:folder, ph:cube, tabler:sword)</label>
-          <input type="text" id="modalPageIcon" placeholder="Ex: mdi:folder" value="mdi:folder" class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100">
-        </div>
-        <div>
-          <label class="text-xs text-slate-500 block mb-1">Crowdin (opcional)</label>
-          <input type="url" id="modalPageCrowdinUrl" placeholder="https://crowdin.com/editor/" class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100">
-          <p id="newPageCrowdinError" class="text-[11px] font-semibold text-red-500 hidden mt-1">Link inválido. Deve ser crowdin.com/editor/ ou https://crowdin.com/editor/</p>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <button onclick="closeNewPageModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold">Cancelar</button>
-        <button onclick="saveNewPage()" class="px-4 py-2 rounded-xl bg-accentBlue text-xs text-white font-bold shadow-md shadow-blue-500/20">Criar página</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="jsonImportModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4">
-      
-      <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
-          <i data-lucide="file-code" class="w-5 h-5 text-accentBlue"></i> Importar JSON de Traduções
-        </h3>
-        <button onclick="closeJsonImportModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
-      </div>
-
-      <div class="space-y-3">
-        <div id="jsonInputAreaWrapper">
-          <label class="text-xs text-slate-500 block mb-1">Selecione o arquivo .json ou cole o código abaixo:</label>
-          <input type="file" id="jsonFileInput" accept=".json" onchange="handleJsonFileSelect(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-accentBlue hover:file:bg-blue-100 dark:file:bg-slate-800 dark:file:text-slate-200 mb-2">
-          <textarea id="jsonContentArea" rows="8" placeholder='{ "block.minecraft.stone": "Pedra", "item.minecraft.apple": "Maçã" }' class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-3 text-xs font-mono text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea>
-        </div>
-
-        <div id="importProgressArea" class="hidden mt-4 space-y-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-          <div class="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300">
-            <span>Progresso da Importação</span>
-            <span id="importPercentage">0%</span>
-          </div>
-          <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
-            <div id="importProgressBar" class="bg-accentBlue h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-          </div>
-          
-          <div class="flex items-center justify-between mt-2">
-            <span id="importStatusText" class="text-xs text-slate-500">Aguardando...</span>
-            <div class="flex gap-2">
-              <button id="btnPauseImport" onclick="togglePauseImport()" class="px-3 py-1.5 bg-yellow-600 text-white font-bold text-xs rounded-lg hover:bg-yellow-700 transition-colors shadow-sm">Pausar</button>
-              <button id="btnStopImport" onclick="stopImport()" class="px-3 py-1.5 bg-red-600 text-white font-bold text-xs rounded-lg hover:bg-red-700 transition-colors shadow-sm">Parar</button>
-            </div>
-          </div>
-
-          <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
-            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Páginas importadas:</span>
-            <div id="importPagesHistory" class="max-h-32 overflow-y-auto space-y-1 text-xs font-mono text-slate-600 dark:text-slate-400">
-              <p class="text-slate-400 italic text-[11px]">Aguardando importação...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <button id="btnCancelJson" onclick="closeJsonImportModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold">Cancelar</button>
-        <button id="btnSubmitJson" onclick="submitJsonImport()" class="px-4 py-2 rounded-xl bg-accentBlue text-xs text-white font-bold shadow-md shadow-blue-500/20">Importar</button>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="customConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 overflow-hidden">
-      <div class="flex items-center gap-3">
-        <div id="customConfirmIconWrapper" class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0">
-          <i id="customConfirmIcon" data-lucide="alert-triangle" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 id="customConfirmTitle" class="text-base font-bold text-slate-800 dark:text-white">Confirmar Ação</h3>
-          <p id="customConfirmSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Esta ação não poderá ser desfeita</p>
-        </div>
-      </div>
-      <div class="max-h-48 overflow-y-auto pr-1">
-        <p id="customConfirmMessage" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed break-words whitespace-pre-wrap">Deseja realmente prosseguir?</p>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <button onclick="closeCustomConfirm(false)" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all">Cancelar</button>
-        <button id="customConfirmOkBtn" class="px-4 py-2 rounded-xl text-xs text-white font-bold shadow-md transition-all">Confirmar</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="customRestoreModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 overflow-hidden">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue flex items-center justify-center shrink-0">
-          <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-slate-800 dark:text-white">Confirmar Restauração</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400">O registro anterior será recuperado</p>
-        </div>
-      </div>
-      <div class="max-h-48 overflow-y-auto pr-1">
-        <p id="customRestoreMessage" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed break-words whitespace-pre-wrap">Deseja realmente restaurar este item?</p>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <button onclick="closeCustomRestore(false)" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all">Cancelar</button>
-        <button id="customRestoreOkBtn" class="px-4 py-2 rounded-xl bg-accentBlue hover:bg-blue-700 text-xs text-white font-bold shadow-md shadow-blue-500/20 transition-all">Restaurar</button>
-      </div>
-    </div>
-  </div>
-
-    <div id="managePagesModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 class="text-base font-bold text-slate-800 dark:text-white">Gerenciar Páginas</h3>
-        <button onclick="closeManagePagesModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
-      </div>
-      
-      <div class="flex items-center gap-2 px-1 pb-1">
-        <input type="checkbox" id="selectAllPagesCheckbox" onchange="toggleSelectAllPages(this.checked)" class="rounded border-slate-300 dark:border-slate-700 w-4 h-4 cursor-pointer">
-        <label for="selectAllPagesCheckbox" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">Selecionar todas as páginas</label>
-      </div>
-
-      <div id="pagesManageList" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-      
-      <div class="flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-800">
-        <span class="text-xs text-slate-500"><span id="selectedPagesCount">0</span> selecionada(s)</span>
-        <button onclick="deleteSelectedPages()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs text-white font-bold transition-colors">Apagar</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="editHeaderModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardBg dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4">
-      <h3 class="text-base font-bold text-slate-800 dark:text-white">Configurar página</h3>
-      <div class="space-y-3">
-        <div>
-          <label class="text-xs text-slate-500 block mb-1">Título da página</label>
-          <input type="text" id="headerTitleInput" class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100">
-        </div>
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <label class="text-xs text-slate-500">Código do ícone</label>
-            <a href="https://icones.js.org/" target="_blank" class="text-[11px] font-bold text-accentBlue hover:underline flex items-center gap-1">
-              Saiba mais <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
-          </div>
-          <input type="text" id="headerIconInput" placeholder="Ex: mdi:folder" class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100">
-        </div>
-        <div>
-          <label class="text-xs text-slate-500 block mb-1">Crowdin (opcional)</label>
-          <input type="url" id="headerCrowdinUrlInput" placeholder="https://crowdin.com/editor/..." class="w-full bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 rounded-xl p-2.5 text-xs font-mono text-slate-800 dark:text-slate-100">
-          <p id="headerCrowdinError" class="text-[11px] font-semibold text-red-500 hidden mt-1">Link inválido. Deve ser crowdin.com/editor/... ou https://crowdin.com/editor/</p>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <button onclick="closeEditHeaderModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold">Cancelar</button>
-        <button onclick="savePageHeaderInfo()" class="px-4 py-2 rounded-xl bg-accentBlue hover:bg-blue-700 text-xs text-white font-bold shadow-md shadow-blue-500/20">Salvar</button>
-      </div>
-    </div>
-  </div>
+  <div id="protectedAppRoot"></div>
 
   <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl z-50 hidden flex items-center gap-3 text-xs font-semibold">
     <i data-lucide="check-circle" class="w-4 h-4 text-brandGreen"></i><span id="toastMsg">Notificação...</span>
   </div>
 
   <script>
-    let appState = { activePageId: 'summary', pages: [], appTitle: '', appDesc: '' };
     let currentUserSession = null;
-    let actionHistoryLog = [];
-    let selectedRowIndices = new Set();
-    let currentViewMode = 'summary';
-    let itemsPerPage = 30;
-    let currentPage = 1;
-    let roleCheckInterval = null;
-    let sortPagesAlphabetically = false;
     let loadingWatchdog = null;
+    let failedLoginAttempts = 0;
+    let thunderInterval = null;
+    let rainInitialized = false;
 
     function showLoading() {
       const el = document.getElementById('loadingScreen');
@@ -1078,7 +713,7 @@ body.app-ready footer { display: flex !important; }
       loadingWatchdog = setTimeout(() => {
         hideLoading();
         showToast('O servidor demorou para responder. Tente sincronizar novamente.');
-      }, 90000); // Aumentado de 45s para 90s
+      }, 90000);
     }
 
     function hideLoading() {
@@ -1091,176 +726,160 @@ body.app-ready footer { display: flex !important; }
       }
     }
 
-    const STATUS_PALETTE = {
-      'Aprovado':   { bg: '#42f59b', text: '#000000' },
-      'Em revisão': { bg: '#f5da42', text: '#000000' },
-      'Urgente':    { bg: '#ff0000', text: '#ffffff' }
-    };
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      document.getElementById('toastMsg').innerText = msg;
 
-    function updateActiveNavStyles() {
-      document.querySelectorAll('#sidebarContainer button').forEach(btn => {
-        btn.classList.remove('bg-white/10', 'text-white', 'shadow-sm', 'font-semibold');
-        btn.classList.add('text-blue-200', 'font-medium', 'hover:text-white', 'hover:bg-white/5');
-      });
-      let activeBtn = null;
-      if (currentViewMode === 'summary') activeBtn = document.getElementById('summaryTabBtn');
-      else if (currentViewMode === 'terminology') activeBtn = document.getElementById('terminologyTabBtn');
-      else if (currentViewMode === 'history') activeBtn = document.getElementById('historyTabBtn');
-      else if (currentViewMode === 'page') activeBtn = document.getElementById(`page_nav_${appState.activePageId}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('text-blue-200', 'font-medium', 'hover:text-white', 'hover:bg-white/5');
-        activeBtn.classList.add('bg-white/10', 'text-white', 'shadow-sm', 'font-semibold');
-      }
+      toast.classList.remove('hidden', 'toast-animate');
+      void toast.offsetWidth;
+      toast.classList.add('toast-animate');
+
+      clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => toast.classList.add('hidden'), 2500);
     }
 
     function switchAuthMode(mode) {
-  clearLoginErrorState();
-  const loginForm = document.getElementById('loginFormContainer');
-  const regForm = document.getElementById('registerFormContainer');
+      clearLoginErrorState();
+      const loginForm = document.getElementById('loginFormContainer');
+      const regForm = document.getElementById('registerFormContainer');
 
-  if (mode === 'register') {
-    loginForm.classList.add('hidden');
-    regForm.classList.remove('hidden', 'fade-in');
-    void regForm.offsetWidth; // reinicia a animação CSS
-    regForm.classList.add('fade-in');
-    document.getElementById('authTitle').innerText = 'Cadastro';
-    document.getElementById('authSubtitle').innerText = 'Cadastre-se para acessar a documentação';
-  } else {
-    regForm.classList.add('hidden');
-    loginForm.classList.remove('hidden', 'fade-in');
-    void loginForm.offsetWidth;
-    loginForm.classList.add('fade-in');
-    document.getElementById('authTitle').innerText = 'Bem-vindo(a) à documentação da Unidade 63';
-    document.getElementById('authSubtitle').innerText = 'Digite suas credenciais para acessá-la';
-  }
-}
+      if (mode === 'register') {
+        loginForm.classList.add('hidden');
+        regForm.classList.remove('hidden', 'fade-in');
+        void regForm.offsetWidth;
+        regForm.classList.add('fade-in');
+        document.getElementById('authTitle').innerText = 'Cadastro';
+        document.getElementById('authSubtitle').innerText = 'Cadastre-se para acessar a documentação';
+      } else {
+        regForm.classList.add('hidden');
+        loginForm.classList.remove('hidden', 'fade-in');
+        void loginForm.offsetWidth;
+        loginForm.classList.add('fade-in');
+        document.getElementById('authTitle').innerText = 'Bem-vindo(a) à documentação da Unidade 63';
+        document.getElementById('authSubtitle').innerText = 'Digite suas credenciais para acessá-la';
+      }
+    }
 
     function clearLoginErrorState() {
       document.querySelectorAll('.auth-input').forEach(input => input.classList.remove('shake-input'));
-      document.getElementById('loginErrorMsg').classList.add('hidden');
+      const errEl = document.getElementById('loginErrorMsg');
+      if (errEl) errEl.classList.add('hidden');
     }
 
-    function startAutoRoleSync() {
-      if (roleCheckInterval) clearInterval(roleCheckInterval);
-      roleCheckInterval = setInterval(() => {
-        if (!currentUserSession || !currentUserSession.username) return;
-        google.script.run
-          .withSuccessHandler(roleRes => {
-            if (roleRes && roleRes.success) {
-              if (currentUserSession.role !== roleRes.role) {
-                currentUserSession.role = roleRes.role;
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      clearLoginErrorState();
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+
+      setMorphButtonState('loginSubmitBtn', 'loading', 'Entrar');
+
+      google.script.run
+        .withSuccessHandler(res => {
+          if (res && res.success) {
+            try {
+              setMorphButtonState('loginSubmitBtn', 'success', 'Entrar');
+              currentUserSession = res.user;
+
+              // Restaura o clima ensolarado ao acertar as credenciais
+              updateLoginWeather(0, true);
+
+              setTimeout(() => {
+                showLoading();
+                document.getElementById('authScreen').classList.add('hidden');
+
+                // Monta o AppPrincipal usando o HTML já retornado no login (res.appPayload)
+                mountProtectedApp(res.appPayload);
                 setupUIAfterLogin();
-                renderApp();
-                showToast(`Sua permissão foi alterada para: ${roleRes.role.toUpperCase()}`);
-              }
+                loadSheetsData();
+                startAutoRoleSync();
+                showToast(`Bem-vindo(a), ${currentUserSession.username}!`);
+                setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+              }, 750);
+            } catch (err) {
+              console.error('ERRO após login:', err);
+              setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+              hideLoading();
+              showToast('Erro ao inicializar o app: ' + err.message);
             }
-          })
-          .verifyUserRole(currentUserSession.username);
-      }, 15000);
+          } else {
+            failedLoginAttempts++;
+            updateLoginWeather(failedLoginAttempts, false);
+
+            setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+            document.querySelectorAll('.auth-input').forEach(input => input.classList.add('shake-input'));
+            document.getElementById('loginErrorMsg').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => {
+              document.querySelectorAll('.auth-input').forEach(input => input.classList.remove('shake-input'));
+            }, 500);
+          }
+        })
+        .withFailureHandler(err => {
+          setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
+          console.error('Falha no login:', err);
+          showToast('Erro de comunicação com o servidor. Tente novamente.');
+        })
+        .verifyUserLogin(user, pass);
     }
 
-function handleLoginSubmit(e) {
-  e.preventDefault();
-  clearLoginErrorState();
-  const user = document.getElementById('loginUser').value.trim();
-  const pass = document.getElementById('loginPass').value.trim();
+    function mountProtectedApp(htmlString) {
+      const container = document.getElementById('protectedAppRoot');
+      if (!container) return;
 
-  setMorphButtonState('loginSubmitBtn', 'loading', 'Entrar');
+      container.innerHTML = htmlString;
 
-  google.script.run
-    .withSuccessHandler(res => {
-      if (res && res.success) {
-        try {
-          setMorphButtonState('loginSubmitBtn', 'success', 'Entrar');
-          currentUserSession = res.user;
-
-          // Restaura o clima ensolarado ao acertar as credenciais
-          updateLoginWeather(0, true);
-
-          setTimeout(() => {
-            showLoading();
-            document.getElementById('authScreen').classList.add('hidden');
-            setupUIAfterLogin();
-            loadSheetsData();
-            startAutoRoleSync();
-            showToast(`Bem-vindo(a), ${currentUserSession.username}!`);
-            setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
-          }, 750);
-        } catch (err) {
-          console.error('💥 ERRO após login:', err);
-          setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
-          hideLoading();
-          showToast('Erro ao inicializar o app: ' + err.message);
-        }
-      } else {
-        // Incrementa falhas e piora o clima progressivamente
-        failedLoginAttempts++;
-        updateLoginWeather(failedLoginAttempts, false);
-
-        setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
-        document.querySelectorAll('.auth-input').forEach(input => input.classList.add('shake-input'));
-        document.getElementById('loginErrorMsg').classList.remove('hidden');
-        lucide.createIcons();
-        setTimeout(() => {
-          document.querySelectorAll('.auth-input').forEach(input => input.classList.remove('shake-input'));
-        }, 500);
-      }
-    })
-    .withFailureHandler(err => {
-      setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
-      console.error('Falha no login:', err);
-      showToast('Erro de comunicação com o servidor. Tente novamente.');
-    })
-    .verifyUserLogin(user, pass);
-}
-
-function triggerViewAnimation(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.classList.remove('hidden', 'fade-in');
-  void el.offsetWidth; // Obriga o navegador a reiniciar a animação toda vez que você trocar de aba
-  el.classList.add('fade-in');
-}
+      // Reexecuta os blocos <script> inseridos via innerHTML
+      const scripts = container.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+    }
 
     function handleRegisterSubmit(e) {
-  e.preventDefault();
-  const userEl = document.getElementById('regUser');
-  const userWrapper = document.getElementById('regUserWrapper');
-  const user = userEl.value.trim();
-  const pass = document.getElementById('regPass').value.trim();
+      e.preventDefault();
+      const userEl = document.getElementById('regUser');
+      const userWrapper = document.getElementById('regUserWrapper');
+      const user = userEl.value.trim();
+      const pass = document.getElementById('regPass').value.trim();
 
-  // Ativa o carregamento no botão de cadastro
-  setMorphButtonState('registerSubmitBtn', 'loading', 'Cadastrar');
+      setMorphButtonState('registerSubmitBtn', 'loading', 'Cadastrar');
 
-  google.script.run
-    .withSuccessHandler(res => {
-      // Restaura o botão ao receber resposta
-      setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
-      if (res.success) {
-        userWrapper.classList.remove('shake-input');
-        showToast('Cadastro realizado com sucesso! Faça login.');
-        switchAuthMode('login');
-      } else {
-        userWrapper.classList.add('shake-input');
-        setTimeout(() => userWrapper.classList.remove('shake-input'), 500);
-        showToast(res.message || 'Nome de usuário já existe.');
-      }
-    })
-    .withFailureHandler(err => {
-      // Restaura o botão se der erro de rede
-      setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
-      console.error('Falha no cadastro:', err);
-      showToast('Erro de comunicação com o servidor.');
-    })
-    .registerNewUser(user, pass);
-}
+      google.script.run
+        .withSuccessHandler(res => {
+          setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
+          if (res && res.success) {
+            userWrapper.classList.remove('shake-input');
+            showToast('Cadastro realizado com sucesso! Faça login.');
+            switchAuthMode('login');
+          } else {
+            userWrapper.classList.add('shake-input');
+            setTimeout(() => userWrapper.classList.remove('shake-input'), 500);
+            showToast((res && res.message) || 'Nome de usuário já existe.');
+          }
+        })
+        .withFailureHandler(err => {
+          setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
+          console.error('Falha no cadastro:', err);
+          showToast('Erro de comunicação com o servidor.');
+        })
+        .registerNewUser(user, pass);
+    }
 
     function logoutSession() {
-      if (roleCheckInterval) clearInterval(roleCheckInterval);
+      if (typeof roleCheckInterval !== 'undefined' && roleCheckInterval) clearInterval(roleCheckInterval);
       if (thunderInterval) { clearInterval(thunderInterval); thunderInterval = null; }
       failedLoginAttempts = 0;
       hideLoading();
       currentUserSession = null;
+
+      // Limpa o conteúdo protegido do DOM ao sair
+      const container = document.getElementById('protectedAppRoot');
+      if (container) container.innerHTML = '';
 
       document.body.classList.remove('app-ready');
       const authScreen = document.getElementById('authScreen');
@@ -1274,1372 +893,29 @@ function triggerViewAnimation(containerId) {
       clearLoginErrorState();
     }
 
-    function setupUIAfterLogin() {
-      if (!currentUserSession) return;
-      const role = currentUserSession.role;
-      document.getElementById('appDisplayTitle').innerText = currentUserSession.username;
-      const roleLabels = { 'editor': 'Editor', 'leitor': 'Leitor' };
-      document.getElementById('appDisplayDesc').innerText = roleLabels[role] || 'Leitor';
-
-      const standardPages = document.getElementById('standardPagesSection');
-      const topSearch = document.getElementById('topSearchBarContainer');
-      const manageFooter = document.getElementById('managePagesFooterBtn');
-      const newPageHeaderBtn = document.getElementById('newPageHeaderBtn');
-      const importJsonBtn = document.getElementById('importJsonBtn');
-
-      document.body.classList.add('app-ready');
-
-      const appMain = document.getElementById('appMainContainer');
-      if (appMain) {
-        appMain.classList.remove('hidden');
-        appMain.classList.add('flex');
-      }
-
-      standardPages.classList.remove('hidden');
-      if (topSearch) {
-        topSearch.classList.remove('hidden');
-        topSearch.classList.add('flex');
-      }
-
-      if (role === 'editor') {
-        manageFooter.style.display = 'flex';
-        if (newPageHeaderBtn) newPageHeaderBtn.style.display = 'flex';
-        if (importJsonBtn) importJsonBtn.style.display = 'flex';
-      } else {
-        manageFooter.style.display = 'none';
-        if (newPageHeaderBtn) newPageHeaderBtn.style.display = 'none';
-        if (importJsonBtn) importJsonBtn.style.display = 'none';
-      }
-
-      openSummaryView();
-    }
-
-    function handleCellChange(rowIndex, fieldName, value) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      const term = page.terms.find(t => t.id === rowIndex);
-      const prevValue = term ? term[fieldName] : '';
-
-      google.script.run
-        .withSuccessHandler(() => {
-          if (term) term[fieldName] = value;
-          logActionWithRestore('Edição de Célula', `Alterado campo "${fieldName}" na página "${page.title}" (De: "${prevValue}" para: "${value}")`, page.title, rowIndex, fieldName, prevValue, value);
-          renderPagesNav();
-        })
-        .withFailureHandler(err => { console.error("Erro ao salvar:", err); showToast('Erro ao salvar alteração.'); })
-        .updateCellInSheet(page.title, rowIndex, fieldName, value, currentUserSession.role, currentUserSession.username);
-    }
-
-    function handleRowStatusChange(rowIndex, newStatus, selectEl) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      const term = page.terms.find(t => t.id === rowIndex);
-      if (!term) return;
-      const prevStatus = term.status || 'Aprovado';
-      if (prevStatus === newStatus) return;
-
-      const st = STATUS_PALETTE[newStatus] || STATUS_PALETTE['Aprovado'];
-      if (selectEl) { selectEl.style.backgroundColor = st.bg; selectEl.style.color = st.text; }
-
-      google.script.run
-        .withSuccessHandler(() => {
-          term.status = newStatus;
-          logActionWithRestore('Edição de Status', `Status alterado na página "${page.title}" (De: "${prevStatus}" para: "${newStatus}")`, page.title, rowIndex, 'status', prevStatus, newStatus);
-          renderPagesNav();
-        })
-        .withFailureHandler(err => {
-          console.error('Erro ao salvar status:', err);
-          showToast('Erro ao salvar status.');
-          if (selectEl) {
-            selectEl.value = prevStatus;
-            const old = STATUS_PALETTE[prevStatus] || STATUS_PALETTE['Aprovado'];
-            selectEl.style.backgroundColor = old.bg;
-            selectEl.style.color = old.text;
-          }
-        })
-        .updateCellInSheet(page.title, rowIndex, 'status', newStatus, currentUserSession.role, currentUserSession.username);
-    }
-
-    function handleAddTerm(e) {
-      if (e) e.preventDefault();
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) { showToast('Nenhuma página ativa selecionada.'); return; }
-
-      const sourceEl = document.getElementById('newSource');
-      const sheetValEl = document.getElementById('newSheetValue');
-      const commentsEl = document.getElementById('newComments');
-      const keyEl = document.getElementById('newKey');
-
-      const source = sourceEl ? sourceEl.value.trim() : '';
-      const sheetVal = sheetValEl ? sheetValEl.value.trim() : '';
-      const comments = commentsEl ? commentsEl.value.trim() : '';
-      const key = keyEl ? keyEl.value.trim() : '-';
-
-      if (!source || !sheetVal) { showToast('Preencha os campos obrigatórios (Source e Tradução).'); return; }
-      showToast('Adicionando termo...');
-
-      google.script.run
-        .withSuccessHandler(res => {
-          if (res && res.success !== false) {
-            if (sourceEl) sourceEl.value = '';
-            if (sheetValEl) sheetValEl.value = '';
-            if (commentsEl) commentsEl.value = '';
-            if (keyEl) keyEl.value = '';
-            showToast('Termo adicionado com sucesso!');
-            if (res.pages) appState = res; else loadSheetsData(false);
-            logAction('Adição de Termo', `Termo "${source}" adicionado na página ${page.title}`);
-            renderPagesNav();
-            if (currentViewMode === 'page') renderActivePageContent();
-          } else {
-            showToast(res && res.message ? res.message : 'Erro ao adicionar termo.');
-          }
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-        .addTermToSheet(page.title, { source, sheetVal, comments, key, status: 'Aprovado' }, currentUserSession.role, currentUserSession.username);
-    }
-
-    function deleteTermRow(rowIndex) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId) || appState.pages.find(p => p.isTerminology);
-      if (!page) { showToast('Página não encontrada.'); return; }
-      const termToDelete = page.terms ? page.terms.find(t => t.id === rowIndex) : null;
-      const termDetails = termToDelete ? ` (Termo: "${termToDelete.source}")` : '';
-      showToast('Apagando linha...');
-
-      google.script.run
-        .withSuccessHandler(res => {
-          showToast('Linha apagada com sucesso!');
-          appState = res;
-          logActionWithRestore('Apagamento de Linha', `Uma linha foi apagada da página ${page.title}${termDetails}`, page.title, rowIndex, 'row_delete', JSON.stringify(termToDelete || {}), '');
-          renderPagesNav();
-          if (currentViewMode === 'page') renderActivePageContent();
-          else if (currentViewMode === 'terminology') renderTerminologyMatrix();
-          loadAuditHistory();
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro ao apagar linha.'); })
-        .deleteMultipleRowsFromSheet(page.title, [rowIndex], currentUserSession.role, currentUserSession.username);
-    }
-
-    function toggleSelectAllPages(isChecked) {
-      const checkboxes = document.querySelectorAll('.manage-page-checkbox');
-      checkboxes.forEach(cb => cb.checked = isChecked);
-      updateSelectedPagesCount();
-    }
-
-    function toggleSelectRow(rowIndex, checkboxEl) {
-      if (checkboxEl.checked) selectedRowIndices.add(rowIndex); else selectedRowIndices.delete(rowIndex);
-      updateDeleteButtonState();
-    }
-
-    function toggleSelectAllRows(isChecked) {
-      selectedRowIndices.clear();
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (page && page.terms && isChecked) page.terms.forEach(t => selectedRowIndices.add(t.id));
-      renderActivePageContent();
-      updateDeleteButtonState();
-    }
-
-    function updateDeleteButtonState() {
-      const btn = document.getElementById('deleteSelectedBtn');
-      const countEl = document.getElementById('selectedCount');
-      if (countEl) countEl.innerText = selectedRowIndices.size;
-      const isLeitor = currentUserSession && currentUserSession.role === 'leitor';
-      if (isLeitor) { if (btn) btn.style.display = 'none'; return; }
-      if (btn) {
-        if (selectedRowIndices.size > 0) {
-          btn.removeAttribute('disabled');
-          btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        } else {
-          btn.setAttribute('disabled', 'true');
-          btn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-      }
-    }
-
-    function deleteSelectedTerms() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      if (selectedRowIndices.size === 0) return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      const countToDelete = selectedRowIndices.size;
-      showToast('Apagando selecionados...');
-      google.script.run
-        .withSuccessHandler(res => {
-          showToast('Itens apagados com sucesso!');
-          selectedRowIndices.clear();
-          appState = res;
-          logAction('Apagamento em Massa', `${countToDelete} item(ns) apagado(s) da página ${page.title}`);
-          renderPagesNav();
-          if (currentViewMode === 'page') renderActivePageContent();
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro ao apagar itens.'); })
-        .deleteMultipleRowsFromSheet(page.title, Array.from(selectedRowIndices), currentUserSession.role, currentUserSession.username);
-    }
-
-    function openBulkStatusModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const modal = document.getElementById('bulkStatusModal');
-      if (modal) { modal.classList.remove('hidden'); lucide.createIcons(); }
-    }
-
-    function closeBulkStatusModal() {
-      const modal = document.getElementById('bulkStatusModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function applyBulkStatus(statusValue) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      closeBulkStatusModal();
-      showToast(`Aplicando status "${statusValue}" em massa...`);
-      google.script.run
-        .withSuccessHandler(res => {
-          showToast('Status aplicado com sucesso!');
-          appState = res;
-          logAction('Status da página', `Status alterado para "${statusValue}" em todos os itens da página ${page.title}`);
-          renderPagesNav();
-          if (currentViewMode === 'page') renderActivePageContent();
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro ao aplicar status.'); })
-        .updateAllStatusesInSheet(page.title, statusValue, currentUserSession.role, currentUserSession.username);
-    }
-
-    function changeItemsPerPage(val) {
-      itemsPerPage = val === 'all' ? 'all' : parseInt(val, 10);
-      currentPage = 1;
-      renderActivePageContent();
-    }
-
-    function changePage(direction) {
-      currentPage += direction;
-      renderActivePageContent();
-    }
-
-    function getPageBadgeStyle(terms) {
-      if (terms && terms.length > 0) {
-        const hasUrgente = terms.some(t => t.status && t.status.toLowerCase().includes('urgente'));
-        const hasRevisao = terms.some(t => t.status && (t.status.toLowerCase().includes('revisão') || t.status.toLowerCase().includes('revisao')));
-        if (hasUrgente) return `background-color: ${STATUS_PALETTE['Urgente'].bg}; color: ${STATUS_PALETTE['Urgente'].text};`;
-        if (hasRevisao) return `background-color: ${STATUS_PALETTE['Em revisão'].bg}; color: ${STATUS_PALETTE['Em revisão'].text};`;
-      }
-      return '';
-    }
-
-    function fitTextareaHeight(el) {
-      if (!el) return;
-      el.style.height = '1px';
-      var h = el.scrollHeight;
-      if (h < 32) h = 32;
-      el.style.height = h + 'px';
-      el.style.overflowY = 'hidden';
-    }
-
-    function fitAllTextareas() {
-      document.querySelectorAll('textarea.auto-resize-textarea').forEach(fitTextareaHeight);
-      requestAnimationFrame(function () {
-        document.querySelectorAll('textarea.auto-resize-textarea').forEach(fitTextareaHeight);
-      });
-      setTimeout(function () {
-        document.querySelectorAll('textarea.auto-resize-textarea').forEach(fitTextareaHeight);
-      }, 100);
-      setTimeout(function () {
-        document.querySelectorAll('textarea.auto-resize-textarea').forEach(fitTextareaHeight);
-      }, 300);
-    }
-
-    function renderActivePageContent() {
-      const page = appState.pages.find(p => p.id === appState.activePageId) || appState.pages[0];
-      if (!page) return;
-      document.getElementById('activePageTitle').innerText = page.title;
-      document.getElementById('activePageDesc').innerText = page.desc || 'Sincronizado';
-      const colHeader = document.getElementById('dynamicSheetColumnHeader');
-      if (colHeader) colHeader.innerText = page.title.toUpperCase();
-
-      const crowdinContainer = document.getElementById('activePageCrowdinContainer');
-      if (crowdinContainer) {
-        if (page.titleLink && page.titleLink.trim() !== '') {
-          crowdinContainer.style.display = 'block';
-          crowdinContainer.innerHTML = `<a href="${page.titleLink}" target="_blank" class="px-3 py-1.5 bg-accentBlue hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Crowdin</a>`;
-        } else {
-          crowdinContainer.style.display = 'none';
-          crowdinContainer.innerHTML = '';
-        }
-      }
-
-      const isLeitor = currentUserSession && currentUserSession.role === 'leitor';
-      const addFormContainer = document.getElementById('addTermFormWrapper');
-      if (addFormContainer) addFormContainer.style.display = isLeitor ? 'none' : 'block';
-      const bulkBtn = document.getElementById('bulkStatusBtn');
-      if (bulkBtn) bulkBtn.style.display = isLeitor ? 'none' : 'flex';
-      const editHeaderBtn = document.getElementById('editHeaderBtn');
-      if (editHeaderBtn) editHeaderBtn.style.display = isLeitor ? 'none' : 'inline-block';
-      const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-      if (selectAllCheckbox && isLeitor) selectAllCheckbox.parentElement.style.display = 'none';
-
-const searchQuery = (currentViewMode === 'page' && document.getElementById('searchInput')) 
-  ? document.getElementById('searchInput').value.toLowerCase().trim() 
-  : '';
-      let terms = page.terms || [];
-      if (searchQuery) {
-        terms = terms.filter(t => (t.source && t.source.toLowerCase().includes(searchQuery)) || (t.sheetVal && t.sheetVal.toLowerCase().includes(searchQuery)) || (t.comments && t.comments.toLowerCase().includes(searchQuery)) || (t.key && t.key.toLowerCase().includes(searchQuery)));
-      }
-
-      const totalTerms = terms.length;
-      let paginatedTerms = terms;
-      let totalPages = 1;
-      if (itemsPerPage !== 'all') {
-        totalPages = Math.ceil(totalTerms / itemsPerPage) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
-        paginatedTerms = terms.slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage);
-      }
-
-      const tbody = document.getElementById('termsTableBody');
-      const thCb = document.getElementById('thCheckbox');
-      const thAct = document.getElementById('thActions');
-      if (thCb) thCb.style.display = isLeitor ? 'none' : 'table-cell';
-      if (thAct) thAct.style.display = isLeitor ? 'none' : 'table-cell';
-
-      tbody.innerHTML = paginatedTerms.map((t) => {
-        const isChecked = selectedRowIndices.has(t.id);
-        const st = t.status || 'Aprovado';
-        const stStyle = STATUS_PALETTE[st] || { bg: '#42f59b', text: '#000000' };
-        return `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-900 align-top">
-            <td class="py-3 px-3 text-center" style="${isLeitor ? 'display:none;' : ''}"><input type="checkbox" onchange="toggleSelectRow(${t.id}, this)" ${isChecked ? 'checked' : ''} class="rounded border-slate-300 dark:border-slate-700" ${isLeitor ? 'disabled' : ''}></td>
-            <td class="py-2 px-3"><textarea rows="1" oninput="fitTextareaHeight(this)" onfocus="fitTextareaHeight(this)" onpaste="setTimeout(() => fitTextareaHeight(this), 0)" onchange="handleCellChange(${t.id}, 'source', this.value)" ${isLeitor ? 'disabled' : ''} class="auto-resize-textarea w-full bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-accentBlue rounded-lg px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none transition-all" style="overflow-y:hidden;">${t.source || ''}</textarea></td>
-            <td class="py-2 px-3"><textarea rows="1" oninput="fitTextareaHeight(this)" onfocus="fitTextareaHeight(this)" onpaste="setTimeout(() => fitTextareaHeight(this), 0)" onchange="handleCellChange(${t.id}, 'sheetVal', this.value)" ${isLeitor ? 'disabled' : ''} class="auto-resize-textarea w-full bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-emerald-500 rounded-lg px-2 py-1 text-xs text-emerald-600 dark:text-emerald-400 focus:outline-none transition-all" style="overflow-y:hidden;">${t.sheetVal || ''}</textarea></td>
-            <td class="py-2 px-3"><textarea rows="1" oninput="fitTextareaHeight(this)" onfocus="fitTextareaHeight(this)" onpaste="setTimeout(() => fitTextareaHeight(this), 0)" onchange="handleCellChange(${t.id}, 'comments', this.value)" ${isLeitor ? 'disabled' : ''} class="auto-resize-textarea w-full bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-accentBlue rounded-lg px-2 py-1 text-xs text-slate-500 dark:text-slate-400 focus:outline-none transition-all" style="overflow-y:hidden;">${t.comments || ''}</textarea></td>
-            <td class="py-2 px-3"><textarea rows="1" oninput="fitTextareaHeight(this)" onfocus="fitTextareaHeight(this)" onpaste="setTimeout(() => fitTextareaHeight(this), 0)" onchange="handleCellChange(${t.id}, 'key', this.value)" ${isLeitor ? 'disabled' : ''} class="auto-resize-textarea w-full bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-accentBlue rounded-lg px-2 py-1 text-xs font-mono text-accentBlue focus:outline-none transition-all" style="overflow-y:hidden;">${t.key || ''}</textarea></td>
-            <td class="py-3 px-4">
-              <select onchange="handleRowStatusChange(${t.id}, this.value, this)" ${isLeitor ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer focus:outline-none border-0 shadow-sm transition-all" style="background-color: ${stStyle.bg}; color: ${stStyle.text};">
-                <option value="Aprovado" ${st === 'Aprovado' ? 'selected' : ''} style="background-color: #42f59b; color: #000;">Aprovado</option>
-                <option value="Em revisão" ${st === 'Em revisão' ? 'selected' : ''} style="background-color: #f5da42; color: #000;">Em revisão</option>
-                <option value="Urgente" ${st === 'Urgente' ? 'selected' : ''} style="background-color: #ff0000; color: #fff;">Urgente</option>
-              </select>
-            </td>
-            <td class="py-3 px-3 text-center" style="${isLeitor ? 'display:none;' : ''}"><button onclick="deleteTermRow(${t.id})" class="text-slate-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
-          </tr>`;
-      }).join('') || '<tr><td colspan="7" class="py-12 text-center text-slate-400">Nenhum registro encontrado.</td></tr>';
-
-      const activeIconContainer = document.getElementById('activePageIcon');
-      if (activeIconContainer) {
-        const iconCode = page.icon || 'mdi:folder';
-        activeIconContainer.className = "p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue flex items-center justify-center shrink-0 w-12 h-12";
-        activeIconContainer.innerHTML = `<iconify-icon icon="${iconCode}" width="24" height="24" class="text-accentBlue"></iconify-icon>`;
-      }
-
-      const startItem = totalTerms === 0 ? 0 : (itemsPerPage === 'all' ? 1 : (currentPage - 1) * itemsPerPage + 1);
-      const endItem = itemsPerPage === 'all' ? totalTerms : Math.min(currentPage * itemsPerPage, totalTerms);
-      document.getElementById('paginationInfo').innerText = `Mostrando ${startItem}-${endItem} de ${totalTerms} itens`;
-      document.getElementById('currentPageLabel').innerText = itemsPerPage === 'all' ? 'Pág. Única' : `Pág. ${currentPage} de ${totalPages}`;
-
-      const prevBtn = document.getElementById('prevPageBtn');
-      const nextBtn = document.getElementById('nextPageBtn');
-      if (itemsPerPage === 'all' || currentPage <= 1) { prevBtn.setAttribute('disabled', 'true'); prevBtn.classList.add('opacity-50', 'cursor-not-allowed'); }
-      else { prevBtn.removeAttribute('disabled'); prevBtn.classList.remove('opacity-50', 'cursor-not-allowed'); }
-      if (itemsPerPage === 'all' || currentPage >= totalPages) { nextBtn.setAttribute('disabled', 'true'); nextBtn.classList.add('opacity-50', 'cursor-not-allowed'); }
-      else { nextBtn.removeAttribute('disabled'); nextBtn.classList.remove('opacity-50', 'cursor-not-allowed'); }
-
-      updateDeleteButtonState();
-      fitAllTextareas();
-      lucide.createIcons();
-    }
-
-    function openSummaryView() {
-  currentViewMode = 'summary';
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchDropdown').classList.add('hidden');
-  
-  document.getElementById('historyViewContainer').classList.add('hidden');
-  document.getElementById('terminologyViewContainer').classList.add('hidden');
-  document.getElementById('pageViewContainer').classList.add('hidden');
-  
-  triggerViewAnimation('summaryViewContainer'); // <-- Substituiu o .classList.remove('hidden')
-  
-  renderSummaryTopics();
-  updateActiveNavStyles();
-  lucide.createIcons();
-}
-
-    function openTerminologyView() {
-  currentViewMode = 'terminology';
-  document.getElementById('summaryViewContainer').classList.add('hidden');
-  document.getElementById('historyViewContainer').classList.add('hidden');
-  document.getElementById('pageViewContainer').classList.add('hidden');
-  
-  triggerViewAnimation('terminologyViewContainer'); // <-- Substituiu o .classList.remove('hidden')
-  
-  renderTerminologyMatrix();
-  updateActiveNavStyles();
-  lucide.createIcons();
-}
-
-    function renderTerminologyMatrix() {
-      const container = document.getElementById('alphabetMatrixContainer');
-      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      let termPage = appState.pages.find(p => p.isTerminology);
-      let allTerms = termPage && termPage.terms ? termPage.terms : [];
-      document.getElementById('terminologyCountBadge').innerText = allTerms.length;
-
-      const isLeitor = currentUserSession && currentUserSession.role === 'leitor';
-      const addForm = document.getElementById('addTerminologyTermFormWrapper');
-      if (addForm) addForm.style.display = isLeitor ? 'none' : 'block';
-
-      if (!termPage) {
-        container.innerHTML = `<p class="text-sm text-slate-400 p-4">Página "Notas terminológicas" não encontrada.</p>`;
-        return;
-      }
-
-      container.innerHTML = alphabet.map(letter => {
-        const letterTerms = allTerms.filter(t => (t.source || '').toUpperCase().startsWith(letter));
-        return `
-          <div class="w-80 shrink-0 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex flex-col space-y-3">
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-              <span class="w-8 h-8 rounded-xl bg-sky-100 dark:bg-sky-950 text-sky-600 font-mono font-bold flex items-center justify-center">${letter}</span>
-              <span class="text-[10px] font-mono text-slate-400">${letterTerms.length} termo(s)</span>
-            </div>
-            <div class="flex-1 overflow-y-auto space-y-3">
-              ${letterTerms.map(t => `
-                <div class="p-3.5 bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-2xl space-y-3 shadow-sm relative">
-                  <div class="space-y-1"><span class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider block">TERMO / SOURCE STRING:</span><p class="text-xs font-bold text-slate-800 dark:text-white">${t.source || ''}</p></div>
-                  <div class="space-y-1"><span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">TRADUÇÃO / DEFINIÇÃO:</span><p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">${t.sheetVal || ''}</p></div>
-                  <div class="space-y-1"><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">DESCRIÇÃO / ANOTAÇÕES:</span><p class="text-xs text-slate-500 dark:text-slate-400">${t.comments || 'Nenhuma anotação'}</p></div>
-                  <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span class="text-xs font-mono text-accentBlue truncate max-w-[200px]">${t.key && t.key !== '-' ? `Chave: ${t.key}` : ''}</span>
-                    ${!isLeitor ? `<button onclick="deleteTerminologyTerm('${termPage.title}', ${t.id})" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors" title="Apagar termo"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
-                  </div>
-                </div>`).join('')}
-            </div>
-          </div>`;
-      }).join('');
-      lucide.createIcons();
-    }
-
-    function deleteTerminologyTerm(sheetName, rowIndex) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      showToast('Apagando termo terminológico...');
-      google.script.run
-        .withSuccessHandler(res => {
-          showToast('Termo apagado com sucesso!');
-          appState = res;
-          logAction('Apagamento de Termo Terminológico', `Termo da linha ${rowIndex} apagado de Notas Terminológicas`);
-          renderTerminologyMatrix();
-          loadAuditHistory();
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro ao apagar termo.'); })
-        .deleteMultipleRowsFromSheet(sheetName, [rowIndex], currentUserSession.role, currentUserSession.username);
-    }
-
-    function handleAddTerminologyTerm(e) {
-      if (e) e.preventDefault();
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      let termPage = appState.pages.find(p => p.isTerminology);
-      if (!termPage) return;
-      const source = document.getElementById('newTermSource').value.trim();
-      const sheetVal = document.getElementById('newTermValue').value.trim();
-      const comments = document.getElementById('newTermComments').value.trim();
-      const key = document.getElementById('newTermKey').value.trim() || '-';
-      if (!source || !sheetVal) { showToast('Preencha os campos obrigatórios.'); return; }
-      showToast('Adicionando termo...');
-      google.script.run
-        .withSuccessHandler(res => {
-          if (res && res.success !== false) {
-            document.getElementById('newTermSource').value = '';
-            document.getElementById('newTermValue').value = '';
-            document.getElementById('newTermComments').value = '';
-            document.getElementById('newTermKey').value = '';
-            showToast('Termo adicionado com sucesso!');
-            appState = res;
-            logAction('Adição de Termo Terminológico', `Termo "${source}" adicionado em Notas Terminológicas`);
-            renderTerminologyMatrix();
-          } else {
-            showToast(res && res.message ? res.message : 'Erro ao adicionar termo.');
-          }
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-        .addTermToSheet(termPage.title, { source, sheetVal, comments, key, status: 'Aprovado' }, currentUserSession.role, currentUserSession.username);
-    }
-
-    function openHistoryView() {
-  currentViewMode = 'history';
-  document.getElementById('summaryViewContainer').classList.add('hidden');
-  document.getElementById('terminologyViewContainer').classList.add('hidden');
-  document.getElementById('pageViewContainer').classList.add('hidden');
-  
-  triggerViewAnimation('historyViewContainer'); // <-- Substituiu o .classList.remove('hidden')
-  
-  loadAuditHistory();
-  updateActiveNavStyles();
-  lucide.createIcons();
-}
-
-    function loadAuditHistory() {
-      showToast('Carregando histórico da planilha...');
-      google.script.run
-        .withSuccessHandler(logs => { actionHistoryLog = logs || []; renderHistoryList(); showToast('Histórico atualizado!'); })
-        .withFailureHandler(err => { console.error("Erro ao carregar auditoria:", err); showToast('Erro ao carregar histórico.'); })
-        .getAuditLogsFromSheet();
-    }
-
-    function renderHistoryList() {
-      const container = document.getElementById('historyList');
-      const badge = document.getElementById('historyCountBadge');
-      if (badge) badge.innerText = actionHistoryLog.length;
-      if (!container) return;
-      if (!actionHistoryLog || actionHistoryLog.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Nenhum registro de modificação encontrado na planilha.</p>`;
-        return;
-      }
-      const isLeitor = currentUserSession && currentUserSession.role === 'leitor';
-      container.innerHTML = actionHistoryLog.map((i, index) => {
-        let rawUser = i.username || 'Sistema';
-        let displayName = rawUser.includes('@') ? rawUser.split('@')[0] : rawUser;
-        if (displayName.toLowerCase() === 'iagoemanuel47') displayName = currentUserSession ? currentUserSession.username : 'IagoEmanuel15';
-        return `
-          <div class="p-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl flex items-center justify-between gap-4 text-xs transition-all">
-            <div class="space-y-1 overflow-hidden flex-1 pr-4">
-              <div class="flex items-center gap-2">
-                <span class="inline-block px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-accentBlue dark:text-blue-400 font-mono text-[10px] font-bold">${i.timestamp}</span>
-                <span class="text-[10px] font-bold text-slate-400 font-mono">Modificado por: ${displayName}</span>
-              </div>
-              <p class="font-bold text-slate-800 dark:text-white">${i.title}</p>
-              <p class="text-slate-500 dark:text-slate-400 break-words whitespace-pre-wrap">${i.description}</p>
-            </div>
-            <div>${i.hasRestore && !isLeitor ? `<button onclick="restoreHistoryItem(${index})" class="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-xl font-bold text-[11px] flex items-center gap-1.5 shrink-0 transition-all" title="Restaurar estado anterior"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restaurar</button>` : ''}</div>
-          </div>`;
-      }).join('');
-      lucide.createIcons();
-    }
-
-    function logAction(title, description) {
-      const username = currentUserSession ? currentUserSession.username : 'Sistema';
-      google.script.run.recordAuditLog(username, title, description);
-    }
-
-    function logActionWithRestore(title, description, sheetName, rowIndex, fieldName, oldValue, newValue) {
-      const username = currentUserSession ? currentUserSession.username : 'Sistema';
-      google.script.run.recordAuditLog(username, title, `${description} | Restaurável [Sheet: ${sheetName}, Row: ${rowIndex}, Field: ${fieldName}, Old: ${oldValue}]`);
-    }
-
-    function restoreHistoryItem(index) {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const item = actionHistoryLog[index];
-      if (!item || !item.hasRestore || !item.restoreMeta) { showToast('Erro: Metadados de restauração indisponíveis para este item.'); return; }
-      const meta = item.restoreMeta;
-
-      if (meta.type === 'page_snapshot') {
-        showCustomRestore(`Deseja realmente restaurar esta página com todo o seu conteúdo e formatações originais?`, () => {
-          showToast('Restaurando página...');
-          google.script.run
-            .withSuccessHandler(res => {
-              if (res && res.success) { showToast('Página restaurada com sucesso!'); appState = res.data; renderApp(); loadAuditHistory(); }
-              else { showToast(res.message || 'Erro ao restaurar página.'); }
-            })
-            .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-            .restoreDeletedPageFromSnapshot(meta.snapshotPayload, currentUserSession.role, currentUserSession.username);
-        });
-        return;
-      }
-
-      let friendlyTarget = `a linha ${meta.rowIndex}`;
-      if (meta.fieldName === 'crowdinUrl') friendlyTarget = `o link do Crowdin`;
-      else {
-        try { const parsedData = JSON.parse(meta.oldValue); if (parsedData.source) friendlyTarget = `o termo "${parsedData.source}"`; }
-        catch (e) { if (meta.fieldName && meta.fieldName !== 'row_delete') friendlyTarget = `o campo "${meta.fieldName}"`; }
-      }
-
-      showCustomRestore(`Deseja restaurar ${friendlyTarget} na página "${meta.sheetName}" para o estado anterior?`, () => {
-        showToast('Restaurando dados...');
-        google.script.run
-          .withSuccessHandler(res => {
-            if (res && (res.success !== false)) {
-              showToast('Ação restaurada com sucesso!');
-              if (res.data) { appState = res.data; renderApp(); } else { loadSheetsData(true); }
-              loadAuditHistory();
-            } else {
-              showToast(res && res.message ? res.message : 'Erro ao restaurar dados na planilha.');
-            }
-          })
-          .withFailureHandler(err => { console.error("Erro de execução:", err); showToast('Erro de comunicação ao tentar restaurar.'); })
-          .revertCellInSheet(meta.sheetName, meta.rowIndex, meta.fieldName, meta.oldValue, currentUserSession.role, currentUserSession.username);
-      });
-    }
-
-    function renderApp() {
-      renderPagesNav();
-      if (currentViewMode === 'summary') renderSummaryTopics();
-      else if (currentViewMode === 'terminology') renderTerminologyMatrix();
-      else if (currentViewMode === 'page') renderActivePageContent();
-      lucide.createIcons();
-    }
-
-    function loadSheetsData(isManual = false) {
-      if (isManual) showToast('Sincronizando...'); else showLoading();
-      const role = currentUserSession ? currentUserSession.role : 'leitor';
-
-      google.script.run
-        .withSuccessHandler(data => {
-          try {
-            appState = data || { pages: [] };
-            renderApp();
-          } catch (e) {
-            console.error('Erro na renderização:', e);
-            showToast('Erro ao renderizar os dados.');
-          } finally {
-            hideLoading();
-            if (isManual) showToast('Sincronizado com sucesso!');
-          }
-        })
-        .withFailureHandler(err => {
-          console.error('Erro no getSpreadsheetData:', err);
-          hideLoading();
-          showToast('Erro ao carregar dados da planilha.');
-        })
-        .getSpreadsheetData(role);
-    }
-
-    function togglePagesSort() {
-      sortPagesAlphabetically = !sortPagesAlphabetically;
-      const sortBtn = document.getElementById('sortPagesBtn');
-      if (sortBtn) {
-        sortBtn.innerHTML = sortPagesAlphabetically ? '<iconify-icon icon="mdi:sort" width="14" height="14" class="text-white"></iconify-icon>' : '<iconify-icon icon="mdi:sort-alphabetical-ascending" width="14" height="14"></iconify-icon>';
-        sortBtn.title = sortPagesAlphabetically ? "Ordem padrão da planilha" : "Ordenar por ordem alfabética";
-      }
-      renderPagesNav();
-    }
-
-    function renderPagesNav() {
-      const nav = document.getElementById('pagesNav');
-      let pages = appState.pages.filter(p => {
-        const t = p.title.toLowerCase();
-        if (t === 'usuariosauth' || t === 'logauditoria') return false;
-        if (t.startsWith('notif_') || t.startsWith('sistema')) return false;
-        return !p.isTerminology;
-      });
-
-      document.getElementById('totalPagesBadge').innerText = pages.length;
-      const summaryBadge = document.getElementById('summaryCountBadge');
-      if (summaryBadge) summaryBadge.innerText = pages.length;
-
-      if (sortPagesAlphabetically) pages.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' }));
-
-      nav.innerHTML = pages.map(p => {
-        const termsCount = p.terms ? p.terms.length : 0;
-        const badgeStyle = getPageBadgeStyle(p.terms);
-        const iconCode = p.icon || 'mdi:folder';
-        return `
-          <button id="page_nav_${p.id}" onclick="switchPage('${p.id}')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-medium text-blue-200 hover:text-white hover:bg-white/5 transition-all">
-            <div class="flex items-center gap-2.5 truncate">
-              <iconify-icon icon="${iconCode}" width="16" height="16" class="shrink-0"></iconify-icon>
-              <span class="truncate font-mono">${p.title}</span>
-              ${p.titleLink ? '<span class="text-[9px] font-sans px-1.5 py-0.5 rounded bg-blue-500/30 text-blue-100 font-bold mr-3">Crowdin</span>' : ''}
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-blue-200" style="${badgeStyle}">${termsCount}</span>
-          </button>`;
-      }).join('');
-      updateActiveNavStyles();
-    }
-
-    function renderSummaryTopics() {
-      const grid = document.getElementById('summaryTopicsGrid');
-      if (!grid) return;
-      const pages = appState.pages.filter(p => {
-        const t = p.title.toLowerCase();
-        if (t === 'usuariosauth' || t === 'logauditoria') return false;
-        if (t.startsWith('notif_') || t.startsWith('sistema')) return false;
-        return !p.isTerminology;
-      });
-
-      grid.innerHTML = pages.map((p) => {
-        const termsCount = p.terms ? p.terms.length : 0;
-        const badgeStyle = getPageBadgeStyle(p.terms);
-        const iconCode = p.icon || 'mdi:folder';
-        return `
-          <div onclick="switchPage('${p.id}')" class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-3xl p-5 cursor-pointer hover:scale-[1.02] transition-all shadow-lg flex flex-col justify-between h-44 relative">
-            <div class="flex items-start justify-between">
-              <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center"><iconify-icon icon="${iconCode}" width="20" height="20"></iconify-icon></div>
-              <div class="flex items-center gap-1.5">
-                ${p.titleLink ? '<span class="text-[10px] font-sans px-2 py-0.5 rounded-full bg-white/30 text-white font-bold backdrop-blur-sm">Crowdin</span>' : ''}
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style="${badgeStyle}">Linhas: ${termsCount}</span>
-              </div>
-            </div>
-            <div>
-              <h3 class="text-base font-bold font-mono truncate">${p.title}</h3>
-              <p class="text-xs text-white/80 truncate">${p.desc || 'Sincronizado com a planilha'}</p>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    function switchPage(pageId) {
-  currentViewMode = 'page';
-  appState.activePageId = pageId;
-  currentPage = 1;
-  selectedRowIndices.clear();
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchDropdown').classList.add('hidden');
-  
-  document.getElementById('summaryViewContainer').classList.add('hidden');
-  document.getElementById('terminologyViewContainer').classList.add('hidden');
-  document.getElementById('historyViewContainer').classList.add('hidden');
-  
-  triggerViewAnimation('pageViewContainer'); // <-- Substituiu o .classList.remove('hidden')
-  
-  renderActivePageContent();
-  updateActiveNavStyles();
-}
-
-    function showToast(msg) {
-  const toast = document.getElementById('toast');
-  document.getElementById('toastMsg').innerText = msg;
-
-  // Reinicia a animação para que o Toast suba suavemente mesmo se vários aparecerem seguidos
-  toast.classList.remove('hidden', 'toast-animate');
-  void toast.offsetWidth;
-  toast.classList.add('toast-animate');
-
-  // Evita que um toast anterior feche o novo antes da hora
-  clearTimeout(toast._hideTimer);
-  toast._hideTimer = setTimeout(() => toast.classList.add('hidden'), 2500);
-}
-
-    function openNewPageModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const modal = document.getElementById('newPageModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        document.getElementById('modalPageTitle').value = '';
-        const crowdinInput = document.getElementById('modalPageCrowdinUrl');
-        if (crowdinInput) crowdinInput.value = '';
-        document.getElementById('newPageCrowdinError').classList.add('hidden');
-        document.getElementById('newPageTitleError').classList.add('hidden');
-        crowdinInput.classList.remove('border-red-500');
-        document.getElementById('modalPageTitle').classList.remove('border-red-500', 'shake-input');
-        lucide.createIcons();
-      }
-    }
-
-    function closeNewPageModal() {
-      const modal = document.getElementById('newPageModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function isValidCrowdinUrl(url) {
-      if (!url || url.trim() === '') return true;
-      return url.trim().toLowerCase().includes('crowdin.com');
-    }
-
-    function saveNewPage() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const titleInput = document.getElementById('modalPageTitle');
-      const iconSelect = document.getElementById('modalPageIcon');
-      const crowdinUrlInput = document.getElementById('modalPageCrowdinUrl');
-      const errorEl = document.getElementById('newPageCrowdinError');
-      const titleErrorEl = document.getElementById('newPageTitleError');
-      const title = titleInput.value.trim();
-      const icon = iconSelect.value;
-      const crowdinUrl = crowdinUrlInput ? crowdinUrlInput.value.trim() : '';
-
-      titleErrorEl.classList.add('hidden');
-      titleInput.classList.remove('border-red-500', 'shake-input');
-
-      if (!title) { showToast('Digite o nome da aba.'); titleInput.classList.add('border-red-500', 'shake-input'); return; }
-      if (title.toLowerCase() === 'usuariosauth') { showToast('Este nome de página é reservado.'); titleInput.classList.add('border-red-500', 'shake-input'); return; }
-      if (!isValidCrowdinUrl(crowdinUrl)) { errorEl.classList.remove('hidden'); crowdinUrlInput.classList.add('border-red-500'); return; }
-      else { errorEl.classList.add('hidden'); crowdinUrlInput.classList.remove('border-red-500'); }
-
-      showToast('Criando nova aba...');
-      const userRole = currentUserSession ? currentUserSession.role : 'editor';
-
-      google.script.run
-        .withSuccessHandler(res => {
-          if (res && res.success) {
-            closeNewPageModal();
-            showToast('Aba criada com sucesso!');
-            logAction('Criação de Página', `Nova página criada: ${title}`);
-            loadSheetsData();
-          } else {
-            showToast(res && res.message ? res.message : 'Erro ao criar a aba.');
-            titleErrorEl.classList.remove('hidden');
-            titleInput.classList.add('border-red-500', 'shake-input');
-            setTimeout(() => titleInput.classList.remove('shake-input'), 500);
-            lucide.createIcons();
-          }
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-        .addNewPageToSpreadsheet(title, icon, crowdinUrl, userRole, currentUserSession.username);
-    }
-
-    function openEditHeaderModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      document.getElementById('headerTitleInput').value = page.title;
-      document.getElementById('headerIconInput').value = page.icon || 'mdi:folder';
-      const crowdinInput = document.getElementById('headerCrowdinUrlInput');
-      crowdinInput.value = page.titleLink || '';
-      document.getElementById('headerCrowdinError').classList.add('hidden');
-      crowdinInput.classList.remove('border-red-500');
-      const modal = document.getElementById('editHeaderModal');
-      if (modal) { modal.classList.remove('hidden'); lucide.createIcons(); }
-    }
-
-    function closeEditHeaderModal() {
-      const modal = document.getElementById('editHeaderModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function savePageHeaderInfo() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const page = appState.pages.find(p => p.id === appState.activePageId);
-      if (!page) return;
-      const titleInput = document.getElementById('headerTitleInput');
-      const iconInput = document.getElementById('headerIconInput');
-      const crowdinInput = document.getElementById('headerCrowdinUrlInput');
-      const errorEl = document.getElementById('headerCrowdinError');
-      const newTitle = titleInput ? titleInput.value.trim() : '';
-      const newIcon = iconInput ? iconInput.value.trim() : (page.icon || 'mdi:folder');
-      let newTitleLink = crowdinInput ? crowdinInput.value.trim() : '';
-
-      if (!isValidCrowdinUrl(newTitleLink)) { errorEl.classList.remove('hidden'); crowdinInput.classList.add('border-red-500'); return; }
-      else { errorEl.classList.add('hidden'); crowdinInput.classList.remove('border-red-500'); }
-      if (newTitleLink && !newTitleLink.startsWith('http://') && !newTitleLink.startsWith('https://')) newTitleLink = 'https://' + newTitleLink;
-      if (!newTitle) { showToast('O título não pode estar vazio.'); return; }
-      if (newTitle.toLowerCase() === 'usuariosauth') { showToast('Este nome de página é reservado.'); return; }
-
-      showToast('Atualizando página...');
-      const currentUsername = currentUserSession ? currentUserSession.username : 'Sistema';
-
-      google.script.run
-        .withSuccessHandler(res => {
-          if (res) {
-            closeEditHeaderModal();
-            showToast('Página atualizada com sucesso!');
-            appState = res;
-            logAction('Atualização de Página', `Configurações da página ${page.title} atualizadas`);
-            renderApp();
-          } else { showToast('Erro ao atualizar a página.'); }
-        })
-        .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-        .updatePageHeaderInfo(page.title, newTitle, page.desc, newTitleLink, newIcon, currentUsername);
-    }
-
-    function openManagePagesModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      const modal = document.getElementById('managePagesModal');
-      if (modal) { modal.classList.remove('hidden'); renderManagePagesList(); lucide.createIcons(); }
-    }
-
-    function closeManagePagesModal() {
-      const modal = document.getElementById('managePagesModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function renderManagePagesList() {
-      const listContainer = document.getElementById('pagesManageList');
-      if (!listContainer) return;
-      const pages = appState.pages.filter(p => {
-        const t = p.title.toLowerCase();
-        return !p.isTerminology && t !== 'usuariosauth' && t !== 'logauditoria';
-      });
-      
-      listContainer.innerHTML = pages.map(p => `
-        <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs">
-          <div class="flex items-center gap-2">
-            <input type="checkbox" value="${p.title}" class="manage-page-checkbox rounded border-slate-300 dark:border-slate-700" onchange="updateSelectedPagesCount()">
-            <span class="font-mono font-bold text-slate-800 dark:text-white">${p.title}</span>
-          </div>
-          <span class="text-[10px] text-slate-400 font-mono">${p.terms ? p.terms.length : 0} itens</span>
-        </div>`).join('') || '<p class="text-xs text-slate-400 text-center py-4">Nenhuma página disponível para gerenciar.</p>';
-      
-      // Desmarca o botão "Selecionar todas" ao abrir
-      const selectAllCb = document.getElementById('selectAllPagesCheckbox');
-      if (selectAllCb) selectAllCb.checked = false;
-
-      updateSelectedPagesCount();
-    }
-
-    function updateSelectedPagesCount() {
-      const checkboxes = document.querySelectorAll('.manage-page-checkbox');
-      const checkedCheckboxes = document.querySelectorAll('.manage-page-checkbox:checked');
-      
-      const countEl = document.getElementById('selectedPagesCount');
-      if (countEl) countEl.innerText = checkedCheckboxes.length;
-
-      const selectAllCb = document.getElementById('selectAllPagesCheckbox');
-      if (selectAllCb && checkedCheckboxes.length !== checkboxes.length) {
-        selectAllCb.checked = false;
-      } else if (selectAllCb && checkboxes.length > 0 && checkedCheckboxes.length === checkboxes.length) {
-        selectAllCb.checked = true;
-      }
-    }
-
-    function deleteSelectedPages() {
-      const checkboxes = document.querySelectorAll('.manage-page-checkbox:checked');
-      if (checkboxes.length === 0) { showToast('Selecione ao menos uma página para apagar.'); return; }
-      const pageTitles = Array.from(checkboxes).map(cb => cb.value);
-      const userRole = currentUserSession ? currentUserSession.role : 'editor';
-
-      showCustomConfirm(`Deseja realmente apagar as páginas selecionadas (${pageTitles.join(', ')}) e todos os seus dados?`, () => {
-        showToast('Apagando páginas...');
-        google.script.run
-          .withSuccessHandler(res => {
-            if (res && res.success) {
-              showToast('Páginas apagadas com sucesso!');
-              closeManagePagesModal();
-              logAction('Apagamento de Páginas', `Páginas apagadas: ${pageTitles.join(', ')}`);
-              if (res.data) { appState = res.data; renderApp(); } else { loadSheetsData(); }
-            } else { showToast(res && res.message ? res.message : 'Erro ao apagar páginas.'); }
-          })
-          .withFailureHandler(err => { console.error("Erro:", err); showToast('Erro de comunicação com o servidor.'); })
-          .deleteMultiplePagesFromSpreadsheet(pageTitles, userRole, currentUserSession.username);
-      }, false);
-    }
-
-    let confirmCallback = function() {};
-    function showCustomConfirm(message, onOk, isRestore = false) {
-      const modal = document.getElementById('customConfirmModal');
-      const msgEl = document.getElementById('customConfirmMessage');
-      const okBtn = document.getElementById('customConfirmOkBtn');
-      const titleEl = document.getElementById('customConfirmTitle');
-      const subtitleEl = document.getElementById('customConfirmSubtitle');
-      const iconWrapper = document.getElementById('customConfirmIconWrapper');
-      const iconEl = document.getElementById('customConfirmIcon');
-      if (msgEl && message) msgEl.innerText = message;
-      confirmCallback = onOk;
-      if (isRestore) {
-        titleEl.innerText = 'Confirmar restauração';
-        subtitleEl.innerText = 'O registro anterior será recuperado';
-        iconWrapper.className = 'w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-accentBlue flex items-center justify-center shrink-0';
-        iconEl.setAttribute('data-lucide', 'rotate-ccw');
-        okBtn.className = 'px-4 py-2 rounded-xl bg-accentBlue hover:bg-blue-700 text-xs text-white font-bold shadow-md shadow-blue-500/20 transition-all';
-        okBtn.innerText = 'Restaurar';
-      } else {
-        titleEl.innerText = 'Confirmar apagamento';
-        subtitleEl.innerText = 'Esta ação não poderá ser desfeita';
-        iconWrapper.className = 'w-10 h-10 rounded-2xl bg-red-50 dark:bg-red-950/50 text-red-500 flex items-center justify-center shrink-0';
-        iconEl.setAttribute('data-lucide', 'alert-triangle');
-        okBtn.className = 'px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs text-white font-bold shadow-md shadow-red-500/20 transition-all';
-        okBtn.innerText = 'Apagar';
-      }
-      if (modal) { modal.classList.remove('hidden'); lucide.createIcons(); }
-      const newOkBtn = okBtn.cloneNode(true);
-      okBtn.parentNode.replaceChild(newOkBtn, okBtn);
-      newOkBtn.addEventListener('click', () => closeCustomConfirm(true));
-    }
-
-    function closeCustomConfirm(isOk) {
-      const modal = document.getElementById('customConfirmModal');
-      if (modal) modal.classList.add('hidden');
-      if (isOk && typeof confirmCallback === 'function') confirmCallback();
-      confirmCallback = function() {};
-    }
-
-    let restoreCallback = function() {};
-    function showCustomRestore(message, onOk) {
-      const modal = document.getElementById('customRestoreModal');
-      const msgEl = document.getElementById('customRestoreMessage');
-      const okBtn = document.getElementById('customRestoreOkBtn');
-      if (msgEl && message) msgEl.innerText = message;
-      restoreCallback = onOk;
-      if (modal) { modal.classList.remove('hidden'); lucide.createIcons(); }
-      const newOkBtn = okBtn.cloneNode(true);
-      okBtn.parentNode.replaceChild(newOkBtn, okBtn);
-      newOkBtn.addEventListener('click', () => closeCustomRestore(true));
-    }
-
-    function closeCustomRestore(isOk) {
-      const modal = document.getElementById('customRestoreModal');
-      if (modal) modal.classList.add('hidden');
-      if (isOk && typeof restoreCallback === 'function') restoreCallback();
-      restoreCallback = function() {};
-    }
-
-    let importState = {
-      isImporting: false,
-      isPaused: false,
-      shouldStop: false,
-      totalItems: 0,
-      processedItems: 0,
-      currentIndex: 0,
-      itemsArray: [],
-      chunkSize: 50,
-      completedPages: new Set(),
-      retryCount: 0,
-      maxRetries: 3
-    };
-
-    function openJsonImportModal() {
-      if (currentUserSession && currentUserSession.role === 'leitor') return;
-      document.getElementById('jsonContentArea').value = '';
-      document.getElementById('jsonFileInput').value = '';
-
-      importState.isImporting = false;
-      importState.isPaused = false;
-      importState.shouldStop = false;
-      importState.completedPages.clear();
-
-      document.getElementById('importProgressArea').classList.add('hidden');
-      document.getElementById('jsonInputAreaWrapper').classList.remove('hidden');
-      document.getElementById('btnSubmitJson').classList.remove('hidden');
-      document.getElementById('btnCancelJson').classList.remove('hidden');
-      document.getElementById('btnCancelJson').innerText = 'Cancelar';
-      document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Aguardando importação...</p>';
-
-      document.getElementById('jsonImportModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeJsonImportModal() {
-      if (importState.isImporting && !importState.isPaused) {
-        if (!confirm("A importação está em andamento. Deseja realmente fechar?")) return;
-        stopImport();
-      }
-      importState.isImporting = false;
-      document.getElementById('jsonImportModal').classList.add('hidden');
-    }
-
-    function handleJsonFileSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('jsonContentArea').value = e.target.result;
-      };
-      reader.readAsText(file);
-    }
-
-    function flattenJsonObject(obj, prefix = '', res = {}) {
-      for (const key of Object.keys(obj)) {
-        const value = obj[key];
-        const newKey = prefix ? `${prefix}.${key}` : key;
-        if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-          flattenJsonObject(value, newKey, res);
-        } else if (value !== undefined && value !== null) {
-          res[newKey] = String(value);
-        }
-      }
-      return res;
-    }
-
-    function togglePauseImport() {
-      importState.isPaused = !importState.isPaused;
-      const btn = document.getElementById('btnPauseImport');
-      const statusText = document.getElementById('importStatusText');
-
-      if (importState.isPaused) {
-        btn.innerText = 'Retomar';
-        btn.className = 'px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors shadow-sm';
-        statusText.innerText = 'Pausado pelo usuário...';
-      } else {
-        importState.retryCount = 0;
-        btn.innerText = 'Pausar';
-        btn.className = 'px-3 py-1.5 bg-yellow-600 text-white font-bold text-xs rounded-lg hover:bg-yellow-700 transition-colors shadow-sm';
-        statusText.innerText = 'Processando...';
-        processNextChunk();
-      }
-    }
-
-    function stopImport() {
-      importState.shouldStop = true;
-      importState.isImporting = false;
-      document.getElementById('importStatusText').innerText = 'Importação cancelada pelo usuário.';
-      document.getElementById('btnPauseImport').classList.add('hidden');
-      document.getElementById('btnStopImport').classList.add('hidden');
-      document.getElementById('btnCancelJson').classList.remove('hidden');
-      document.getElementById('btnCancelJson').innerText = 'Fechar';
-      showToast('Importação interrompida.');
-    }
-
-    function submitJsonImport() {
-      if (importState.isImporting) return;
-
-      const contentArea = document.getElementById('jsonContentArea');
-      const rawText = contentArea ? contentArea.value.trim() : '';
-
-      if (!rawText) {
-        showToast('Cole um JSON ou selecione um arquivo antes de importar.');
-        return;
-      }
-
-      let parsed;
-      try {
-        parsed = JSON.parse(rawText);
-      } catch (e) {
-        showToast('Não é possível finalizar a importação: o JSON está inválido ou corrompido.');
-        return;
-      }
-
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-        showToast('O JSON deve ser um objeto chave-valor válido.');
-        return;
-      }
-
-      const flatParsed = flattenJsonObject(parsed);
-      const keys = Object.keys(flatParsed);
-      if (keys.length === 0) {
-        showToast('O JSON está vazio.');
-        return;
-      }
-
-      const existingMap = {};
-      if (appState && appState.pages) {
-        appState.pages.forEach(p => {
-          if (p.isTerminology) return;
-          if (p.terms) {
-            p.terms.forEach(t => {
-              const k = (t.key || '').toLowerCase().trim();
-              if (k) existingMap[k] = (t.sheetVal || '').trim();
-            });
-          }
-        });
-      }
-
-      const filteredItems = [];
-      let frontendIgnored = 0;
-
-      keys.forEach(k => {
-        const cleanK = k.trim();
-        const cleanV = String(flatParsed[k]).trim();
-        if (!cleanK) return;
-
-        if (existingMap[cleanK.toLowerCase()] === cleanV) {
-          frontendIgnored++;
-        } else {
-          filteredItems.push({ key: cleanK, value: cleanV });
-        }
-      });
-
-      if (filteredItems.length === 0) {
-        showToast(`Todos os ${frontendIgnored} termo(s) do arquivo já existem e são idênticos. Nada a importar.`);
-        return;
-      }
-
-      if (frontendIgnored > 0) {
-        showToast(`Ignorando ${frontendIgnored} termo(s) idêntico(s). Importando ${filteredItems.length}...`);
-      }
-
-      importState.isImporting = true;
-      importState.isPaused = false;
-      importState.shouldStop = false;
-      importState.totalItems = filteredItems.length;
-      importState.processedItems = 0;
-      importState.currentIndex = 0;
-      importState.itemsArray = filteredItems;
-      importState.completedPages.clear();
-      importState.retryCount = 0;
-
-      document.getElementById('importPagesHistory').innerHTML = '<p class="text-slate-400 italic text-[11px]">Processando...</p>';
-      document.getElementById('jsonInputAreaWrapper').classList.add('hidden');
-      document.getElementById('importProgressArea').classList.remove('hidden');
-      document.getElementById('btnSubmitJson').classList.add('hidden');
-      document.getElementById('btnCancelJson').classList.add('hidden');
-      document.getElementById('btnPauseImport').classList.remove('hidden');
-      document.getElementById('btnStopImport').classList.remove('hidden');
-      document.getElementById('btnPauseImport').innerText = 'Pausar';
-      document.getElementById('btnPauseImport').className = 'px-3 py-1.5 bg-yellow-600 text-white font-bold text-xs rounded-lg hover:bg-yellow-700 transition-colors shadow-sm';
-      document.getElementById('importStatusText').innerText = 'Processando...';
-
-      updateProgressBar();
-      processNextChunk();
-    }
-
-    function processNextChunk() {
-      if (!importState.isImporting || importState.isPaused || importState.shouldStop) return;
-
-      if (importState.currentIndex >= importState.totalItems) {
-        finishImport();
-        return;
-      }
-
-      const start = importState.currentIndex;
-      const chunk = [];
-      let currentChars = 2; // "{}"
-
-      // Monta o lote respeitando tanto o limite de itens quanto o limite de caracteres
-      for (let i = start; i < Math.min(start + importState.chunkSize, importState.totalItems); i++) {
-        const item = importState.itemsArray[i];
-        const entrySize = item.key.length + item.value.length + 6;
-        if (chunk.length > 0 && (currentChars + entrySize) > importState.maxPayloadChars) {
-          break;
-        }
-        chunk.push(item);
-        currentChars += entrySize;
-      }
-
-      const chunkObj = {};
-      chunk.forEach(item => { chunkObj[item.key] = item.value; });
-
-      const role = currentUserSession ? currentUserSession.role : 'editor';
-      const username = currentUserSession ? currentUserSession.username : 'Sistema';
-
-      const handleFailure = (err) => {
-        const errMsg = err && err.message ? err.message : String(err || 'Erro desconhecido');
-        console.warn(`Falha no lote (Tentativa ${importState.retryCount + 1} de ${importState.maxRetries}):`, errMsg);
-
-        if (importState.retryCount < importState.maxRetries) {
-          importState.retryCount++;
-          document.getElementById('importStatusText').innerText = `Falha detectada (${errMsg}). Tentando novamente (${importState.retryCount}/${importState.maxRetries})...`;
-          setTimeout(processNextChunk, 2000 * importState.retryCount);
-        } else {
-          document.getElementById('importStatusText').innerText = `Erro: ${errMsg}`;
-          importState.isPaused = true;
-          document.getElementById('btnPauseImport').innerText = 'Retomar';
-          document.getElementById('btnPauseImport').className = 'px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors shadow-sm';
-          document.getElementById('btnCancelJson').classList.remove('hidden');
-          document.getElementById('btnCancelJson').innerText = 'Fechar';
-          showToast(`Importação pausada: ${errMsg}`);
-        }
-      };
-
-      google.script.run
-        .withSuccessHandler(res => {
-          if (!res || res.success === false || res.error) {
-            handleFailure(new Error((res && (res.message || res.error)) || 'O servidor rejeitou o lote.'));
-            return;
-          }
-
-          importState.currentIndex += chunk.length;
-          importState.processedItems += chunk.length;
-          importState.retryCount = 0;
-
-          if (importState.processedItems > importState.totalItems) {
-            importState.processedItems = importState.totalItems;
-          }
-
-          updateProgressBar();
-
-          if (res.affectedPages && res.affectedPages.length > 0) {
-            let hasNewPage = false;
-            res.affectedPages.forEach(pageName => {
-              if (!importState.completedPages.has(pageName)) {
-                importState.completedPages.add(pageName);
-                hasNewPage = true;
-              }
-            });
-
-            if (hasNewPage) {
-              const historyContainer = document.getElementById('importPagesHistory');
-              if (historyContainer.innerHTML.includes('Aguardando') || historyContainer.innerHTML.includes('Processando')) {
-                historyContainer.innerHTML = '';
-              }
-
-              historyContainer.innerHTML = Array.from(importState.completedPages).sort().map(page =>
-                `<div class="flex items-center gap-1.5">${page}</div>`
-              ).join('');
-
-              historyContainer.scrollTop = historyContainer.scrollHeight;
-            }
-          }
-
-          document.getElementById('importStatusText').innerText = 'Processando...';
-          setTimeout(processNextChunk, 300);
-        })
-        .withFailureHandler(handleFailure)
-        .importJsonStringsToSheet(JSON.stringify(chunkObj), role, username);
-    }
-
-    function updateProgressBar() {
-      const pct = Math.round((importState.processedItems / importState.totalItems) * 100);
-      document.getElementById('importPercentage').innerText = pct + '%';
-      document.getElementById('importProgressBar').style.width = pct + '%';
-    }
-
-    function finishImport() {
-      importState.isImporting = false;
-      document.getElementById('importStatusText').innerText = 'Concluído!';
-      document.getElementById('importPercentage').innerText = '100%';
-      document.getElementById('importProgressBar').style.width = '100%';
-      document.getElementById('btnPauseImport').classList.add('hidden');
-      document.getElementById('btnStopImport').classList.add('hidden');
-
-      showToast('Importação concluída com sucesso!');
-
-      setTimeout(() => {
-        document.getElementById('jsonImportModal').classList.add('hidden');
-        loadSheetsData();
-      }, 1500);
-    }
-    
-        let searchDebounceTimer = null;
-
-    function handleSearchInput(query) {
-      const dropdown = document.getElementById('searchDropdown');
-      const resultsList = document.getElementById('searchResultsList');
-
-      if (currentViewMode === 'page') {
-        dropdown.classList.add('hidden');
-        currentPage = 1;
-        renderActivePageContent();
-        return;
-      }
-
-      if (query.trim().length < 2) {
-        dropdown.classList.add('hidden');
-        return;
-      }
-
-      clearTimeout(searchDebounceTimer);
-      searchDebounceTimer = setTimeout(() => {
-        resultsList.innerHTML = '<div class="p-3 text-xs text-center text-slate-400">Buscando...</div>';
-        dropdown.classList.remove('hidden');
-
-        google.script.run
-          .withSuccessHandler(results => {
-            if (!results || results.length === 0) {
-              resultsList.innerHTML = '<div class="p-3 text-xs text-center text-slate-400">Nenhum resultado encontrado.</div>';
-              return;
-            }
-
-            resultsList.innerHTML = results.map(r => `
-              <div onclick="switchPage('${r.pageId}')" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="text-[10px] font-bold text-accentBlue bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">${r.pageName}</span>
-                  <span class="text-[10px] text-slate-400 font-mono truncate max-w-[150px]">${r.key}</span>
-                </div>
-                <p class="text-xs text-slate-800 dark:text-slate-200">${r.translation}</p>
-              </div>
-            `).join('');
-          })
-          .withFailureHandler(err => {
-            console.error("Erro na busca:", err);
-            resultsList.innerHTML = '<div class="p-3 text-xs text-center text-red-400">Erro ao buscar.</div>';
-          })
-          .searchGlobal(query);
-      }, 400);
-    }
-
     function setMorphButtonState(btnId, state, defaultText) {
-  const btn = document.getElementById(btnId);
-  if (!btn) return;
-  if (state === 'loading') {
-    btn.disabled = true;
-    btn.classList.add('opacity-80', 'cursor-wait');
-    btn.innerHTML = `<iconify-icon icon="svg-spinners:ring-resize" width="16" height="16"></iconify-icon>`;
-  } else if (state === 'success') {
-    btn.classList.remove('bg-accentBlue', 'opacity-80', 'cursor-wait');
-    btn.classList.add('bg-emerald-500');
-    btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Concluído!</span>`;
-    lucide.createIcons();
-  } else {
-    btn.disabled = false;
-    btn.classList.remove('opacity-80', 'cursor-wait', 'bg-emerald-500');
-    btn.innerHTML = defaultText;
-  }
-}
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-  lucide.createIcons();
-});
+      if (state === 'loading') {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Processando...</span>`;
+        if (window.lucide) lucide.createIcons();
+      } else if (state === 'success') {
+        btn.disabled = true;
+        btn.classList.add('bg-emerald-500', 'hover:bg-emerald-500');
+        btn.innerHTML = `<i data-lucide="check" class="w-5 h-5 stroke-[2.5]"></i><span>Validado!</span>`;
+        if (window.lucide) lucide.createIcons();
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('bg-emerald-500', 'hover:bg-emerald-500');
+        btn.innerHTML = `<span>${defaultText}</span>`;
+      }
+    }
 
-let failedLoginAttempts = 0;
-    let thunderInterval = null;
-    let rainInitialized = false;
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
 
     function initRainDrops() {
       if (rainInitialized) return;
@@ -2656,7 +932,6 @@ let failedLoginAttempts = 0;
       rainInitialized = true;
     }
 
-    // Sintetiza o som grave e estalado de trovão do Minecraft via Web Audio API
     function playMinecraftThunderSound() {
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -2746,7 +1021,6 @@ let failedLoginAttempts = 0;
         initRainDrops();
         if (rainLayer) rainLayer.classList.remove('hidden');
 
-        // Dispara um trovão imediatamente e agenda trovões periódicos
         triggerMinecraftThunder();
         if (!thunderInterval) {
           thunderInterval = setInterval(() => {
