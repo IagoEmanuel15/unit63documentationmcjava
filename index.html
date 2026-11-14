@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxk_K2YT6Oxw75Dn8MpIQ5XxzYOnCel5w-nlLywbjooMsbuIX9xFIoamClr1aLDg9h4/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwuzlN8bfbmweHafyem73oitdBaY1l6Zi80Gzr6voZmJ_T9Ya9szdGPrRdoy7B6SMxQ/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -651,30 +651,7 @@ body.app-ready footer { display: flex !important; }
         </div>
         <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 bg-accentBlue hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-blue-500/25 transition-all">Entrar</button>
         <div class="text-center pt-2">
-          <span class="text-xs text-slate-500">Não tem uma conta? </span>
-          <button type="button" onclick="switchAuthMode('register')" class="text-xs font-bold text-accentBlue hover:underline">Cadastre-se</button>
-        </div>
-      </form>
-
-      <form id="registerFormContainer" onsubmit="handleRegisterSubmit(event)" class="space-y-4 hidden">
-        <div class="space-y-1">
-          <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Nome de Usuário</label>
-          <div class="relative" id="regUserWrapper">
-            <i data-lucide="user-plus" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="regUser" required placeholder="Escolha um nome de usuário" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
-          </div>
-        </div>
-        <div class="space-y-1">
-          <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Cadastrar Senha</label>
-          <div class="relative">
-            <i data-lucide="lock" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="password" id="regPass" required minlength="3" placeholder="Crie uma senha forte e com pelo menos 3 caracteres" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
-          </div>
-        </div>
-        <button type="submit" id="registerSubmitBtn" class="w-full py-3.5 bg-brandGreen hover:opacity-90 text-white font-bold text-xs rounded-2xl shadow-lg shadow-emerald-500/25 transition-all">Cadastrar</button>
-        <div class="text-center pt-2">
-          <span class="text-xs text-slate-500">Já possui uma conta? </span>
-          <button type="button" onclick="switchAuthMode('login')" class="text-xs font-bold text-accentBlue hover:underline">Iniciar sessão</button>
+          <span class="text-xs text-slate-500">Contate um revisor no Crowdin para saber mais.</span>
         </div>
       </form>
     </div>
