@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzoy_kEWbfIKg6tV2hW35AAw2bXyhEj26RTXqExC_Kj_KtwjE-CBtfd1OtRmoa35gAH/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwrzbJf4XcrjBQbb4MOF2XDEH6fWf3Ccw1LZ6P8RoUzLg954v6cftFz8RClExMl4tXA/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -141,10 +141,39 @@ body.app-ready footer { display: flex !important; }
   transition: opacity 0.25s ease-in-out;
 }
 
+/* === FUNDO COM GRADE DE PIXEL E DIVISÓRIA EM SOMBRA DA COLUNA DE LOGIN === */
+.login-pixel-grid {
+  background-color: #f8fafc;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+    linear-gradient(to right, rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+  background-position: -1px -1px;
+  box-shadow:
+    14px 0 36px -6px rgba(2, 6, 23, 0.42),
+    4px 0 12px -2px rgba(2, 6, 23, 0.24);
+}
+
+.dark .login-pixel-grid {
+  background-color: #07101e;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(to right, rgba(59, 130, 246, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.09) 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+  background-position: -1px -1px;
+  box-shadow:
+    16px 0 42px -4px rgba(0, 0, 0, 0.78),
+    4px 0 14px -2px rgba(0, 0, 0, 0.55);
+}
+
 /* === CENÁRIO ANIMADO DA TELA DE LOGIN === */
 @keyframes cloudDrift {
   0% { transform: translateX(-220px); }
-  100% { transform: translateX(calc(100vw + 220px)); }
+  100% { transform: translateX(calc(100% + 220px)); }
 }
 
 @keyframes treeSway {
@@ -303,25 +332,25 @@ body.app-ready footer { display: flex !important; }
 .leg-b { animation: legStepB 0.45s infinite; }
 
 /* === SISTEMA DE CLIMA DINÂMICO (MINECRAFT) === */
-#authScreen {
+#sceneryPanel {
   transition: background 1.2s ease-in-out;
 }
 
 /* Clima 0: Ensolarado / Céu Limpo */
-#authScreen.weather-sunny {
+#sceneryPanel.weather-sunny {
   background: linear-gradient(to bottom, #1d4ed8, #3b82f6, #60a5fa) !important;
 }
 
 /* Clima 1 e 2: Nublado / Carregado */
-#authScreen.weather-cloudy-1 {
+#sceneryPanel.weather-cloudy-1 {
   background: linear-gradient(to bottom, #1e293b, #334155, #475569) !important;
 }
-#authScreen.weather-cloudy-2 {
+#sceneryPanel.weather-cloudy-2 {
   background: linear-gradient(to bottom, #0f172a, #1e293b, #334155) !important;
 }
 
 /* Clima 3+: Tempestade */
-#authScreen.weather-storm {
+#sceneryPanel.weather-storm {
   background: linear-gradient(to bottom, #020617, #090d16, #111827) !important;
 }
 
@@ -341,9 +370,9 @@ body.app-ready footer { display: flex !important; }
   background: inherit;
 }
 
-#authScreen.weather-cloudy-1 .storm-cloud { opacity: 0.65; }
-#authScreen.weather-cloudy-2 .storm-cloud,
-#authScreen.weather-storm .storm-cloud {
+#sceneryPanel.weather-cloudy-1 .storm-cloud { opacity: 0.65; }
+#sceneryPanel.weather-cloudy-2 .storm-cloud,
+#sceneryPanel.weather-storm .storm-cloud {
   opacity: 0.95;
   background: #1e293b;
   box-shadow: 0 8px 0 #0f172a;
@@ -388,7 +417,6 @@ body.app-ready footer { display: flex !important; }
 }
 
 /* Centralização perfeita do botão de login e seus estados (loading / success) */
-/* Centralização perfeita do botão preservando as animações */
 #loginSubmitBtn {
   display: inline-flex !important;
   align-items: center !important;
@@ -441,10 +469,57 @@ body.app-ready footer { display: flex !important; }
 
 <body id="appBody" class="bg-bgLight dark:bg-bgDark text-slate-800 dark:text-slate-100 font-sans antialiased h-screen w-screen flex flex-col overflow-hidden m-0 p-0 transition-colors duration-200">
 
-  <div id="authScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#061539] via-[#0b2863] to-[#133b8a] dark:from-[#020617] dark:via-[#05122c] dark:to-[#0a1d42] p-4 overflow-hidden">
+  <div id="authScreen" class="fixed inset-0 z-50 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto lg:overflow-hidden bg-white dark:bg-cardBgDark">
 
-    <!-- Cenário Animado -->
-    <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+    <!-- COLUNA ESQUERDA ISOLADA: Fundo em Grade de Pixel + Divisória em Sombra -->
+    <div class="lg:col-span-5 login-pixel-grid flex items-center justify-center p-6 sm:p-10 relative z-20 min-h-screen lg:min-h-full">
+      <!-- Divisória em formato de sombra projetada na junção entre as duas telas -->
+      <div class="hidden lg:block absolute inset-y-0 right-0 w-10 pointer-events-none bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent dark:from-black/50 dark:via-black/20 dark:to-transparent"></div>
+      <div class="block lg:hidden absolute inset-x-0 bottom-0 h-8 pointer-events-none bg-gradient-to-t from-slate-950/15 to-transparent dark:from-black/45 to-transparent"></div>
+
+      <!-- Card do Formulário Original -->
+      <div class="relative z-10 w-full max-w-md bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-[30px] p-8 shadow-2xl space-y-6">
+        <div class="text-center space-y-2">
+          <h2 id="authTitle" class="text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Documentação da Unidade 63!</h2>
+          <p id="authSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Digite suas credenciais abaixo para acessá-la</p>
+        </div>
+
+        <form id="loginFormContainer" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Nome de Usuário</label>
+            <div class="relative">
+              <i data-lucide="user" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="loginUser" required placeholder="Ex.: Steve" class="auth-input w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Senha</label>
+            <div class="relative">
+              <i data-lucide="key" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="password" id="loginPass" required placeholder="••••••••••••" class="auth-input w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
+            </div>
+            <p id="loginErrorMsg" class="text-[11px] font-semibold text-red-500 hidden pt-1 flex items-center gap-1">
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i> Credenciais inválidas. Verifique usuário e senha.
+            </p>
+          </div>
+          <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 bg-accentBlue hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-blue-500/25 transition-all">Entrar</button>
+          <div class="text-center pt-2">
+            <span class="text-xs text-slate-500">
+              Contate um revisor no 
+              <a href="https://crowdin.com/project/minecraft" target="_blank" class="text-[11px] font-bold text-accentBlue hover:underline inline-flex items-center gap-1">
+                Crowdin<i data-lucide="external-link" class="w-3 h-3"></i>
+              </a> 
+              para saber mais.
+            </span><br>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: Cenário Animado Original da Tela de Login -->
+    <div id="sceneryPanel" class="lg:col-span-7 relative min-h-[420px] lg:min-h-full bg-gradient-to-b from-[#061539] via-[#0b2863] to-[#133b8a] dark:from-[#020617] dark:via-[#05122c] dark:to-[#0a1d42] overflow-hidden select-none pointer-events-none z-0">
+      <!-- Sombra interna suave na borda esquerda da animação para profundidade -->
+      <div class="hidden lg:block absolute inset-y-0 left-0 w-12 z-30 pointer-events-none bg-gradient-to-r from-slate-950/45 via-slate-950/15 to-transparent"></div>
       
       <!-- Sol em bloco (Visível no clima ensolarado) -->
       <div id="mcSun" class="hidden absolute top-12 right-16 w-16 h-16 bg-amber-300 shadow-[0_0_50px_rgba(253,224,71,0.85)] border-4 border-amber-100 transition-opacity duration-1000"></div>
@@ -455,7 +530,6 @@ body.app-ready footer { display: flex !important; }
         <div class="w-3 h-3 bg-amber-200/50 mt-2 ml-8"></div>
       </div>
 
-      <!-- Nuvens carregadas (Aparecem ao errar a senha) -->
       <!-- Nuvens carregadas em múltiplas camadas (Aparecem ao errar a senha) -->
       <div class="storm-cloud w-56 h-10" style="top: 4%; animation-duration: 38s; animation-delay: -5s;">
         <div class="w-28 h-6 -top-5 left-10"></div>
@@ -504,7 +578,7 @@ body.app-ready footer { display: flex !important; }
         <div class="w-3 h-16 bg-white shadow-[0_0_20px_#fff]"></div>
         <div class="w-2 h-20 bg-cyan-100 shadow-[0_0_25px_#38bdf8] -translate-x-2"></div>
       </div>
-      <div id="mcLightningFlash" class="opacity-0 fixed inset-0 bg-white z-40 pointer-events-none"></div>
+      <div id="mcLightningFlash" class="opacity-0 absolute inset-0 bg-white z-40 pointer-events-none"></div>
 
       <!-- Nuvens deslizando pelo céu -->
       <div class="sky-cloud w-36 h-7" style="top: 14%; animation-duration: 48s; animation-delay: -10s;">
@@ -624,43 +698,6 @@ body.app-ready footer { display: flex !important; }
       </div>
     </div>
 
-    <!-- Card do Formulário -->
-    <div class="relative z-10 w-full max-w-md bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-[30px] p-8 shadow-2xl space-y-6">
-      <div class="text-center space-y-2">
-        <h2 id="authTitle" class="text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Documentação da Unidade 63!</h2>
-        <p id="authSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Digite suas credenciais abaixo para acessá-la</p>
-      </div>
-
-      <form id="loginFormContainer" onsubmit="handleLoginSubmit(event)" class="space-y-4">
-        <div class="space-y-1">
-          <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Nome de Usuário</label>
-          <div class="relative">
-            <i data-lucide="user" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="loginUser" required placeholder="Ex.: Steve" class="auth-input w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
-          </div>
-        </div>
-        <div class="space-y-1">
-          <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Senha</label>
-          <div class="relative">
-            <i data-lucide="key" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="password" id="loginPass" required placeholder="••••••••••••" class="auth-input w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
-          </div>
-          <p id="loginErrorMsg" class="text-[11px] font-semibold text-red-500 hidden pt-1 flex items-center gap-1">
-            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i> Credenciais inválidas. Verifique usuário e senha.
-          </p>
-        </div>
-        <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 bg-accentBlue hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-blue-500/25 transition-all">Entrar</button>
-        <div class="text-center pt-2">
-  <span class="text-xs text-slate-500">
-    Contate um revisor no 
-    <a href="https://crowdin.com/project/minecraft" target="_blank" class="text-[11px] font-bold text-accentBlue hover:underline inline-flex items-center gap-1">
-      Crowdin<i data-lucide="external-link" class="w-3 h-3"></i>
-    </a> 
-    para saber mais.
-  </span><br>
-</div>
-      </form>
-    </div>
   </div>
 
   <div id="loadingScreen" class="fixed inset-0 bg-[#0b2863] z-[9999] hidden flex-col items-center justify-center space-y-4">
@@ -866,7 +903,11 @@ body.app-ready footer { display: flex !important; }
 
       document.body.classList.remove('app-ready');
       const authScreen = document.getElementById('authScreen');
-      authScreen.classList.remove('hidden', 'weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
+      const sceneryPanel = document.getElementById('sceneryPanel');
+      authScreen.classList.remove('hidden');
+      if (sceneryPanel) {
+        sceneryPanel.classList.remove('weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
+      }
       document.getElementById('mcRainLayer').classList.add('hidden');
       document.getElementById('mcSun').classList.add('hidden');
       document.getElementById('mcMoon').classList.remove('hidden');
@@ -967,7 +1008,8 @@ body.app-ready footer { display: flex !important; }
     }
 
     function updateLoginWeather(attempts, isSunny = false) {
-      const screen = document.getElementById('authScreen');
+      const screen = document.getElementById('sceneryPanel');
+      const authScreen = document.getElementById('authScreen');
       const rainLayer = document.getElementById('mcRainLayer');
       const sun = document.getElementById('mcSun');
       const moon = document.getElementById('mcMoon');
@@ -1007,7 +1049,7 @@ body.app-ready footer { display: flex !important; }
         triggerMinecraftThunder();
         if (!thunderInterval) {
           thunderInterval = setInterval(() => {
-            if (failedLoginAttempts >= 4 && !screen.classList.contains('hidden')) {
+            if (failedLoginAttempts >= 4 && authScreen && !authScreen.classList.contains('hidden')) {
               triggerMinecraftThunder();
             }
           }, 5500);
