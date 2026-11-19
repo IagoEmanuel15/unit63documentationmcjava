@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unidade 63 — Documentação</title>
+  <title>Minecraft: Java Edition (Documentação)</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@zip.js/zip.js@2.7.52/dist/zip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwuXiCU4f4s3l0kbZpMUiLT6y907gXQaPkCdwDQbIMfFqQfYg-FkuxzZUMZYLDuvJcx/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzJSm2R7mMiKMFu5Yv1uVzwJj3LKgj-MHlbNrVg5l21AxS5EQkXYW7W65gjXJUVuytt/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -759,28 +761,6 @@ body.app-ready footer { display: flex !important; }
       toast._hideTimer = setTimeout(() => toast.classList.add('hidden'), 2500);
     }
 
-    function switchAuthMode(mode) {
-      clearLoginErrorState();
-      const loginForm = document.getElementById('loginFormContainer');
-      const regForm = document.getElementById('registerFormContainer');
-
-      if (mode === 'register') {
-        loginForm.classList.add('hidden');
-        regForm.classList.remove('hidden', 'fade-in');
-        void regForm.offsetWidth;
-        regForm.classList.add('fade-in');
-        document.getElementById('authTitle').innerText = 'Cadastro';
-        document.getElementById('authSubtitle').innerText = 'Cadastre-se para acessar a documentação';
-      } else {
-        regForm.classList.add('hidden');
-        loginForm.classList.remove('hidden', 'fade-in');
-        void loginForm.offsetWidth;
-        loginForm.classList.add('fade-in');
-        document.getElementById('authTitle').innerText = 'Bem-vindo(a) à documentação da Unidade 63';
-        document.getElementById('authSubtitle').innerText = 'Digite suas credenciais para acessá-la';
-      }
-    }
-
     function clearLoginErrorState() {
       document.querySelectorAll('.auth-input').forEach(input => input.classList.remove('shake-input'));
       const errEl = document.getElementById('loginErrorMsg');
@@ -858,36 +838,6 @@ body.app-ready footer { display: flex !important; }
         newScript.appendChild(document.createTextNode(oldScript.innerHTML));
         oldScript.parentNode.replaceChild(newScript, oldScript);
       });
-    }
-
-    function handleRegisterSubmit(e) {
-      e.preventDefault();
-      const userEl = document.getElementById('regUser');
-      const userWrapper = document.getElementById('regUserWrapper');
-      const user = userEl.value.trim();
-      const pass = document.getElementById('regPass').value.trim();
-
-      setMorphButtonState('registerSubmitBtn', 'loading', 'Cadastrar');
-
-      google.script.run
-        .withSuccessHandler(res => {
-          setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
-          if (res && res.success) {
-            userWrapper.classList.remove('shake-input');
-            showToast('Cadastro realizado com sucesso! Faça login.');
-            switchAuthMode('login');
-          } else {
-            userWrapper.classList.add('shake-input');
-            setTimeout(() => userWrapper.classList.remove('shake-input'), 500);
-            showToast((res && res.message) || 'Nome de usuário já existe.');
-          }
-        })
-        .withFailureHandler(err => {
-          setMorphButtonState('registerSubmitBtn', 'default', 'Cadastrar');
-          console.error('Falha no cadastro:', err);
-          showToast('Erro de comunicação com o servidor.');
-        })
-        .registerNewUser(user, pass);
     }
 
     function logoutSession() {
