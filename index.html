@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw_n0g3ctOF_icGkPrL44k2ZIP3FgC3Ej4M_aYA-4ZBet4i0gL_sRjl0iKp6z9OhHo4/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwK84jYD_9pnlg3dYSjFIMOTUoMtEBsqL_XcXnnupcbBjbG4s1fVu5FXn1nyB_kkk6g/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -76,31 +76,34 @@
       if (label) label.innerText = isDark ? 'Modo Escuro' : 'Modo Claro';
       const circle = document.getElementById('themeToggleCircle');
       if (circle) circle.style.transform = isDark ? 'translateX(24px)' : 'translateX(0px)';
+      if (typeof window.syncPaperCutTheme === 'function') {
+        window.syncPaperCutTheme();
+      }
     }
   </script>
   <style>
     /* Garante scroll suave e evita estouro horizontal */
-  html, body {
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
 
-  /* Em telas pequenas, a tabela mantém largura mínima legível com scroll horizontal suave */
-  @media (max-width: 1024px) {
-    #pageViewContainer table {
-      min-width: 780px;
+    /* Em telas pequenas, a tabela mantém largura mínima legível com scroll horizontal suave */
+    @media (max-width: 1024px) {
+      #pageViewContainer table {
+        min-width: 780px;
+      }
+      #alphabetMatrixContainer {
+        min-width: unset !important;
+        flex-wrap: nowrap;
+        scroll-snap-type: x mandatory;
+      }
+      #alphabetMatrixContainer > div {
+        scroll-snap-align: start;
+        width: 85vw;
+        max-width: 320px;
+      }
     }
-    #alphabetMatrixContainer {
-      min-width: unset !important;
-      flex-wrap: nowrap;
-      scroll-snap-type: x mandatory;
-    }
-    #alphabetMatrixContainer > div {
-      scroll-snap-align: start;
-      width: 85vw;
-      max-width: 320px;
-    }
-  }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -124,386 +127,183 @@
       box-sizing: border-box;
     }
 
-/* Esconde TUDO antes do login */
-body:not(.app-ready) #appMainContainer, 
-body:not(.app-ready) #sidebarContainer, 
-body:not(.app-ready) #topSearchBarContainer, 
-body:not(.app-ready) footer {
-  display: none !important;
-}
+    /* Esconde TUDO antes do login */
+    body:not(.app-ready) #appMainContainer, 
+    body:not(.app-ready) #sidebarContainer, 
+    body:not(.app-ready) #topSearchBarContainer, 
+    body:not(.app-ready) footer {
+      display: none !important;
+    }
 
-/* Quando logado, mostra o app */
-body.app-ready #appMainContainer { display: flex !important; }
-body.app-ready #sidebarContainer { display: flex !important; }
-body.app-ready #topSearchBarContainer { display: flex !important; }
-body.app-ready footer { display: flex !important; }
+    /* Quando logado, mostra o app */
+    body.app-ready #appMainContainer { display: flex !important; }
+    body.app-ready #sidebarContainer { display: flex !important; }
+    body.app-ready #topSearchBarContainer { display: flex !important; }
+    body.app-ready footer { display: flex !important; }
 
-/* Transição suave de entrada para views e troca de formulários */
-.fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+    /* Transição suave de entrada para views e troca de formulários */
+    .fade-in {
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-/* Entrada com escala para os cards internos dos modais */
-@keyframes modalPop {
-  from { opacity: 0; transform: scale(0.95) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-.modal-animate > div {
-  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+    /* Entrada com escala para os cards internos dos modais */
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.95) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-animate > div {
+      animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-/* Entrada e saída do Toast */
-@keyframes toastSlideUp {
-  from { opacity: 0; transform: translate(-50%, 16px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
-}
-.toast-animate {
-  animation: toastSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+    /* Entrada e saída do Toast */
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translate(-50%, 16px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .toast-animate {
+      animation: toastSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-/* Transição da tela de carregamento */
-#loadingScreen {
-  transition: opacity 0.25s ease-in-out;
-}
+    /* Transição da tela de carregamento */
+    #loadingScreen {
+      transition: opacity 0.25s ease-in-out;
+    }
 
-/* === FUNDO COM GRADE DE PIXEL E DIVISÓRIA EM SOMBRA DA COLUNA DE LOGIN === */
-.login-pixel-grid {
-  background-color: #f8fafc;
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
-    linear-gradient(to right, rgba(37, 99, 235, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
-  background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
-  background-position: -1px -1px;
-  box-shadow:
-    14px 0 36px -6px rgba(2, 6, 23, 0.42),
-    4px 0 12px -2px rgba(2, 6, 23, 0.24);
-}
+    /* === FUNDO UNIFORME SEM GRADE DE PIXEL === */
+    .login-pixel-grid {
+      background-color: #ffffff;
+      background-image: none;
+    }
 
-.dark .login-pixel-grid {
-  background-color: #07101e;
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    linear-gradient(to right, rgba(59, 130, 246, 0.09) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.09) 1px, transparent 1px);
-  background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
-  background-position: -1px -1px;
-  box-shadow:
-    16px 0 42px -4px rgba(0, 0, 0, 0.78),
-    4px 0 14px -2px rgba(0, 0, 0, 0.55);
-}
+    .dark .login-pixel-grid {
+      background-color: #07101e;
+      background-image: none;
+    }
 
-/* === CENÁRIO ANIMADO DA TELA DE LOGIN === */
-@keyframes cloudDrift {
-  0% { transform: translateX(-220px); }
-  100% { transform: translateX(calc(100% + 220px)); }
-}
+    /* === NOVA ANIMAÇÃO DO LADO DIREITO: CASCATA DE ARQUIVOS + DIVISÓRIA PAPER-CUT === */
+    .depth-viewport {
+      position: relative;
+      overflow: hidden;
+      background: #05120e;
+      --hud-accent: #00f5c4;
+    }
 
-@keyframes treeSway {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(2.2deg); }
-}
+    #translationCascadeCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
 
-@keyframes leafRustle {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(3px, -2px); }
-}
+    .green-flash-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      pointer-events: none;
+      background: radial-gradient(circle at 60% 50%, rgba(0, 255, 179, 0.34) 0%, rgba(0, 215, 145, 0.14) 65%, transparent 100%);
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
 
-@keyframes starTwinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
-}
+    .papercut-wrapper {
+      position: absolute;
+      inset: -1%;
+      width: 102%;
+      height: 102%;
+      z-index: 5;
+      pointer-events: none;
+    }
 
-@keyframes fireflyFloat {
-  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
-  33% { transform: translate(12px, -18px); opacity: 0.95; }
-  66% { transform: translate(-10px, -28px); opacity: 0.6; }
-}
+    .cut-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      transform-origin: 18% 50%;
+    }
 
-.sky-cloud {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 6px 0 rgba(255, 255, 255, 0.08);
-  animation: cloudDrift linear infinite;
-}
-.sky-cloud::before,
-.sky-cloud::after {
-  content: '';
-  position: absolute;
-  background: inherit;
-}
+    .shadow-l1 { filter: drop-shadow(16px 0 22px rgba(2, 6, 23, 0.48)); }
+    .shadow-l2 { filter: drop-shadow(14px 4px 20px rgba(0, 0, 0, 0.65)); }
+    .shadow-l3 { filter: drop-shadow(12px 6px 18px rgba(0, 0, 0, 0.78)); }
+    .shadow-l4 { filter: drop-shadow(10px 8px 16px rgba(0, 0, 0, 0.88)); }
 
-.sky-star {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #ffffff;
-  animation: starTwinkle ease-in-out infinite;
-}
+    .edge-glow {
+      stroke-dasharray: 180 620;
+      animation: tracePulse 9s linear infinite;
+    }
+    .edge-glow-delay {
+      stroke-dasharray: 120 540;
+      animation: tracePulse 11s linear infinite reverse;
+    }
 
-.firefly {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: #a3e635;
-  box-shadow: 0 0 8px #a3e635, 0 0 14px #4ade80;
-  animation: fireflyFloat ease-in-out infinite;
-}
+    @keyframes tracePulse {
+      0% { stroke-dashoffset: 800; }
+      100% { stroke-dashoffset: 0; }
+    }
 
-.voxel-tree {
-  transform-origin: bottom center;
-  animation: treeSway 5.5s ease-in-out infinite;
-}
+    /* Centralização perfeita do botão de login e seus estados (loading / success) */
+    #loginSubmitBtn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.5rem !important;
+      position: relative;
+    }
 
-.voxel-leaves {
-  animation: leafRustle 3.8s ease-in-out infinite;
-}
+    #loginSubmitBtn svg,
+    #loginSubmitBtn i {
+      position: static !important;
+      inset: auto !important;
+      margin: 0 !important;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
 
-/* === VEGETAÇÃO EXTRA E ANIMAÇÕES DE INTERAÇÃO === */
-@keyframes grassSway {
-  0%, 100% { transform: skewX(0deg); }
-  50% { transform: skewX(6deg); }
-}
+    #loginSubmitBtn span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
 
-.grass-tuft {
-  transform-origin: bottom center;
-  animation: grassSway 3.2s ease-in-out infinite;
-}
+    /* Animação do ícone de check ao concluir */
+    @keyframes checkPopDraw {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-15deg);
+        stroke-dashoffset: 30;
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.2) rotate(0deg);
+        stroke-dashoffset: 0;
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        stroke-dashoffset: 0;
+      }
+    }
 
-/* Ciclo sincronizado (18s): Ovelha e Porco caminham até o centro, param, pulam com coração e voltam */
-@keyframes sheepWalkInteract {
-  0%   { left: 16%; transform: scaleX(1) translateY(0); }
-  28%  { left: 37%; transform: scaleX(1) translateY(0); }
-  32%  { left: 37%; transform: scaleX(1) translateY(-6px); } /* Pulo de encontro */
-  36%  { left: 37%; transform: scaleX(1) translateY(0); }
-  48%  { left: 37%; transform: scaleX(1) translateY(0); }
-  52%  { left: 37%; transform: scaleX(-1) translateY(0); } /* Vira para voltar */
-  82%  { left: 16%; transform: scaleX(-1) translateY(0); }
-  86%  { left: 16%; transform: scaleX(1) translateY(0); }
-  100% { left: 16%; transform: scaleX(1) translateY(0); }
-}
-
-@keyframes pigWalkInteract {
-  0%   { right: 18%; transform: scaleX(-1) translateY(0); }
-  28%  { right: 39%; transform: scaleX(-1) translateY(0); }
-  34%  { right: 39%; transform: scaleX(-1) translateY(-6px); } /* Pulo de resposta */
-  38%  { right: 39%; transform: scaleX(-1) translateY(0); }
-  48%  { right: 39%; transform: scaleX(-1) translateY(0); }
-  52%  { right: 39%; transform: scaleX(1) translateY(0); } /* Vira para voltar */
-  82%  { right: 18%; transform: scaleX(1) translateY(0); }
-  86%  { right: 18%; transform: scaleX(-1) translateY(0); }
-  100% { right: 18%; transform: scaleX(-1) translateY(0); }
-}
-
-/* Coração que aparece exatamente quando os dois se encontram (30% a 48% do ciclo) */
-@keyframes interactionHeart {
-  0%, 29%   { opacity: 0; transform: translate(-50%, 6px) scale(0.5); }
-  34%       { opacity: 1; transform: translate(-50%, -10px) scale(1.15); }
-  45%       { opacity: 1; transform: translate(-50%, -18px) scale(1); }
-  50%, 100% { opacity: 0; transform: translate(-50%, -24px) scale(0.6); }
-}
-
-/* Galinha ciscando e dando pequenos pulos no canto direito */
-@keyframes chickenHop {
-  0%, 100% { transform: translateX(0) translateY(0) scaleX(-1); }
-  20%      { transform: translateX(-18px) translateY(0) scaleX(-1); }
-  25%      { transform: translateX(-18px) translateY(-5px) scaleX(-1); }
-  30%      { transform: translateX(-18px) translateY(0) scaleX(-1); }
-  50%      { transform: translateX(-18px) translateY(0) scaleX(1); }
-  75%      { transform: translateX(0) translateY(0) scaleX(1); }
-  80%      { transform: translateX(0) translateY(-4px) scaleX(1); }
-  85%      { transform: translateX(0) translateY(0) scaleX(1); }
-}
-
-/* Movimento alternado das patinhas enquanto andam */
-@keyframes legStepA {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-2px); }
-}
-@keyframes legStepB {
-  0%, 100% { transform: translateY(-2px); }
-  50%      { transform: translateY(0); }
-}
-
-.animal-sheep {
-  position: absolute;
-  bottom: 3.5rem; /* alinhado ao topo da grama (h-14) */
-  animation: sheepWalkInteract 18s ease-in-out infinite;
-}
-
-.animal-pig {
-  position: absolute;
-  bottom: 3.5rem;
-  animation: pigWalkInteract 18s ease-in-out infinite;
-}
-
-.animal-chicken {
-  position: absolute;
-  bottom: 3.5rem;
-  right: 10%;
-  animation: chickenHop 7s ease-in-out infinite;
-}
-
-.interaction-heart {
-  position: absolute;
-  bottom: 5.5rem;
-  left: 49%;
-  animation: interactionHeart 18s ease-in-out infinite;
-}
-
-.leg-a { animation: legStepA 0.45s infinite; }
-.leg-b { animation: legStepB 0.45s infinite; }
-
-/* === SISTEMA DE CLIMA DINÂMICO (MINECRAFT) === */
-#sceneryPanel {
-  transition: background 1.2s ease-in-out;
-}
-
-/* Clima 0: Ensolarado / Céu Limpo */
-#sceneryPanel.weather-sunny {
-  background: linear-gradient(to bottom, #1d4ed8, #3b82f6, #60a5fa) !important;
-}
-
-/* Clima 1 e 2: Nublado / Carregado */
-#sceneryPanel.weather-cloudy-1 {
-  background: linear-gradient(to bottom, #1e293b, #334155, #475569) !important;
-}
-#sceneryPanel.weather-cloudy-2 {
-  background: linear-gradient(to bottom, #0f172a, #1e293b, #334155) !important;
-}
-
-/* Clima 3+: Tempestade */
-#sceneryPanel.weather-storm {
-  background: linear-gradient(to bottom, #020617, #090d16, #111827) !important;
-}
-
-/* Nuvens carregadas */
-.storm-cloud {
-  position: absolute;
-  background: #334155;
-  box-shadow: 0 8px 0 #1e293b;
-  opacity: 0;
-  transition: opacity 1s ease-in-out, background-color 1s ease;
-  animation: cloudDrift linear infinite;
-}
-.storm-cloud::before,
-.storm-cloud::after {
-  content: '';
-  position: absolute;
-  background: inherit;
-}
-
-#sceneryPanel.weather-cloudy-1 .storm-cloud { opacity: 0.65; }
-#sceneryPanel.weather-cloudy-2 .storm-cloud,
-#sceneryPanel.weather-storm .storm-cloud {
-  opacity: 0.95;
-  background: #1e293b;
-  box-shadow: 0 8px 0 #0f172a;
-}
-
-/* Gotas de chuva estilo Minecraft */
-@keyframes mcRainFall {
-  0% { transform: translateY(-10vh) translateX(0); }
-  100% { transform: translateY(110vh) translateX(-25px); }
-}
-
-.mc-rain-drop {
-  position: absolute;
-  top: -20px;
-  width: 2px;
-  height: 16px;
-  background: linear-gradient(to bottom, rgba(147, 197, 253, 0.2), rgba(96, 165, 250, 0.85));
-  animation: mcRainFall linear infinite;
-}
-
-/* Flash do Relâmpago */
-@keyframes lightningFlashAnim {
-  0% { opacity: 0; }
-  10% { opacity: 0.95; }
-  25% { opacity: 0.15; }
-  40% { opacity: 0.85; }
-  100% { opacity: 0; }
-}
-
-.lightning-active {
-  animation: lightningFlashAnim 0.45s ease-out forwards;
-}
-
-/* Raio pixelado no céu */
-@keyframes boltStrikeAnim {
-  0%, 100% { opacity: 0; }
-  15%, 45% { opacity: 1; }
-}
-
-.bolt-active {
-  animation: boltStrikeAnim 0.4s steps(2, end) forwards;
-}
-
-/* Centralização perfeita do botão de login e seus estados (loading / success) */
-#loginSubmitBtn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  position: relative;
-}
-
-#loginSubmitBtn svg,
-#loginSubmitBtn i {
-  position: static !important;
-  inset: auto !important;
-  margin: 0 !important;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-#loginSubmitBtn span {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-
-/* Animação do ícone de check ao concluir */
-@keyframes checkPopDraw {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) rotate(-15deg);
-    stroke-dashoffset: 30;
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.2) rotate(0deg);
-    stroke-dashoffset: 0;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-    stroke-dashoffset: 0;
-  }
-}
-
-.anim-check-icon {
-  stroke-dasharray: 30;
-  animation: checkPopDraw 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
+    .anim-check-icon {
+      stroke-dasharray: 30;
+      animation: checkPopDraw 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
   </style>
 </head>
 
 <body id="appBody" class="bg-bgLight dark:bg-bgDark text-slate-800 dark:text-slate-100 font-sans antialiased h-screen w-screen flex flex-col overflow-hidden m-0 p-0 transition-colors duration-200">
 
-  <div id="authScreen" class="fixed inset-0 z-50 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto lg:overflow-hidden bg-white dark:bg-cardBgDark">
+  <div id="authScreen" class="fixed inset-0 z-50 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto lg:overflow-hidden bg-white dark:bg-[#07101e]">
 
-    <!-- COLUNA ESQUERDA ISOLADA: Fundo em Grade de Pixel + Divisória em Sombra -->
+    <!-- COLUNA ESQUERDA: Caixa de Login Original Mantida -->
     <div class="lg:col-span-5 login-pixel-grid flex items-center justify-center p-6 sm:p-10 relative z-20 min-h-screen lg:min-h-full">
-      <!-- Divisória em formato de sombra projetada na junção entre as duas telas -->
-      <div class="hidden lg:block absolute inset-y-0 right-0 w-10 pointer-events-none bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent dark:from-black/50 dark:via-black/20 dark:to-transparent"></div>
-      <div class="block lg:hidden absolute inset-x-0 bottom-0 h-8 pointer-events-none bg-gradient-to-t from-slate-950/15 to-transparent dark:from-black/45 to-transparent"></div>
 
       <!-- Card do Formulário Original -->
-      <div class="relative z-10 w-full max-w-md bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-[30px] p-8 shadow-2xl space-y-6">
+<div class="relative z-10 w-full max-w-md bg-white dark:bg-cardBgDark border border-slate-200 dark:border-slate-800 rounded-[30px] p-8 shadow-2xl space-y-6">
         <div class="text-center space-y-2">
           <h2 id="authTitle" class="text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Documentação da Unidade 63!</h2>
           <p id="authSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Digite suas credenciais abaixo para acessá-la</p>
@@ -541,185 +341,85 @@ body.app-ready footer { display: flex !important; }
       </div>
     </div>
 
-    <!-- COLUNA DIREITA: Cenário Animado Original da Tela de Login -->
-    <div id="sceneryPanel" class="lg:col-span-7 relative min-h-[420px] lg:min-h-full bg-gradient-to-b from-[#061539] via-[#0b2863] to-[#133b8a] dark:from-[#020617] dark:via-[#05122c] dark:to-[#0a1d42] overflow-hidden select-none pointer-events-none z-0">
-      <!-- Sombra interna suave na borda esquerda da animação para profundidade -->
-      <div class="hidden lg:block absolute inset-y-0 left-0 w-12 z-30 pointer-events-none bg-gradient-to-r from-slate-950/45 via-slate-950/15 to-transparent"></div>
-      
-      <!-- Sol em bloco (Visível no clima ensolarado) -->
-      <div id="mcSun" class="hidden absolute top-12 right-16 w-16 h-16 bg-amber-300 shadow-[0_0_50px_rgba(253,224,71,0.85)] border-4 border-amber-100 transition-opacity duration-1000"></div>
+    <!-- COLUNA DIREITA: Divisória Paper-Cut em Profundidade + Cascata de Arquivos de Tradução -->
+    <div id="depthViewport" class="lg:col-span-7 depth-viewport min-h-[420px] lg:min-h-full select-none pointer-events-none z-10 lg:-ml-6">
+      <canvas id="translationCascadeCanvas"></canvas>
+      <div class="green-flash-overlay" id="greenFlashOverlay"></div>
 
-      <!-- Lua em bloco -->
-      <div id="mcMoon" class="absolute top-12 right-16 w-14 h-14 bg-amber-100/90 shadow-[0_0_35px_rgba(254,243,199,0.45)] transition-opacity duration-1000">
-        <div class="w-4 h-4 bg-amber-200/60 mt-2 ml-2"></div>
-        <div class="w-3 h-3 bg-amber-200/50 mt-2 ml-8"></div>
-      </div>
+      <!-- DIVISÓRIA ORGÂNICA EM CAMADAS PAPER-CUT -->
+      <div class="papercut-wrapper">
+        <!-- CAMADA PROFUNDA 4 -->
+        <svg class="cut-layer shadow-l4" data-layer-index="3" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradLayer4" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop id="l4Stop1" offset="0%" stop-color="#0b241d" />
+              <stop id="l4Stop2" offset="50%" stop-color="#11362c" />
+              <stop id="l4Stop3" offset="100%" stop-color="#071914" />
+            </linearGradient>
+          </defs>
+          <path d="M 0,0 L 430,0 C 460,140 310,230 330,360 C 350,480 480,520 440,650 C 400,770 260,840 280,1000 L 0,1000 Z"
+                fill="url(#gradLayer4)" />
+          <path id="l4Stroke" d="M 430,0 C 460,140 310,230 330,360 C 350,480 480,520 440,650 C 400,770 260,840 280,1000"
+                fill="none" stroke="rgba(0, 245, 196, 0.28)" stroke-width="2" />
+          <path id="l4Glow" class="edge-glow" d="M 430,0 C 460,140 310,230 330,360 C 350,480 480,520 440,650 C 400,770 260,840 280,1000"
+                fill="none" stroke="#00f5c4" stroke-width="2.5" />
 
-      <!-- Nuvens carregadas em múltiplas camadas (Aparecem ao errar a senha) -->
-      <div class="storm-cloud w-56 h-10" style="top: 4%; animation-duration: 38s; animation-delay: -5s;">
-        <div class="w-28 h-6 -top-5 left-10"></div>
-      </div>
-      <div class="storm-cloud w-80 h-12" style="top: 7%; animation-duration: 50s; animation-delay: -28s;">
-        <div class="w-44 h-8 -top-6 left-16"></div>
-      </div>
-      <div class="storm-cloud w-64 h-10" style="top: 10%; animation-duration: 42s; animation-delay: -16s;">
-        <div class="w-32 h-7 -top-5 left-12"></div>
-      </div>
-      <div class="storm-cloud w-96 h-14" style="top: 13%; animation-duration: 58s; animation-delay: -41s;">
-        <div class="w-48 h-9 -top-7 left-20"></div>
-      </div>
-      <div class="storm-cloud w-72 h-12" style="top: 16%; animation-duration: 46s; animation-delay: -22s;">
-        <div class="w-36 h-8 -top-6 left-14"></div>
-      </div>
-      <div class="storm-cloud w-60 h-10" style="top: 19%; animation-duration: 36s; animation-delay: -9s;">
-        <div class="w-30 h-6 -top-5 left-10"></div>
-      </div>
-      <div class="storm-cloud w-80 h-12" style="top: 22%; animation-duration: 52s; animation-delay: -35s;">
-        <div class="w-40 h-8 -top-6 left-16"></div>
-      </div>
-      <div class="storm-cloud w-64 h-10" style="top: 25%; animation-duration: 41s; animation-delay: -14s;">
-        <div class="w-32 h-7 -top-5 left-12"></div>
-      </div>
-      <div class="storm-cloud w-88 h-12" style="top: 28%; animation-duration: 55s; animation-delay: -47s;">
-        <div class="w-44 h-8 -top-6 left-18"></div>
-      </div>
-      <div class="storm-cloud w-52 h-9" style="top: 31%; animation-duration: 34s; animation-delay: -19s;">
-        <div class="w-24 h-6 -top-4 left-8"></div>
-      </div>
-      <div class="storm-cloud w-76 h-11" style="top: 34%; animation-duration: 48s; animation-delay: -31s;">
-        <div class="w-38 h-7 -top-5 left-14"></div>
-      </div>
-      <div class="storm-cloud w-64 h-10" style="top: 37%; animation-duration: 44s; animation-delay: -3s;">
-        <div class="w-32 h-6 -top-5 left-12"></div>
-      </div>
+          <path d="M 1000,340 C 860,390 830,520 710,560 C 590,600 540,740 620,860 C 670,930 640,980 610,1000 L 1000,1000 Z"
+                fill="url(#gradLayer4)" />
+          <path id="l4GlowRight" class="edge-glow-delay" d="M 1000,340 C 860,390 830,520 710,560 C 590,600 540,740 620,860 C 670,930 640,980 610,1000"
+                fill="none" stroke="#00d4ff" stroke-width="2" />
+        </svg>
 
-      <!-- Camada de Chuva (Ativada a partir da 3ª tentativa falha) -->
-      <div id="mcRainLayer" class="hidden absolute inset-0 overflow-hidden"></div>
+        <!-- CAMADA INTERMEDIÁRIA 3 -->
+        <svg class="cut-layer shadow-l3" data-layer-index="2" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradLayer3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop id="l3Stop1" offset="0%" stop-color="#193d33" />
+              <stop id="l3Stop2" offset="75%" stop-color="#235245" />
+              <stop id="l3Stop3" offset="100%" stop-color="#14322a" />
+            </linearGradient>
+          </defs>
+          <path d="M 0,0 L 345,0 C 375,130 220,210 245,345 C 270,475 395,515 350,645 C 305,775 185,840 215,1000 L 0,1000 Z"
+                fill="url(#gradLayer3)" />
+          <path id="l3Stroke" d="M 345,0 C 375,130 220,210 245,345 C 270,475 395,515 350,645 C 305,775 185,840 215,1000"
+                fill="none" stroke="rgba(0, 245, 196, 0.35)" stroke-width="1.8" />
 
-      <!-- Raio Pixelado e Flash de Trovão (Ativados a partir da 4ª tentativa falha) -->
-      <div id="mcLightningBolt" class="opacity-0 absolute top-0 left-1/3 flex flex-col items-center">
-        <div class="w-3 h-16 bg-white shadow-[0_0_20px_#fff]"></div>
-        <div class="w-3 h-14 bg-white shadow-[0_0_20px_#fff] translate-x-3"></div>
-        <div class="w-3 h-16 bg-white shadow-[0_0_20px_#fff]"></div>
-        <div class="w-2 h-20 bg-cyan-100 shadow-[0_0_25px_#38bdf8] -translate-x-2"></div>
-      </div>
-      <div id="mcLightningFlash" class="opacity-0 absolute inset-0 bg-white z-40 pointer-events-none"></div>
+          <path d="M 1000,415 C 890,455 865,575 755,610 C 645,645 615,785 695,895 C 735,950 715,985 690,1000 L 1000,1000 Z"
+                fill="url(#gradLayer3)" />
+          <path id="l3StrokeRight" d="M 1000,415 C 890,455 865,575 755,610 C 645,645 615,785 695,895 C 735,950 715,985 690,1000"
+                fill="none" stroke="rgba(0, 212, 255, 0.3)" stroke-width="1.8" />
+        </svg>
 
-      <!-- Nuvens deslizando pelo céu -->
-      <div class="sky-cloud w-36 h-7" style="top: 14%; animation-duration: 48s; animation-delay: -10s;">
-        <div class="w-20 h-5 bg-white/15 -top-4 left-6 absolute"></div>
-      </div>
-      <div class="sky-cloud w-48 h-8" style="top: 26%; animation-duration: 65s; animation-delay: -32s;">
-        <div class="w-24 h-6 bg-white/15 -top-5 left-10 absolute"></div>
-      </div>
-      <div class="sky-cloud w-32 h-6" style="top: 38%; animation-duration: 54s; animation-delay: -20s;">
-        <div class="w-16 h-4 bg-white/15 -top-3 left-5 absolute"></div>
-      </div>
+        <!-- CAMADA INTERMEDIÁRIA 2 -->
+        <svg class="cut-layer shadow-l2" data-layer-index="1" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradLayer2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop id="l2Stop1" offset="0%" stop-color="#8b9693" />
+              <stop id="l2Stop2" offset="60%" stop-color="#6c7875" />
+              <stop id="l2Stop3" offset="100%" stop-color="#4e5956" />
+            </linearGradient>
+          </defs>
+          <path d="M 0,0 L 265,0 C 295,125 140,205 165,340 C 190,470 315,510 270,640 C 225,770 115,845 145,1000 L 0,1000 Z"
+                fill="url(#gradLayer2)" />
+          <path id="l2Glow" class="edge-glow" d="M 265,0 C 295,125 140,205 165,340 C 190,470 315,510 270,640 C 225,770 115,845 145,1000"
+                fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" />
 
-      <!-- Vaga-lumes flutuantes -->
-      <div class="firefly" style="bottom: 24%; left: 14%; animation-duration: 6s;"></div>
-      <div class="firefly" style="bottom: 30%; left: 22%; animation-duration: 7.5s; animation-delay: 1.5s;"></div>
-      <div class="firefly" style="bottom: 20%; right: 18%; animation-duration: 6.8s; animation-delay: 0.8s;"></div>
-      <div class="firefly" style="bottom: 34%; right: 26%; animation-duration: 8s; animation-delay: 2.2s;"></div>
+          <path d="M 1000,490 C 915,525 895,630 800,660 C 705,690 685,820 760,925 C 795,970 780,990 765,1000 L 1000,1000 Z"
+                fill="url(#gradLayer2)" />
+        </svg>
 
-      <!-- ÁRVORE 1 (Esquerda Principal - Carvalho Grande) -->
-      <div class="voxel-tree absolute bottom-14 left-6 sm:left-14 flex flex-col items-center">
-        <div class="voxel-leaves flex flex-col items-center -mb-2">
-          <div class="w-16 h-7 bg-[#22c55e] border-b-4 border-[#15803d]"></div>
-          <div class="w-28 h-8 bg-[#16a34a] border-b-4 border-[#166534] -mt-1"></div>
-          <div class="w-36 h-9 bg-[#15803d] border-b-4 border-[#14532d] -mt-1 flex justify-between px-3 pt-2">
-            <span class="w-3 h-3 bg-[#4ade80]/40"></span>
-            <span class="w-3 h-3 bg-[#4ade80]/30"></span>
-          </div>
+        <!-- CAMADA FRONTAL 1 (Conecta com o painel esquerdo com a mesma grade de pixel) -->
+        <svg width="0" height="0" class="absolute pointer-events-none" aria-hidden="true">
+          <defs>
+            <clipPath id="frontPaperCutClip" clipPathUnits="objectBoundingBox">
+              <path d="M -0.03,0 L 0.19,0 C 0.225,0.12 0.07,0.2 0.095,0.335 C 0.12,0.465 0.245,0.505 0.2,0.635 C 0.155,0.765 0.055,0.845 0.085,1 L -0.03,1 Z" />
+              <path d="M 1.03,0.565 C 0.955,0.595 0.935,0.69 0.855,0.715 C 0.775,0.74 0.76,0.855 0.83,0.95 C 0.855,0.982 0.845,0.995 0.835,1 L 1.03,1 Z" />
+            </clipPath>
+          </defs>
+        </svg>
+        <div class="cut-layer shadow-l1" data-layer-index="0">
+          <div class="w-full h-full login-pixel-grid" style="clip-path: url(#frontPaperCutClip); -webkit-clip-path: url(#frontPaperCutClip);"></div>
         </div>
-        <div class="w-8 h-20 bg-[#78350f] border-x-4 border-[#451a03] flex flex-col justify-around items-center py-1">
-          <div class="w-2 h-4 bg-[#92400e]"></div>
-          <div class="w-2 h-3 bg-[#451a03]"></div>
-        </div>
-      </div>
-
-      <!-- ÁRVORE 2 (Esquerda Fundo - Bétula / Árvore Média) -->
-      <div class="voxel-tree hidden sm:flex absolute bottom-14 left-44 flex-col items-center" style="animation-delay: -1.8s;">
-        <div class="voxel-leaves flex flex-col items-center -mb-1">
-          <div class="w-12 h-5 bg-[#4ade80] border-b-4 border-[#16a34a]"></div>
-          <div class="w-20 h-6 bg-[#22c55e] border-b-4 border-[#15803d] -mt-1"></div>
-          <div class="w-24 h-7 bg-[#16a34a] border-b-4 border-[#166534] -mt-1"></div>
-        </div>
-        <div class="w-5 h-14 bg-[#e2e8f0] border-x-2 border-[#94a3b8] flex flex-col justify-around items-center py-1">
-          <div class="w-3 h-1 bg-[#334155] self-start"></div>
-          <div class="w-2.5 h-1 bg-[#334155] self-end"></div>
-          <div class="w-3 h-1 bg-[#334155] self-start"></div>
-        </div>
-      </div>
-
-      <!-- ÁRVORE 3 (Direita - Carvalho Alto) -->
-      <div class="voxel-tree absolute bottom-14 right-6 sm:right-16 flex flex-col items-center" style="animation-delay: -2.7s;">
-        <div class="voxel-leaves flex flex-col items-center -mb-2">
-          <div class="w-14 h-6 bg-[#22c55e] border-b-4 border-[#15803d]"></div>
-          <div class="w-24 h-8 bg-[#16a34a] border-b-4 border-[#166534] -mt-1"></div>
-          <div class="w-32 h-9 bg-[#15803d] border-b-4 border-[#14532d] -mt-1 flex justify-around px-2 pt-2">
-            <span class="w-2.5 h-2.5 bg-[#4ade80]/40"></span>
-            <span class="w-2.5 h-2.5 bg-[#4ade80]/30"></span>
-          </div>
-        </div>
-        <div class="w-7 h-24 bg-[#78350f] border-x-4 border-[#451a03] flex flex-col justify-around items-center py-1">
-          <div class="w-2 h-5 bg-[#92400e]"></div>
-          <div class="w-2 h-4 bg-[#451a03]"></div>
-        </div>
-      </div>
-
-      <!-- VEGETAÇÃO RASTEIRA (Tufos de Grama e Flores espalhados pelo chão) -->
-      <div class="absolute bottom-14 inset-x-0 h-6 flex items-end">
-        <!-- Tufo 1 -->
-        <div class="grass-tuft absolute left-[4%] flex items-end gap-0.5">
-          <div class="w-1.5 h-3 bg-[#22c55e]"></div>
-          <div class="w-1.5 h-5 bg-[#4ade80]"></div>
-          <div class="w-1.5 h-3.5 bg-[#16a34a]"></div>
-        </div>
-        <!-- Flor Vermelha (Papoula) -->
-        <div class="grass-tuft absolute left-[12%] flex flex-col items-center" style="animation-delay: -0.8s;">
-          <div class="w-3 h-3 bg-red-500 border-t-2 border-red-300"></div>
-          <div class="w-1 h-3 bg-[#16a34a]"></div>
-        </div>
-        <!-- Tufo 2 -->
-        <div class="grass-tuft absolute left-[24%] flex items-end gap-0.5" style="animation-delay: -1.4s;">
-          <div class="w-1.5 h-4 bg-[#4ade80]"></div>
-          <div class="w-1.5 h-6 bg-[#22c55e]"></div>
-          <div class="w-1.5 h-3 bg-[#16a34a]"></div>
-        </div>
-        <!-- Flor Amarela (Dente-de-leão) -->
-        <div class="grass-tuft absolute left-[33%] flex flex-col items-center" style="animation-delay: -2.1s;">
-          <div class="w-2.5 h-2.5 bg-yellow-300 border-t-2 border-yellow-100"></div>
-          <div class="w-1 h-2.5 bg-[#16a34a]"></div>
-        </div>
-        <!-- Tufo 3 (Centro) -->
-        <div class="grass-tuft absolute left-[48%] flex items-end gap-0.5" style="animation-delay: -0.5s;">
-          <div class="w-1.5 h-3.5 bg-[#16a34a]"></div>
-          <div class="w-1.5 h-5 bg-[#4ade80]"></div>
-          <div class="w-1.5 h-4 bg-[#22c55e]"></div>
-        </div>
-        <!-- Tufo 4 -->
-        <div class="grass-tuft absolute right-[32%] flex items-end gap-0.5" style="animation-delay: -1.9s;">
-          <div class="w-1.5 h-3 bg-[#22c55e]"></div>
-          <div class="w-1.5 h-4.5 bg-[#4ade80]"></div>
-        </div>
-        <!-- Flor Vermelha 2 -->
-        <div class="grass-tuft absolute right-[24%] flex flex-col items-center" style="animation-delay: -1.1s;">
-          <div class="w-3 h-3 bg-red-500 border-t-2 border-red-300"></div>
-          <div class="w-1 h-3 bg-[#16a34a]"></div>
-        </div>
-        <!-- Tufo 5 -->
-        <div class="grass-tuft absolute right-[6%] flex items-end gap-0.5" style="animation-delay: -2.4s;">
-          <div class="w-1.5 h-4 bg-[#16a34a]"></div>
-          <div class="w-1.5 h-6 bg-[#4ade80]"></div>
-          <div class="w-1.5 h-3.5 bg-[#22c55e]"></div>
-        </div>
-      </div>
-
-      <!-- Chão em blocos (Grama + Terra) -->
-      <div class="absolute bottom-0 inset-x-0 h-14 flex flex-col">
-        <div class="h-4 w-full bg-[#22c55e] border-t-4 border-[#4ade80]"></div>
-        <div class="flex-1 w-full bg-[#713f12] border-t-4 border-[#854d0e]"></div>
       </div>
     </div>
 
@@ -745,8 +445,6 @@ body.app-ready footer { display: flex !important; }
     let currentUserSession = null;
     let loadingWatchdog = null;
     let failedLoginAttempts = 0;
-    let thunderInterval = null;
-    let rainInitialized = false;
 
     function showLoading() {
       const el = document.getElementById('loadingScreen');
@@ -774,7 +472,8 @@ body.app-ready footer { display: flex !important; }
     function showToast(msg) {
       const toast = document.getElementById('toast');
       if (!toast) return;
-      document.getElementById('toastMsg').innerText = msg;
+      const toastMsg = document.getElementById('toastMsg');
+      if (toastMsg) toastMsg.innerText = msg;
 
       toast.classList.remove('hidden', 'toast-animate');
       void toast.offsetWidth;
@@ -804,15 +503,16 @@ body.app-ready footer { display: flex !important; }
             try {
               setMorphButtonState('loginSubmitBtn', 'success', 'Entrar');
               currentUserSession = res.user;
+              failedLoginAttempts = 0;
 
-              // Restaura o clima ensolarado ao acertar as credenciais
-              updateLoginWeather(0, true);
+              if (typeof window.cascadeTriggerSuccessState === 'function') {
+                window.cascadeTriggerSuccessState();
+              }
 
               setTimeout(() => {
                 showLoading();
                 document.getElementById('authScreen').classList.add('hidden');
 
-                // Monta o AppPrincipal usando o HTML já retornado no login (res.appPayload)
                 mountProtectedApp(res.appPayload);
                 setupUIAfterLogin();
                 loadSheetsData();
@@ -828,11 +528,14 @@ body.app-ready footer { display: flex !important; }
             }
           } else {
             failedLoginAttempts++;
-            updateLoginWeather(failedLoginAttempts, false);
+            if (typeof window.cascadeRegisterFailedAttempt === 'function') {
+              window.cascadeRegisterFailedAttempt(failedLoginAttempts);
+            }
 
             setMorphButtonState('loginSubmitBtn', 'default', 'Entrar');
             document.querySelectorAll('.auth-input').forEach(input => input.classList.add('shake-input'));
-            document.getElementById('loginErrorMsg').classList.remove('hidden');
+            const errEl = document.getElementById('loginErrorMsg');
+            if (errEl) errEl.classList.remove('hidden');
             if (window.lucide) lucide.createIcons();
             setTimeout(() => {
               document.querySelectorAll('.auth-input').forEach(input => input.classList.remove('shake-input'));
@@ -853,7 +556,6 @@ body.app-ready footer { display: flex !important; }
 
       container.innerHTML = htmlString;
 
-      // Reexecuta os blocos <script> inseridos via innerHTML
       const scripts = container.querySelectorAll('script');
       scripts.forEach(oldScript => {
         const newScript = document.createElement('script');
@@ -865,28 +567,25 @@ body.app-ready footer { display: flex !important; }
 
     function logoutSession() {
       if (typeof roleCheckInterval !== 'undefined' && roleCheckInterval) clearInterval(roleCheckInterval);
-      if (thunderInterval) { clearInterval(thunderInterval); thunderInterval = null; }
       failedLoginAttempts = 0;
       hideLoading();
       currentUserSession = null;
 
-      // Limpa o conteúdo protegido do DOM ao sair
       const container = document.getElementById('protectedAppRoot');
       if (container) container.innerHTML = '';
 
       document.body.classList.remove('app-ready');
       const authScreen = document.getElementById('authScreen');
-      const sceneryPanel = document.getElementById('sceneryPanel');
-      authScreen.classList.remove('hidden');
-      if (sceneryPanel) {
-        sceneryPanel.classList.remove('weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
-      }
-      document.getElementById('mcRainLayer').classList.add('hidden');
-      document.getElementById('mcSun').classList.add('hidden');
-      document.getElementById('mcMoon').classList.remove('hidden');
+      if (authScreen) authScreen.classList.remove('hidden');
 
-      document.getElementById('loginUser').value = '';
-      document.getElementById('loginPass').value = '';
+      if (typeof window.cascadeResetState === 'function') {
+        window.cascadeResetState();
+      }
+
+      const uInput = document.getElementById('loginUser');
+      const pInput = document.getElementById('loginPass');
+      if (uInput) uInput.value = '';
+      if (pInput) pInput.value = '';
       clearLoginErrorState();
     }
 
@@ -910,124 +609,629 @@ body.app-ready footer { display: flex !important; }
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    /* ================= CONTROLADOR DA ANIMAÇÃO: CASCATA DE ARQUIVOS & PAPER-CUT ================= */
+    function initTranslationCascade() {
       if (window.lucide) lucide.createIcons();
-    });
 
-    function initRainDrops() {
-      if (rainInitialized) return;
-      const rainLayer = document.getElementById('mcRainLayer');
-      if (!rainLayer) return;
-      let dropsHtml = '';
-      for (let i = 0; i < 95; i++) {
-        const left = Math.random() * 100;
-        const duration = 0.55 + Math.random() * 0.45;
-        const delay = Math.random() * -2;
-        dropsHtml += `<div class="mc-rain-drop" style="left:${left}%; animation-duration:${duration}s; animation-delay:${delay}s;"></div>`;
+      const canvas = document.getElementById('translationCascadeCanvas');
+      const viewport = document.getElementById('depthViewport');
+      if (!canvas || !viewport) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const layerElements = document.querySelectorAll('.cut-layer');
+      const greenFlashOverlay = document.getElementById('greenFlashOverlay');
+
+      let width = 800;
+      let height = 600;
+
+      let errorCount = 0;
+      let targetRedLevel = 0;
+      let currentRedLevel = 0;
+      let targetOutbreakLevel = 0;
+      let currentOutbreakLevel = 0;
+
+      let borderPulseEnergy = 0;
+      let borderPulseTime = 0;
+
+      function setAttr(id, attr, val) {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute(attr, val);
       }
-      rainLayer.innerHTML = dropsHtml;
-      rainInitialized = true;
-    }
 
-    function playMinecraftThunderSound() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const duration = 2.4;
-        const bufferSize = ctx.sampleRate * duration;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
 
-        for (let i = 0; i < bufferSize; i++) {
-          const decay = Math.pow(1 - i / bufferSize, 1.8);
-          data[i] = (Math.random() * 2 - 1) * decay;
+      function lerpColor(rgb1, rgb2, t) {
+        const c = Math.max(0, Math.min(1, t));
+        return 'rgb(' +
+          Math.round(lerp(rgb1[0], rgb2[0], c)) + ', ' +
+          Math.round(lerp(rgb1[1], rgb2[1], c)) + ', ' +
+          Math.round(lerp(rgb1[2], rgb2[2], c)) + ')';
+      }
+
+      function lerpRgba(rgb1, rgb2, t, alpha) {
+        const c = Math.max(0, Math.min(1, t));
+        return 'rgba(' +
+          Math.round(lerp(rgb1[0], rgb2[0], c)) + ', ' +
+          Math.round(lerp(rgb1[1], rgb2[1], c)) + ', ' +
+          Math.round(lerp(rgb1[2], rgb2[2], c)) + ', ' +
+          alpha.toFixed(3) + ')';
+      }
+
+      const PALETTE = {
+        bgTop:     [[7, 26, 21],     [44, 9, 14]],
+        bgBottom:  [[3, 12, 9],      [20, 4, 6]],
+        primary:   [[0, 245, 196],   [255, 62, 82]],
+        secondary: [[0, 212, 255],   [255, 118, 96]],
+        l4_1:      [[11, 36, 29],    [54, 11, 17]],
+        l4_2:      [[17, 54, 44],    [82, 16, 25]],
+        l4_3:      [[7, 25, 20],     [32, 5, 9]],
+        l3_1:      [[25, 61, 51],    [88, 20, 30]],
+        l3_2:      [[35, 82, 69],    [120, 28, 40]],
+        l3_3:      [[20, 50, 42],    [66, 14, 21]],
+        l2_1:      [[139, 150, 147], [164, 122, 127]],
+        l2_2:      [[108, 120, 117], [134, 88, 94]],
+        l2_3:      [[78, 89, 86],    [98, 58, 63]]
+      };
+
+      const FILE_TEMPLATES = [
+        { name: 'en_US_core.json',   lang: 'EN -> PT', line1: '"block.minecraft.stone"', line2: '"Pedra"' },
+        { name: 'ja_JP_ui.json',     lang: 'JA -> PT', line1: '"設定を保存"',            line2: '"Salvar opções"' },
+        { name: 'de_DE_terms.xliff', lang: 'DE -> PT', line1: '"Verbindung"',            line2: '"Conexão"' },
+        { name: 'fr_FR_items.json',  lang: 'FR -> PT', line1: '"Épée en diamant"',       line2: '"Espada de diamante"' },
+        { name: 'es_ES_docs.arb',    lang: 'ES -> PT', line1: '"Archivo listo"',         line2: '"Arquivo pronto"' },
+        { name: 'ko_KR_str.json',    lang: 'KO -> PT', line1: '"데이터 동기화"',         line2: '"Sincronizar"' },
+        { name: 'it_IT_pack.xliff',  lang: 'IT -> PT', line1: '"Traduzione"',            line2: '"Tradução"' },
+        { name: 'zh_CN_lex.json',    lang: 'ZH -> PT', line1: '"安全通道"',              line2: '"Canal seguro"' },
+        { name: 'ru_RU_sys.po',      lang: 'RU -> PT', line1: '"Перевод файла"',         line2: '"Traduzir arq."' },
+        { name: 'ar_SA_bidi.tmx',    lang: 'AR -> PT', line1: '"ترجمة فورية"',           line2: '"Tradução real"' }
+      ];
+
+      const VIRUS_LABELS = [
+        'TROJAN.LOC.EXE',
+        'WORM.UTF8.SYS',
+        'MALWARE.JSON',
+        'ROOTKIT.BIN',
+        'PAYLOAD.0x9F',
+        'INFECT.NODE'
+      ];
+
+      const GLITCH_CHARS = '#$%&@!?*01X<>~^/|';
+
+      function corruptString(str, severity) {
+        if (severity <= 0.02) return str;
+        let out = '';
+        for (let i = 0; i < str.length; i++) {
+          if (str[i] === ' ') {
+            out += ' ';
+          } else if (Math.random() < severity * 0.65) {
+            out += GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+          } else {
+            out += str[i];
+          }
         }
-
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(280, ctx.currentTime);
-        filter.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + duration);
-
-        const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.85, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-        noise.start();
-      } catch (e) {}
-    }
-
-    function triggerMinecraftThunder() {
-      const flash = document.getElementById('mcLightningFlash');
-      const bolt = document.getElementById('mcLightningBolt');
-      if (bolt) {
-        bolt.style.left = (15 + Math.random() * 70) + '%';
-        bolt.classList.remove('bolt-active');
-        void bolt.offsetWidth;
-        bolt.classList.add('bolt-active');
+        return out;
       }
-      if (flash) {
-        flash.classList.remove('lightning-active');
-        void flash.offsetWidth;
-        flash.classList.add('lightning-active');
-      }
-      playMinecraftThunderSound();
-    }
 
-    function updateLoginWeather(attempts, isSunny = false) {
-      const screen = document.getElementById('sceneryPanel');
-      const authScreen = document.getElementById('authScreen');
-      const rainLayer = document.getElementById('mcRainLayer');
-      const sun = document.getElementById('mcSun');
-      const moon = document.getElementById('mcMoon');
-      if (!screen) return;
+      const TOTAL_FILES = 26;
+      const cascadeFiles = [];
 
-      screen.classList.remove('weather-sunny', 'weather-cloudy-1', 'weather-cloudy-2', 'weather-storm');
-
-      if (isSunny) {
-        failedLoginAttempts = 0;
-        if (thunderInterval) {
-          clearInterval(thunderInterval);
-          thunderInterval = null;
+      function initCascadeFiles() {
+        cascadeFiles.length = 0;
+        const cols = 5;
+        for (let i = 0; i < TOTAL_FILES; i++) {
+          const col = i % cols;
+          const depth = (i % 3) * 0.35 + 0.25;
+          const tpl = FILE_TEMPLATES[i % FILE_TEMPLATES.length];
+          cascadeFiles.push({
+            colRatio: (col + 0.5) / cols + (Math.random() - 0.5) * 0.05,
+            yNorm: Math.random(),
+            speed: (0.042 + depth * 0.055) * (0.88 + Math.random() * 0.24),
+            depth: depth,
+            tpl: tpl,
+            corrupted: false,
+            broken: false,
+            vanishing: false,
+            opacity: 1.0,
+            targetOpacity: 1.0,
+            rank: Math.random(),
+            roleSeed: Math.random(),
+            swayPhase: Math.random() * Math.PI * 2
+          });
         }
-        if (rainLayer) rainLayer.classList.add('hidden');
-        if (moon) moon.classList.add('hidden');
-        if (sun) sun.classList.remove('hidden');
-        screen.classList.add('weather-sunny');
-        return;
+        cascadeFiles.sort((a, b) => a.depth - b.depth);
       }
 
-      if (sun) sun.classList.add('hidden');
-      if (moon) moon.classList.remove('hidden');
+      const VIRUS_COUNT = 12;
+      const virusEntities = [];
+      for (let i = 0; i < VIRUS_COUNT; i++) {
+        virusEntities.push({
+          colRatio: ((i % 5) + 0.5) / 5 + (Math.random() - 0.5) * 0.14,
+          yNorm: Math.random(),
+          speed: 0.055 + Math.random() * 0.045,
+          size: 14 + Math.random() * 10,
+          label: VIRUS_LABELS[i % VIRUS_LABELS.length],
+          phase: Math.random() * Math.PI * 2,
+          wobbleFreq: 2.2 + Math.random() * 1.8
+        });
+      }
 
-      if (attempts === 1) {
-        screen.classList.add('weather-cloudy-1');
-      } else if (attempts === 2) {
-        screen.classList.add('weather-cloudy-2');
-      } else if (attempts === 3) {
-        screen.classList.add('weather-storm');
-        initRainDrops();
-        if (rainLayer) rainLayer.classList.remove('hidden');
-      } else if (attempts >= 4) {
-        screen.classList.add('weather-storm');
-        initRainDrops();
-        if (rainLayer) rainLayer.classList.remove('hidden');
+      function updateFilesState(corruptRatio, isOutbreak) {
+        for (let i = 0; i < cascadeFiles.length; i++) {
+          const f = cascadeFiles[i];
+          f.corrupted = f.rank < corruptRatio;
 
-        triggerMinecraftThunder();
-        if (!thunderInterval) {
-          thunderInterval = setInterval(() => {
-            if (failedLoginAttempts >= 4 && authScreen && !authScreen.classList.contains('hidden')) {
-              triggerMinecraftThunder();
+          if (isOutbreak) {
+            if (f.roleSeed < 0.42) {
+              f.broken = true;
+              f.vanishing = false;
+              f.targetOpacity = 0.85;
+            } else if (f.roleSeed < 0.82) {
+              f.broken = false;
+              f.vanishing = true;
+              f.targetOpacity = 0.0;
+            } else {
+              f.broken = false;
+              f.vanishing = false;
+              f.targetOpacity = 0.95;
             }
-          }, 5500);
+          } else {
+            f.broken = false;
+            f.vanishing = false;
+            f.targetOpacity = 1.0;
+          }
         }
       }
+
+      window.cascadeRegisterFailedAttempt = function (attempts) {
+        errorCount = typeof attempts === 'number' ? attempts : (errorCount + 1);
+        borderPulseEnergy = 1.0;
+        borderPulseTime = 0;
+        targetRedLevel = Math.min(1.0, errorCount / 3.5);
+
+        if (errorCount < 4) {
+          targetOutbreakLevel = 0;
+          updateFilesState(errorCount / 3, false);
+        } else {
+          targetOutbreakLevel = 1.0;
+          updateFilesState(1.0, true);
+        }
+      };
+
+      window.cascadeTriggerSuccessState = function () {
+        errorCount = 0;
+        targetRedLevel = 0;
+        targetOutbreakLevel = 0;
+        borderPulseEnergy = 0.45;
+        borderPulseTime = 0;
+
+        for (let i = 0; i < cascadeFiles.length; i++) {
+          const file = cascadeFiles[i];
+          file.corrupted = false;
+          file.broken = false;
+          file.vanishing = false;
+          file.targetOpacity = 1.0;
+        }
+
+        if (greenFlashOverlay) {
+          greenFlashOverlay.style.transition = 'none';
+          greenFlashOverlay.style.opacity = '0.5';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              greenFlashOverlay.style.transition = 'opacity 0.9s ease-out';
+              greenFlashOverlay.style.opacity = '0';
+            });
+          });
+        }
+      };
+
+      window.cascadeResetState = function () {
+        errorCount = 0;
+        targetRedLevel = 0;
+        currentRedLevel = 0;
+        targetOutbreakLevel = 0;
+        currentOutbreakLevel = 0;
+        borderPulseEnergy = 0;
+        for (let i = 0; i < cascadeFiles.length; i++) {
+          const file = cascadeFiles[i];
+          file.corrupted = false;
+          file.broken = false;
+          file.vanishing = false;
+          file.opacity = 1.0;
+          file.targetOpacity = 1.0;
+        }
+      };
+
+      window.syncPaperCutTheme = function () {};
+
+      function applySvgGradientColors(t, pulseHighlight) {
+        setAttr('l4Stop1', 'stop-color', lerpColor(PALETTE.l4_1[0], PALETTE.l4_1[1], t));
+        setAttr('l4Stop2', 'stop-color', lerpColor(PALETTE.l4_2[0], PALETTE.l4_2[1], t));
+        setAttr('l4Stop3', 'stop-color', lerpColor(PALETTE.l4_3[0], PALETTE.l4_3[1], t));
+
+        const strokeAlpha = 0.32 + pulseHighlight * 0.48;
+        const strokeWidth = 2.0 + pulseHighlight * 1.6;
+        setAttr('l4Stroke', 'stroke', lerpRgba(PALETTE.primary[0], PALETTE.primary[1], t, strokeAlpha));
+        setAttr('l4Stroke', 'stroke-width', strokeWidth.toFixed(2));
+        setAttr('l4Glow', 'stroke', lerpColor(PALETTE.primary[0], PALETTE.primary[1], t));
+        setAttr('l4GlowRight', 'stroke', lerpColor(PALETTE.secondary[0], PALETTE.secondary[1], t));
+
+        setAttr('l3Stop1', 'stop-color', lerpColor(PALETTE.l3_1[0], PALETTE.l3_1[1], t));
+        setAttr('l3Stop2', 'stop-color', lerpColor(PALETTE.l3_2[0], PALETTE.l3_2[1], t));
+        setAttr('l3Stop3', 'stop-color', lerpColor(PALETTE.l3_3[0], PALETTE.l3_3[1], t));
+        setAttr('l3Stroke', 'stroke', lerpRgba(PALETTE.primary[0], PALETTE.primary[1], t, 0.34 + pulseHighlight * 0.45));
+        setAttr('l3Stroke', 'stroke-width', (1.8 + pulseHighlight * 1.4).toFixed(2));
+        setAttr('l3StrokeRight', 'stroke', lerpRgba(PALETTE.secondary[0], PALETTE.secondary[1], t, 0.3 + pulseHighlight * 0.4));
+
+        setAttr('l2Stop1', 'stop-color', lerpColor(PALETTE.l2_1[0], PALETTE.l2_1[1], t));
+        setAttr('l2Stop2', 'stop-color', lerpColor(PALETTE.l2_2[0], PALETTE.l2_2[1], t));
+        setAttr('l2Stop3', 'stop-color', lerpColor(PALETTE.l2_3[0], PALETTE.l2_3[1], t));
+        setAttr('l2Glow', 'stroke', lerpRgba([255, 255, 255], [255, 145, 155], t, 0.68 + pulseHighlight * 0.3));
+      }
+
+      function syncCanvasSize() {
+        const rect = viewport.getBoundingClientRect();
+        const fallbackW = window.innerWidth >= 1024 ? Math.round(window.innerWidth * 0.5833) : window.innerWidth;
+        const fallbackH = window.innerHeight || 600;
+        const w = Math.round(rect.width || viewport.clientWidth || fallbackW);
+        const h = Math.round(rect.height || viewport.clientHeight || fallbackH);
+        if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+          width = canvas.width = w;
+          height = canvas.height = h;
+        }
+      }
+
+      window.addEventListener('resize', syncCanvasSize);
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(syncCanvasSize).observe(viewport);
+      }
+      syncCanvasSize();
+      initCascadeFiles();
+
+      function drawTranslationFileCard(x, y, scale, file, alertT) {
+        if (file.opacity <= 0.015) return;
+
+        const cardW = 148 * scale;
+        const cardH = 84 * scale;
+        const fold = 15 * scale;
+
+        const isCorrupt = file.corrupted && alertT > 0.05;
+        const isBroken = file.broken && currentOutbreakLevel > 0.1;
+
+        const jitterX = isCorrupt ? (Math.random() - 0.5) * (isBroken ? 6.0 : 3.2) * alertT : 0;
+        const jitterY = isCorrupt ? (Math.random() - 0.5) * (isBroken ? 3.5 : 1.8) * alertT : 0;
+
+        const baseAlpha = (0.42 + file.depth * 0.54) * file.opacity;
+
+        ctx.save();
+        ctx.translate(x + jitterX, y + jitterY);
+        ctx.globalAlpha = Math.max(0, Math.min(1, file.opacity));
+
+        if (isBroken) {
+          const splitGap = 7 * scale * currentOutbreakLevel;
+          const tilt = 0.085 * currentOutbreakLevel;
+
+          ctx.save();
+          ctx.translate(-splitGap * 0.6, -splitGap * 0.4);
+          ctx.rotate(-tilt);
+          ctx.beginPath();
+          ctx.moveTo(-cardW / 2, -cardH / 2);
+          ctx.lineTo(cardW / 2 - fold, -cardH / 2);
+          ctx.lineTo(cardW / 2, -cardH / 2 + fold);
+          ctx.lineTo(cardW / 2, -4 * scale);
+          ctx.lineTo(6 * scale, 4 * scale);
+          ctx.lineTo(-10 * scale, -6 * scale);
+          ctx.lineTo(-cardW / 2, 5 * scale);
+          ctx.closePath();
+
+          ctx.fillStyle = 'rgba(74, 10, 18, ' + (baseAlpha * 0.92).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(255, 62, 82, ' + (baseAlpha * 0.98).toFixed(3) + ')';
+          ctx.lineWidth = 1.2 * scale;
+          ctx.fill();
+          ctx.stroke();
+
+          const padX1 = -cardW / 2 + 10 * scale;
+          const topY1 = -cardH / 2 + 16 * scale;
+          ctx.font = 'bold ' + Math.max(7, Math.round(8.5 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          ctx.fillStyle = 'rgba(255, 95, 110, 0.95)';
+          ctx.fillText('X BROKEN_FILE', padX1, topY1);
+          ctx.font = Math.max(7, Math.round(8 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          ctx.fillStyle = 'rgba(240, 210, 215, 0.85)';
+          ctx.fillText(corruptString(file.tpl.name, 0.85), padX1, topY1 + 13 * scale);
+          ctx.restore();
+
+          ctx.save();
+          ctx.translate(splitGap * 0.7, splitGap * 0.65);
+          ctx.rotate(tilt * 1.15);
+          ctx.beginPath();
+          ctx.moveTo(-cardW / 2, 9 * scale);
+          ctx.lineTo(-10 * scale, -2 * scale);
+          ctx.lineTo(6 * scale, 8 * scale);
+          ctx.lineTo(cardW / 2, 0);
+          ctx.lineTo(cardW / 2, cardH / 2);
+          ctx.lineTo(-cardW / 2, cardH / 2);
+          ctx.closePath();
+
+          ctx.fillStyle = 'rgba(58, 8, 15, ' + (baseAlpha * 0.9).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(255, 62, 82, ' + (baseAlpha * 0.95).toFixed(3) + ')';
+          ctx.lineWidth = 1.2 * scale;
+          ctx.fill();
+          ctx.stroke();
+
+          const padX2 = -cardW / 2 + 10 * scale;
+          ctx.font = 'bold ' + Math.max(7, Math.round(8.5 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          ctx.fillStyle = 'rgba(255, 78, 96, 0.92)';
+          ctx.fillText('-> ' + corruptString('ERR_SEGMENT', 0.9), padX2, cardH / 2 - 12 * scale);
+          ctx.restore();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(-cardW / 2, -cardH / 2);
+          ctx.lineTo(cardW / 2 - fold, -cardH / 2);
+          ctx.lineTo(cardW / 2, -cardH / 2 + fold);
+          ctx.lineTo(cardW / 2, cardH / 2);
+          ctx.lineTo(-cardW / 2, cardH / 2);
+          ctx.closePath();
+
+          if (isCorrupt) {
+            ctx.fillStyle = lerpRgba([16, 40, 34], [68, 10, 18], alertT, baseAlpha * 0.9);
+            ctx.strokeStyle = lerpRgba([0, 245, 196], [255, 58, 78], alertT, baseAlpha * 0.98);
+          } else {
+            ctx.fillStyle = lerpRgba([14, 44, 36], [48, 12, 18], alertT, baseAlpha * 0.9);
+            ctx.strokeStyle = lerpRgba([0, 245, 196], [255, 95, 110], alertT, baseAlpha * 0.85);
+          }
+
+          ctx.lineWidth = 1.2 * scale;
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(cardW / 2 - fold, -cardH / 2);
+          ctx.lineTo(cardW / 2 - fold, -cardH / 2 + fold);
+          ctx.lineTo(cardW / 2, -cardH / 2 + fold);
+          ctx.stroke();
+
+          const padX = -cardW / 2 + 10 * scale;
+          const topY = -cardH / 2 + 16 * scale;
+
+          ctx.font = 'bold ' + Math.max(7, Math.round(8.8 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          ctx.textAlign = 'left';
+
+          if (isCorrupt) {
+            ctx.fillStyle = 'rgba(255, 90, 105, ' + Math.min(1, baseAlpha + 0.2).toFixed(3) + ')';
+            ctx.fillText('! CORRUPTED_FILE', padX, topY);
+          } else {
+            ctx.fillStyle = lerpRgba(PALETTE.secondary[0], PALETTE.secondary[1], alertT, Math.min(1, baseAlpha + 0.2));
+            ctx.fillText(file.tpl.lang, padX, topY);
+          }
+
+          ctx.font = Math.max(7, Math.round(8.2 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          ctx.fillStyle = 'rgba(225, 248, 242, ' + (baseAlpha * 0.92).toFixed(3) + ')';
+          const fileName = isCorrupt ? corruptString(file.tpl.name, alertT) : file.tpl.name;
+          ctx.fillText(fileName, padX, topY + 13 * scale);
+
+          ctx.strokeStyle = isCorrupt
+            ? 'rgba(255, 70, 90, ' + (baseAlpha * 0.5).toFixed(3) + ')'
+            : lerpRgba(PALETTE.primary[0], PALETTE.primary[1], alertT, baseAlpha * 0.35);
+          ctx.beginPath();
+          ctx.moveTo(padX, topY + 19 * scale);
+          ctx.lineTo(cardW / 2 - 10 * scale, topY + 19 * scale);
+          ctx.stroke();
+
+          ctx.font = 'bold ' + Math.max(7.2, Math.round(8.6 * scale)) + 'px "JetBrains Mono", Consolas, monospace';
+          const srcText = isCorrupt ? corruptString(file.tpl.line1, alertT) : file.tpl.line1;
+          const dstText = isCorrupt ? corruptString('0xDEAD_ERR_UTF8', alertT) : file.tpl.line2;
+
+          ctx.fillStyle = 'rgba(205, 235, 228, ' + (baseAlpha * 0.88).toFixed(3) + ')';
+          ctx.fillText(srcText, padX, topY + 32 * scale);
+
+          ctx.fillStyle = isCorrupt
+            ? 'rgba(255, 75, 92, ' + Math.min(1, baseAlpha + 0.22).toFixed(3) + ')'
+            : lerpRgba(PALETTE.primary[0], PALETTE.primary[1], alertT, Math.min(1, baseAlpha + 0.22));
+          ctx.fillText('-> ' + dstText, padX, topY + 46 * scale);
+
+          if (isCorrupt && Math.random() < 0.3 * alertT) {
+            ctx.fillStyle = 'rgba(255, 50, 75, ' + (0.25 * alertT).toFixed(3) + ')';
+            const sliceY = (Math.random() - 0.5) * cardH * 0.7;
+            ctx.fillRect(-cardW / 2, sliceY, cardW, 2.5 * scale);
+          }
+        }
+
+        ctx.restore();
+      }
+
+      function drawVirusEntity(x, y, v, outbreakAlpha, now) {
+        if (outbreakAlpha <= 0.02) return;
+
+        const r = v.size;
+        const rot = now * 0.0015 + v.phase;
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.globalAlpha = outbreakAlpha * 0.9;
+
+        const glow = ctx.createRadialGradient(0, 0, r * 0.2, 0, 0, r * 2.1);
+        glow.addColorStop(0, 'rgba(255, 42, 68, 0.35)');
+        glow.addColorStop(1, 'rgba(255, 42, 68, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 2.1, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#ff3b52';
+        ctx.fillStyle = '#ff6b7d';
+        ctx.lineWidth = 1.6;
+        const spikes = 8;
+        for (let s = 0; s < spikes; s++) {
+          const a = rot + (s * Math.PI * 2) / spikes;
+          const sx = Math.cos(a) * (r * 1.45);
+          const sy = Math.sin(a) * (r * 1.45);
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a) * (r * 0.65), Math.sin(a) * (r * 0.65));
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(sx, sy, 2.1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.fillStyle = '#3d0810';
+        ctx.strokeStyle = '#ff3b52';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ff5268';
+        ctx.font = 'bold 10px "JetBrains Mono", Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('!', 0, 0.5);
+
+        ctx.font = 'bold 8.5px "JetBrains Mono", Consolas, monospace';
+        ctx.fillStyle = 'rgba(255, 130, 145, 0.92)';
+        ctx.fillText(v.label, 0, r * 1.95);
+
+        ctx.restore();
+      }
+
+      let lastTimestamp = performance.now();
+
+      function renderCascadeScene(now) {
+        const dt = Math.min(0.05, (now - lastTimestamp) / 1000);
+        lastTimestamp = now;
+
+        const authScreen = document.getElementById('authScreen');
+        if (authScreen && authScreen.classList.contains('hidden')) {
+          requestAnimationFrame(renderCascadeScene);
+          return;
+        }
+
+        syncCanvasSize();
+
+        currentRedLevel += (targetRedLevel - currentRedLevel) * 0.05;
+        currentOutbreakLevel += (targetOutbreakLevel - currentOutbreakLevel) * 0.04;
+
+        if (borderPulseEnergy > 0.001) {
+          borderPulseTime += dt;
+          borderPulseEnergy *= Math.pow(0.18, dt);
+        } else {
+          borderPulseEnergy = 0;
+        }
+
+        const pulseWave = Math.sin(borderPulseTime * 7.5) * borderPulseEnergy;
+        const pulseHighlight = Math.max(0, pulseWave);
+
+        applySvgGradientColors(currentRedLevel, pulseHighlight);
+
+        for (let i = 0; i < layerElements.length; i++) {
+          const el = layerElements[i];
+          const idx = parseFloat(el.getAttribute('data-layer-index'));
+          const phaseOffset = idx * 0.35;
+          const localWave = Math.sin(Math.max(0, borderPulseTime - phaseOffset * 0.08) * 7.5) * borderPulseEnergy;
+          const shiftX = localWave * (4.5 - idx * 0.6);
+          const scale = 1 + localWave * 0.006;
+          el.style.transform = 'translate3d(' + shiftX.toFixed(2) + 'px, 0, 0) scale(' + scale.toFixed(4) + ')';
+        }
+
+        const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+        bgGrad.addColorStop(0, lerpColor(PALETTE.bgTop[0], PALETTE.bgTop[1], currentRedLevel));
+        bgGrad.addColorStop(1, lerpColor(PALETTE.bgBottom[0], PALETTE.bgBottom[1], currentRedLevel));
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, width, height);
+
+        const usableStartX = width * 0.32;
+        const usableWidth = width * 0.58;
+        const cols = 5;
+
+        ctx.save();
+        for (let c = 0; c < cols; c++) {
+          const lineX = usableStartX + ((c + 0.5) / cols) * usableWidth;
+          const lineGrad = ctx.createLinearGradient(0, 0, 0, height);
+          lineGrad.addColorStop(0, 'rgba(0,0,0,0)');
+          lineGrad.addColorStop(0.5, lerpRgba(PALETTE.primary[0], PALETTE.primary[1], currentRedLevel, 0.14));
+          lineGrad.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.strokeStyle = lineGrad;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([5, 11]);
+          ctx.beginPath();
+          ctx.moveTo(lineX, 0);
+          ctx.lineTo(lineX, height);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        const totalSpanY = height + 210;
+
+        for (let i = 0; i < cascadeFiles.length; i++) {
+          const file = cascadeFiles[i];
+          file.yNorm += file.speed * dt;
+          file.opacity += (file.targetOpacity - file.opacity) * 0.045;
+
+          if (file.yNorm > 1) {
+            file.yNorm -= 1;
+            if (errorCount === 0) {
+              file.corrupted = false;
+              file.broken = false;
+              file.vanishing = false;
+              file.targetOpacity = 1.0;
+            } else if (errorCount < 4) {
+              file.corrupted = file.rank < (errorCount / 3);
+            } else {
+              file.corrupted = true;
+              file.roleSeed = Math.random();
+              if (file.roleSeed < 0.42) {
+                file.broken = true;
+                file.vanishing = false;
+                file.targetOpacity = 0.85;
+              } else if (file.roleSeed < 0.82) {
+                file.broken = false;
+                file.vanishing = true;
+                file.opacity = 0.75;
+                file.targetOpacity = 0.0;
+              } else {
+                file.broken = false;
+                file.vanishing = false;
+                file.targetOpacity = 0.95;
+              }
+            }
+          }
+
+          const sway = Math.sin(now * 0.0009 + file.swayPhase) * 4.5 * file.depth;
+          const x = usableStartX + file.colRatio * usableWidth + sway;
+          const y = -105 + file.yNorm * totalSpanY;
+          const scale = 0.64 + file.depth * 0.48;
+
+          drawTranslationFileCard(x, y, scale, file, currentRedLevel);
+        }
+
+        if (currentOutbreakLevel > 0.01) {
+          for (let i = 0; i < virusEntities.length; i++) {
+            const v = virusEntities[i];
+            v.yNorm += v.speed * dt;
+            if (v.yNorm > 1) {
+              v.yNorm -= 1;
+            }
+            const vx = usableStartX + v.colRatio * usableWidth + Math.sin(now * 0.0018 * v.wobbleFreq + v.phase) * 18;
+            const vy = -60 + v.yNorm * (height + 120);
+            drawVirusEntity(vx, vy, v, currentOutbreakLevel, now);
+          }
+        }
+
+        requestAnimationFrame(renderCascadeScene);
+      }
+
+      requestAnimationFrame(renderCascadeScene);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTranslationCascade);
+    } else {
+      initTranslationCascade();
     }
   </script>
 </body>
