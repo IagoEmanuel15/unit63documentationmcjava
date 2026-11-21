@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwK84jYD_9pnlg3dYSjFIMOTUoMtEBsqL_XcXnnupcbBjbG4s1fVu5FXn1nyB_kkk6g/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwQJe-gkeBt9GEcg0mrDvqqsEGqce8oBogI8CmDOIXgY4cE0VjLcJ7VS-r1CRW2NC1v/exec";
     
     var google = window.google || {};
     google.script = google.script || {};
@@ -78,6 +78,10 @@
       if (circle) circle.style.transform = isDark ? 'translateX(24px)' : 'translateX(0px)';
       if (typeof window.syncPaperCutTheme === 'function') {
         window.syncPaperCutTheme();
+      }
+
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
       }
     }
   </script>
